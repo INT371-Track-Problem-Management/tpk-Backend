@@ -8,8 +8,6 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o /app/cmd/
-
 EXPOSE 5000
 
-CMD [ "/app" ]
+CMD [ "go", "run", "main.go" ]
