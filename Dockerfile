@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build tpkBackend.go
+RUN go build ./cmd/tpkBackend.go
 
 EXPOSE 5000
 
