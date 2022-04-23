@@ -8,8 +8,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build ./cmd/tpkBackend.go
-
 EXPOSE 5000
 
-CMD [ "./tpkBackend" ]
+CMD cd cmd \
+    && ["go", "run", "tpkBackend.go"]
