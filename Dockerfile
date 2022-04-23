@@ -10,4 +10,4 @@ COPY . ./
 
 EXPOSE 5000
 
-CMD [ "go", "run", "main.go" ]
+CMD [ "go", "run", "/cmd/main.go" ]
