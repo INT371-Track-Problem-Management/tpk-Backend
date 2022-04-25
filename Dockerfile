@@ -10,5 +10,5 @@ COPY . ./
 
 EXPOSE 5000
 
-CMD cd app/cmd \
-    && ["go", "run", "tpkBackend.go"]
+CMD go build app/cmd/tpkBackend.go \
+    && ./tpkBackend
