@@ -14,22 +14,23 @@ import (
 
 func StartServer() {
 	e := echo.New()
-	h := TestHanler{}
+	h := FuncHandler{}
 	h.Initialize()
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.GET("/api/test", h.Test)
+	e.GET("/api/checkHealthy", h.CheckHealthy)
 
 	e.Logger.Fatal(e.Start(":5000"))
 }
 
-type TestHanler struct {
+type FuncHandler struct {
 	DB *gorm.DB
 }
 
-func (h *TestHanler) Initialize() {
+func (h *FuncHandler) Initialize() {
 
 	dns := "dev:123456789@tcp(52.139.153.111:3306)/project?charset=utf8&parseTime=True&loc=Local"
 	conn, err := gorm.Open(mysql.Open(dns), &gorm.Config{
@@ -41,13 +42,22 @@ func (h *TestHanler) Initialize() {
 	h.DB = conn
 }
 
-func (h *TestHanler) Test(ctx echo.Context) error {
+func (h *FuncHandler) Test(ctx echo.Context) error {
 	req := new(request.Test)
 	err := ctx.Bind(&req)
 	if err != nil {
 		return err
 	}
 	res, err := controller.TestController(ctx, *req, h.DB)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
+	res, err := controller.CheckHealthy(ctx, h.DB)
 	if err != nil {
 		return err
 	}

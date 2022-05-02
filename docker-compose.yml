@@ -2,7 +2,7 @@ version: "2.2"
 services:
   backend:
     container_name: "backend"
-    image: tpk-backend:latest
+    image: ghcr.io/artidsun/int371-backend:latest
     ports:
       - "5000:5000"
     restart: on-failure
