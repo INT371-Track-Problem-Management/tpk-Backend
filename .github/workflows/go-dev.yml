@@ -19,7 +19,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: int371-backend:latest
+          tags: ghcr.io/artidsun/int371-backend
   deploy:
     needs: build
     runs-on: ubuntu-20.04
