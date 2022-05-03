@@ -46,4 +46,4 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Check health check page
-        run: curl https://rungmod.ddns.net/api/checkHealthy | grep "healthy"
+        run: curl https://rungmod.ddns.net/api/checkHealthy | grep "Healthy"
