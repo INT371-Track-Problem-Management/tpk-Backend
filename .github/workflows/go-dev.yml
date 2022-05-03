@@ -38,7 +38,7 @@ jobs:
             git checkout dev
             git pull origin dev
             sudo docker rm -f backend
-            sudo docker rmi ghcr.io/artidsun/int371-backend
+            sudo docker rmi ghcr.io/artidsun/int371-backend:latest
             sudo docker pull ghcr.io/artidsun/int371-backend:latest
             sudo docker-compose up -d
   CheckHealthy:
