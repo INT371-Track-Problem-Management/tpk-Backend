@@ -45,14 +45,5 @@ jobs:
     needs: deploy
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@main
-      - name: pull images and deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            curl 172.20.0.2:5000/api/checkHealthy || grep healthy
+      - name: Check health check page
+        run: curl https://rungmod.ddns.net/api/checkHealthy | grep "healthy"
