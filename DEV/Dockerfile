@@ -3,8 +3,8 @@ FROM golang:1.17-alpine
 COPY ../ ./
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY ../go.mod ./
+COPY ../go.sum ./
 RUN go mod download
 
 EXPOSE 5000
