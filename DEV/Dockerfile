@@ -6,7 +6,7 @@ WORKDIR /app
 COPY ../go.mod ./
 COPY ../go.sum ./
 
-CMD cd .. \ go mod download
+RUN cd .. \ go mod download
 
 EXPOSE 5000
 
