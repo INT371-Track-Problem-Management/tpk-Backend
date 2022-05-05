@@ -1,14 +1,11 @@
 FROM golang:1.17-alpine
 
-COPY ../ ./
-WORKDIR /app
+WORKDIR ../app
 
-COPY ../go.mod ./
-COPY ../go.sum ./
+COPY .. ./
 
-RUN cd .. \ go mod download
+RUN GOOS=linux go build app/cmd/tpkBackend.go
 
 EXPOSE 5000
 
-CMD go build app/cmd/tpkBackend.go \
-    && KEY="DEV"  ./tpkBackend
+CMD KEY="DEV" ./tpkBackend
