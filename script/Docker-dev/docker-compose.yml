@@ -1,10 +1,12 @@
 version: "2.2"
 services:
   backend:
-    container_name: "backend"
-    image: ghcr.io/artidsun/int371-backend:latest
+    env_file:
+      - .env.dev
+    container_name: "${CONTAINER_NAME}"
+    image: backend-dev:latest
     ports:
-      - "5000:5000"
+      - "${COMPOSE_PORT}"
     restart: on-failure
 networks:
   default:

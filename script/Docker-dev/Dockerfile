@@ -6,9 +6,9 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-COPY . ./
+COPY ../../ ./
 
 EXPOSE 5000
 
-CMD go build app/cmd/tpkBackend.go \
+CMD KEY="DEV" go build app/cmd/tpkBackend.go \
     && ./tpkBackend

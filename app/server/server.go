@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/controller"
 
@@ -13,6 +14,8 @@ import (
 )
 
 func StartServer() {
+	key := os.Getenv("KEY")
+	port := SetEnv(key)
 	e := echo.New()
 	h := FuncHandler{}
 	h.Initialize()
@@ -22,8 +25,22 @@ func StartServer() {
 	})
 	e.GET("/api/test", h.Test)
 	e.GET("/api/checkHealthy", h.CheckHealthy)
+	e.Logger.Fatal(e.Start(":" + port))
+}
 
-	e.Logger.Fatal(e.Start(":5000"))
+func SetEnv(key string) string {
+	var port string
+	if key == "PRD" {
+		port = "3000"
+		return port
+	}
+	if key == "DEV" {
+		port = "5000"
+		return port
+	} else {
+		fmt.Printf("Invalid ENV")
+	}
+	return ""
 }
 
 type FuncHandler struct {
@@ -31,7 +48,6 @@ type FuncHandler struct {
 }
 
 func (h *FuncHandler) Initialize() {
-
 	dns := "dev:123456789@tcp(52.139.153.111:3306)/project?charset=utf8&parseTime=True&loc=Local"
 	conn, err := gorm.Open(mysql.Open(dns), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
