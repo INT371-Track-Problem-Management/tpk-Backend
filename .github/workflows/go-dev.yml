@@ -9,21 +9,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@main
-      - name: pull images and deploy
-        uses: appleboy/ssh-action@master
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd tpk-Backend
-            git checkout dev
-            git pull origin dev
-            cd script/Docker-dev
-            docker rm -f backend-dev
-            docker rmi backend-dev:latest
-            docker build . -t backend-dev:latest
+          registry: ghcr.io
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/artidsun/int371-backend:latest
   deploy:
     needs: build
     runs-on: ubuntu-20.04
@@ -38,8 +34,13 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd tpk-Backend/script/Docker-dev
-            docker-compose up -d
+            cd tpk-Backend
+            git checkout dev
+            git pull origin dev
+            sudo docker rm -f backend
+            sudo docker rmi ghcr.io/artidsun/int371-backend:latest
+            sudo docker pull ghcr.io/artidsun/int371-backend:latest
+            sudo docker-compose up -d
   CheckHealthy:
     needs: deploy
     runs-on: ubuntu-20.04
