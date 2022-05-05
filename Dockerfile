@@ -10,5 +10,5 @@ COPY . ./
 
 EXPOSE 5000
 
-CMD KEY="DEV" go build app/cmd/tpkBackend.go \
-    && ./tpkBackend
+CMD go build app/cmd/tpkBackend.go \
+    && KEY="DEV"  ./tpkBackend

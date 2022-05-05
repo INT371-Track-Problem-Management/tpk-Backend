@@ -16,6 +16,7 @@ import (
 func StartServer() {
 	key := os.Getenv("KEY")
 	port := SetEnv(key)
+	fmt.Println("PROJECT RUN ON PORT: " + port)
 	e := echo.New()
 	h := FuncHandler{}
 	h.Initialize()
