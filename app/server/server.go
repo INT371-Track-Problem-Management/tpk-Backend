@@ -32,11 +32,11 @@ func StartServer() {
 func SetEnv(key string) string {
 	var port string
 	if key == "PRD" {
-		port = "3000"
+		port = "5000"
 		return port
 	}
 	if key == "DEV" {
-		port = "5000"
+		port = "3000"
 		return port
 	} else {
 		fmt.Printf("Invalid ENV")
