@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   backend:
-    container_name: "backend"
+    container_name: "backendPrd"
     image: ghcr.io/artidsun/int371-backend:latest
     ports:
       - "5000:5000"
