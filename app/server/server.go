@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/controller"
 
@@ -13,24 +14,41 @@ import (
 )
 
 func StartServer() {
+	key := os.Getenv("KEY")
+	port := SetEnv(key)
+	fmt.Println("PROJECT RUN ON PORT: " + port)
 	e := echo.New()
-	h := TestHanler{}
+	h := FuncHandler{}
 	h.Initialize()
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.GET("/api/test", h.Test)
-
-	e.Logger.Fatal(e.Start(":5000"))
+	e.GET("/api/checkHealthy", h.CheckHealthy)
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
-type TestHanler struct {
+func SetEnv(key string) string {
+	var port string
+	if key == "PRD" {
+		port = "3000"
+		return port
+	}
+	if key == "DEV" {
+		port = "5000"
+		return port
+	} else {
+		fmt.Printf("Invalid ENV")
+	}
+	return ""
+}
+
+type FuncHandler struct {
 	DB *gorm.DB
 }
 
-func (h *TestHanler) Initialize() {
-
+func (h *FuncHandler) Initialize() {
 	dns := "dev:123456789@tcp(52.139.153.111:3306)/project?charset=utf8&parseTime=True&loc=Local"
 	conn, err := gorm.Open(mysql.Open(dns), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
@@ -41,13 +59,22 @@ func (h *TestHanler) Initialize() {
 	h.DB = conn
 }
 
-func (h *TestHanler) Test(ctx echo.Context) error {
+func (h *FuncHandler) Test(ctx echo.Context) error {
 	req := new(request.Test)
 	err := ctx.Bind(&req)
 	if err != nil {
 		return err
 	}
 	res, err := controller.TestController(ctx, *req, h.DB)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
+	res, err := controller.CheckHealthy(ctx, h.DB)
 	if err != nil {
 		return err
 	}
