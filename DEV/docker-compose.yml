@@ -1,0 +1,12 @@
+version: "2.2"
+services:
+  backend:
+    container_name: "backend-dev"
+    image: ghcr.io/artidsun/int371-backend-dev:latest
+    ports:
+      - "3000:3000"
+    restart: on-failure
+networks:
+  default:
+    external:
+      name: project-net

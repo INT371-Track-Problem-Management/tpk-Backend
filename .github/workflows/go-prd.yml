@@ -2,7 +2,7 @@ name: ci-backend-int371
 on:
   push:
     branches:
-      - dev
+      - prd
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -20,7 +20,7 @@ jobs:
         with:
           file: DEV/Dockerfile
           push: true
-          tags: ghcr.io/artidsun/int371-backend-dev:latest
+          tags: ghcr.io/artidsun/int371-backend:latest
   deploy:
     needs: build
     runs-on: ubuntu-20.04
@@ -37,16 +37,16 @@ jobs:
           script: |
             cd tpk-Backend
             git pull
-            git checkout dev
-            git pull origin dev
+            git checkout prd
+            git pull origin prd
             sudo docker rm -f backend
-            sudo docker rmi ghcr.io/artidsun/int371-backend-dev:latest
-            sudo docker pull ghcr.io/artidsun/int371-backend-dev:latest
-            cd DEV
+            sudo docker rmi ghcr.io/artidsun/int371-backend:latest
+            sudo docker pull ghcr.io/artidsun/int371-backend-:latest
+            cd PRD
             sudo docker-compose up -d
   CheckHealthy:
     needs: deploy
     runs-on: ubuntu-20.04
     steps:
       - name: Check health check page
-        run: curl http://rungmod-dev.ddns.net:8080/api/checkHealthy | grep "Healthy"
+        run: curl https://rungmod.ddns.net/api/checkHealthy | grep "Healthy"
