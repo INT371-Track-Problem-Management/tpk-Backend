@@ -26,6 +26,7 @@ func StartServer() {
 	})
 	e.GET("/api/test", h.Test)
 	e.GET("/api/checkHealthy", h.CheckHealthy)
+	e.GET("/api/rooms", h.Rooms)
 	e.Logger.Fatal(e.Start(":" + port))
 }
 
@@ -79,5 +80,13 @@ func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
 		return err
 	}
 
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) Rooms(ctx echo.Context) error {
+	res, err := controller.Rooms(ctx, h.DB)
+	if err != nil {
+		return err
+	}
 	return ctx.JSON(http.StatusOK, res)
 }
