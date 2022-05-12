@@ -9,7 +9,7 @@ import (
 
 func Rooms(ctx echo.Context, conn *gorm.DB) (*[]entity.Room, error) {
 	var room []entity.Room
-	err := conn.Table(entity.TableName()).Find(&room).Error
+	err := conn.Table("room").Find(&room).Error
 	if err != nil {
 		return nil, err
 	}

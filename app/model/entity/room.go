@@ -8,8 +8,3 @@ type Room struct {
 	Status      string `json:"status" gorm:"column:status"`
 	DormId      int    `json:"dormId" gorm:"column:dormId"`
 }
-
-func TableName() string {
-	TableName := "room"
-	return TableName
-}
