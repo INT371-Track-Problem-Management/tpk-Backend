@@ -24,9 +24,15 @@ func StartServer() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	e.GET("/api/test", h.Test)
-	e.GET("/api/checkHealthy", h.CheckHealthy)
-	e.GET("/api/rooms", h.Rooms)
+	api := e.Group("/api/")
+	api.GET("test", h.Test)
+	api.GET("checkHealthy", h.CheckHealthy)
+	api.GET("rooms", h.Rooms)
+	api.GET("customer", h.Customer)
+	api.PUT("rooms", h.RoomsStatus)
+	api.GET("dorm", h.Dorm)
+	api.GET("report", h.Report)
+	api.GET("reportById", h.ReportById)
 	e.Logger.Fatal(e.Start(":" + port))
 }
 
@@ -85,6 +91,61 @@ func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
 
 func (h *FuncHandler) Rooms(ctx echo.Context) error {
 	res, err := controller.Rooms(ctx, h.DB)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) RoomsStatus(ctx echo.Context) error {
+	req := new(request.RoomsStatus)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.RoomsStatus(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) Customer(ctx echo.Context) error {
+	res, err := controller.Customer(ctx, h.DB)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) Dorm(ctx echo.Context) error {
+	req := new(request.Dorm)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.Dorm(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) Report(ctx echo.Context) error {
+	res, err := controller.Report(ctx, h.DB)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportById(ctx echo.Context) error {
+	req := new(request.Report)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.ReportById(ctx, h.DB, *req)
 	if err != nil {
 		return err
 	}
