@@ -16,3 +16,24 @@ func Dorm(ctx echo.Context, conn *gorm.DB, req request.Dorm) (*entity.Dorm, erro
 	}
 	return &dorm, nil
 }
+
+func DormInsert(ctx echo.Context, conn *gorm.DB, req request.DormInsert) error {
+	err := conn.Table("dorm").Create(&req).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DormDelete(ctx echo.Context, conn *gorm.DB, req request.DormDelete) error {
+	var err error
+	err = conn.Exec("DELETE FROM room WHERE dormId = ?", req.DormId).Error
+	if err != nil {
+		return err
+	}
+	err = conn.Exec("DELETE FROM dorm WHERE dormId = ?", req.DormId).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

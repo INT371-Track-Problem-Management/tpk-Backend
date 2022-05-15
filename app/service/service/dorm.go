@@ -24,3 +24,19 @@ func Dorm(ctx echo.Context, conn *gorm.DB, req request.Dorm) (*response.Dorm, er
 	}
 	return res, nil
 }
+
+func DormInsert(ctx echo.Context, conn *gorm.DB, req request.DormInsert) (string, error) {
+	err := repositories.DormInsert(ctx, conn, req)
+	if err != nil {
+		return "Can not insert dorm", err
+	}
+	return "Insert success", nil
+}
+
+func DormDelete(ctx echo.Context, conn *gorm.DB, req request.DormDelete) (string, error) {
+	err := repositories.DormDelete(ctx, conn, req)
+	if err != nil {
+		return "Can not delete", err
+	}
+	return "Delete success", nil
+}

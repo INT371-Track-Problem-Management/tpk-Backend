@@ -25,3 +25,19 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 	}
 	return &report, nil
 }
+
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.Report) error {
+	err := conn.Table("reports").Create(&req).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {
+	err := conn.Exec("UPDATE reports SET status = ? WHERE reportId = ?", req.Status, req.ReportId).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

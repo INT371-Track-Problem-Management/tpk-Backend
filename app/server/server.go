@@ -33,6 +33,12 @@ func StartServer() {
 	api.GET("dorm", h.Dorm)
 	api.GET("report", h.Report)
 	api.GET("reportById", h.ReportById)
+	api.POST("dorm", h.DormInsert)
+	api.POST("rooms", h.RoomsInsert)
+	api.DELETE("dorm", h.DormDelete)
+	api.POST("report", h.ReportInsert)
+	api.PUT("statusReport", h.ReportChangeStatus)
+
 	e.Logger.Fatal(e.Start(":" + port))
 }
 
@@ -146,6 +152,71 @@ func (h *FuncHandler) ReportById(ctx echo.Context) error {
 		return err
 	}
 	res, err := controller.ReportById(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) DormInsert(ctx echo.Context) error {
+	req := new(request.DormInsert)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.DormInsert(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
+	req := new(request.RoomInsert)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.RoomInsert(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) DormDelete(ctx echo.Context) error {
+	req := new(request.DormDelete)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.DormDelete(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
+	req := new(request.ReportInsert)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.ReportInsert(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
+	req := new(request.ReportChangeStatus)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.ReportChangeStatus(ctx, h.DB, *req)
 	if err != nil {
 		return err
 	}

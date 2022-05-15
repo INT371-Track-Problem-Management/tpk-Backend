@@ -24,3 +24,11 @@ func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) error
 	}
 	return nil
 }
+
+func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) error {
+	err := conn.Table("room").Create(&req).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

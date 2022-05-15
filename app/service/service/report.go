@@ -4,6 +4,7 @@ import (
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
+	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -34,4 +35,31 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		ReviewId:         data.ReviewId,
 	}
 	return res, nil
+}
+
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (string, error) {
+	timenow := pkg.GetDatetime()
+	data := entity.Report{
+		ReportId:         req.ReportId,
+		Title:            req.Title,
+		CategoriesReport: req.CategoriesReport,
+		ReportDes:        req.ReportDes,
+		Status:           req.Status,
+		ReportDate:       timenow,
+		SuccessDate:      timenow,
+		ReviewId:         req.ReviewId,
+	}
+	err := repositories.ReportInsert(ctx, conn, data)
+	if err != nil {
+		return "Can not insert", err
+	}
+	return "Insert success", nil
+}
+
+func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) (string, error) {
+	err := repositories.ReportChangeStatus(ctx, conn, req)
+	if err != nil {
+		return "Can not update", err
+	}
+	return "Update success", nil
 }

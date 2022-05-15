@@ -5,6 +5,5 @@ type Room struct {
 	RoomNum     string `json:"roomNum" gorm:"column:roomNum"`
 	Floors      int    `json:"floors" gorm:"column:floors"`
 	Description string `json:"description" gorm:"column:description"`
-	Status      string `json:"status" gorm:"column:status"`
 	DormId      int    `json:"dormId" gorm:"column:dormId"`
 }

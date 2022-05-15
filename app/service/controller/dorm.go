@@ -16,3 +16,19 @@ func Dorm(ctx echo.Context, conn *gorm.DB, req request.Dorm) (*response.Dorm, er
 	}
 	return res, nil
 }
+
+func DormInsert(ctx echo.Context, conn *gorm.DB, req request.DormInsert) (*string, error) {
+	res, err := service.DormInsert(ctx, conn, req)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}
+
+func DormDelete(ctx echo.Context, conn *gorm.DB, req request.DormDelete) (*string, error) {
+	res, err := service.DormDelete(ctx, conn, req)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}

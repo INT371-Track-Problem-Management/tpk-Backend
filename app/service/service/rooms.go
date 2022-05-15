@@ -20,7 +20,15 @@ func Rooms(ctx echo.Context, conn *gorm.DB) (*[]entity.Room, error) {
 func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (string, error) {
 	err := repositories.RoomsStatus(ctx, conn, req)
 	if err != nil {
-		return "", err
+		return "Can not update", err
 	}
 	return "Update success", nil
+}
+
+func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (string, error) {
+	err := repositories.RoomInsert(ctx, conn, req)
+	if err != nil {
+		return "Can not insert", err
+	}
+	return "Insert success", nil
 }
