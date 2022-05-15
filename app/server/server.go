@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/controller"
 
 	"github.com/labstack/echo/v4"
@@ -38,6 +39,7 @@ func StartServer() {
 	api.DELETE("dorm", h.DormDelete)
 	api.POST("report", h.ReportInsert)
 	api.PUT("statusReport", h.ReportChangeStatus)
+	api.GET("testEmail", h.TestGmail)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -70,6 +72,10 @@ func (h *FuncHandler) Initialize() {
 		fmt.Println(err)
 	}
 	h.DB = conn
+}
+func (h *FuncHandler) TestGmail(ctx echo.Context) error {
+	pkg.SSLemail("artid.vijitpanmai@mail.kmutt.ac.th", "Hello-World", "Hi")
+	return ctx.JSON(http.StatusOK, "send mail success")
 }
 
 func (h *FuncHandler) Test(ctx echo.Context) error {
