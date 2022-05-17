@@ -10,6 +10,7 @@ import (
 	"tpk-backend/app/service/controller"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -22,6 +23,11 @@ func StartServer() {
 	e := echo.New()
 	h := FuncHandler{}
 	h.Initialize()
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://www.rungmod.com", "https://dev.rungmod.com", "http://localhost"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
