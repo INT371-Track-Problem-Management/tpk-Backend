@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"tpk-backend/app/authentication"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/controller"
@@ -26,6 +27,7 @@ func StartServer() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	api := e.Group("/api/")
+	api.GET("login", h.Login)
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
 	api.GET("rooms", h.Rooms)
@@ -61,6 +63,22 @@ func SetEnv(key string) string {
 
 type FuncHandler struct {
 	DB *gorm.DB
+}
+
+func (h *FuncHandler) Login(ctx echo.Context) error {
+	var token *string
+	var err error
+	user := new(request.User)
+	err = ctx.Bind(&user)
+	if err != nil {
+		return err
+	}
+	token, err = authentication.Login(ctx, h.DB, *user)
+	if err != nil {
+		fmt.Println("Unatutherize")
+		return ctx.JSON(http.StatusUnauthorized, "Unatutherize")
+	}
+	return ctx.JSON(http.StatusOK, token)
 }
 
 func (h *FuncHandler) Initialize() {
