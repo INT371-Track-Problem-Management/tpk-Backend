@@ -168,6 +168,7 @@ func (h *FuncHandler) Dorm(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) Report(ctx echo.Context) error {
+	fmt.Println("test")
 	res, err := controller.Report(ctx, h.DB)
 	if err != nil {
 		return err
