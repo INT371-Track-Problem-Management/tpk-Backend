@@ -6,44 +6,27 @@ import (
 	"log"
 	"net"
 	"net/smtp"
-	"os"
-
-	"github.com/joho/godotenv"
+	"tpk-backend/app/pkg/config"
 )
-
-func NonSSLmail() {
-	from := "rungmod.sit.kmutt@gmail.com"
-	password := "Project371@rungmod"
-	to := []string{
-		"artid.vijitpanmai@mail.kmutt.ac.th",
-	}
-
-	smtpHost := "smtp.gmail.com"
-	smtpPort := "587"
-
-	message := []byte("This is a test email message.")
-
-	auth := smtp.PlainAuth("", from, password, smtpHost)
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println("Email Sent Successfully!")
-}
 
 func SSLemail(to string, subj string, body string) {
 
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Fatalf("Some error occured. Err: %s", err)
-	}
+	// err := godotenv.Load("../.env")
+	// if err != nil {
+	// 	log.Fatalf("Some error occured. Err: %s", err)
+	// }
 
-	from := os.Getenv("MAILER_USERNAME")
-	password := os.Getenv("MAILER_PASSWORD")
+	// from := os.Getenv("MAILER_USERNAME")
+	// password := os.Getenv("MAILER_PASSWORD")
 
-	smtpHost := os.Getenv("MAILER_HOST")
-	smtpPort := os.Getenv("MAILER_PORT")
+	// smtpHost := os.Getenv("MAILER_HOST")
+	// smtpPort := os.Getenv("MAILER_PORT")
+	mail := config.LoadGmail()
+	from := mail.Username
+	password := mail.Password
+
+	smtpHost := mail.Host
+	smtpPort := mail.Port
 	servername := smtpHost + ":" + smtpPort
 	hostdns := "smtp.example.tld:465"
 	host, _, _ := net.SplitHostPort(hostdns)
