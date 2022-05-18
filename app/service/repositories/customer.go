@@ -9,7 +9,16 @@ import (
 
 func Customer(ctx echo.Context, conn *gorm.DB) (*[]entity.Customer, error) {
 	var Customer []entity.Customer
-	err := conn.Table("room").Find(&Customer).Error
+	err := conn.Table("customer").Find(&Customer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &Customer, nil
+}
+
+func CustomerByUsername(ctx echo.Context, conn *gorm.DB, username string) (*entity.Customer, error) {
+	var Customer entity.Customer
+	err := conn.Table("customer").Where("username = ?", username).Find(&Customer).Error
 	if err != nil {
 		return nil, err
 	}

@@ -15,6 +15,11 @@ type Gmail struct {
 	Password string
 }
 
+type ReportSend struct {
+	Subject string
+	Body    string
+}
+
 func LoadDB() *Database {
 	return &Database{
 		Username: "dev",
@@ -31,5 +36,12 @@ func LoadGmail() *Gmail {
 		Port:     "465",
 		Username: "rungmod.sit.kmutt@gmail.com",
 		Password: "Project371@rungmod",
+	}
+}
+
+func LoadReportSend() *ReportSend {
+	return &ReportSend{
+		Subject: "Received",
+		Body:    "รับเรื่องเรียบร้อยทางเรากำลังดำเนินการ",
 	}
 }

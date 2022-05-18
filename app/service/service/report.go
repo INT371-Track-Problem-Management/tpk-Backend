@@ -5,6 +5,7 @@ import (
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
 	"tpk-backend/app/pkg"
+	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -53,6 +54,15 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 	if err != nil {
 		return "Can not insert", err
 	}
+
+	cus, err := repositories.CustomerByUsername(ctx, conn, req.CreatedBy)
+	if err != nil {
+		return "Can not find profile", err
+	}
+
+	rps := config.LoadReportSend()
+	pkg.SSLemail(cus.Email, rps.Subject, rps.Body)
+
 	return "Insert success", nil
 }
 
