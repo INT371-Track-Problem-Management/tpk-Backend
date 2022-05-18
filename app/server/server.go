@@ -35,7 +35,7 @@ func StartServer() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	api := e.Group("/api/")
-	api.GET("login", h.Login)
+	api.POST("login", h.Login)
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
 	api.GET("rooms", h.Rooms)
