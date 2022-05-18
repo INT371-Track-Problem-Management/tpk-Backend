@@ -6,8 +6,8 @@ services:
     ports:
       - "3000:3000"
     restart: on-failure
-    volumes:
-      - ../.env:/app/.env
+    env_file:
+      - ../.env
 networks:
   default:
     external:
