@@ -8,5 +8,5 @@ type Report struct {
 	Status           string `json:"status" gorm:"column:status"`
 	SuccessDate      string `json:"successDate" gorm:"column:successDate"`
 	ReportDate       string `json:"reportDate" gorm:"column:reportDate"`
-	ReviewId         int    `json:"reviewId" gorm:"column:reviewId"`
+	CreatedBy        string `json:"createdBy" gorm:"column:createdBy"`
 }

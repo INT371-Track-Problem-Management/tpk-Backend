@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"tpk-backend/app/authentication"
@@ -9,6 +10,7 @@ import (
 	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/controller"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/mysql"
@@ -89,7 +91,11 @@ func (h *FuncHandler) Login(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) Initialize() {
-	dns := "dev:123456789@tcp(52.139.153.111:3306)/project?charset=utf8&parseTime=True&loc=Local"
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
+	dns := fmt.Sprintf(`%v:%v@tcp(%v)/%v?charset=utf8&parseTime=True&loc=Local`, os.Getenv("USER"), os.Getenv("PASSWORD"), os.Getenv("HOST_PORT"), os.Getenv("DATABASE"))
 	conn, err := gorm.Open(mysql.Open(dns), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})

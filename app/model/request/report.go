@@ -10,7 +10,7 @@ type ReportInsert struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
-	ReviewId         int    `json:"reviewId" gorm:"column:reviewId"`
+	CreatedBy        string `json:"createdBy" gorm:"column:createdBy"`
 }
 
 type ReportChangeStatus struct {

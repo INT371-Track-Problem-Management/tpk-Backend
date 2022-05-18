@@ -32,7 +32,7 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		ReportDate:       data.ReportDate,
 		SuccessDate:      data.SuccessDate,
 		Status:           data.Status,
-		ReviewId:         data.ReviewId,
+		CreatedBy:        data.CreatedBy,
 	}
 	return res, nil
 }
@@ -47,7 +47,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 		Status:           req.Status,
 		ReportDate:       timenow,
 		SuccessDate:      timenow,
-		ReviewId:         req.ReviewId,
+		CreatedBy:        req.CreatedBy,
 	}
 	err := repositories.ReportInsert(ctx, conn, data)
 	if err != nil {
