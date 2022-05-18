@@ -3,7 +3,7 @@ FROM golang:1.17-alpine
 WORKDIR ../app
 
 COPY .. ./
-# COPY ../app/.env app/.env
+COPY ../app/.env app/.env
 
 RUN GOOS=linux go build app/cmd/tpkBackend.go
 
