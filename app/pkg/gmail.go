@@ -34,7 +34,7 @@ func NonSSLmail() {
 
 func SSLemail(to string, subj string, body string) {
 
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}

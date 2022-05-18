@@ -7,7 +7,7 @@ services:
       - "3000:3000"
     restart: on-failure
     volumes:
-      - ../.env:/app/.env
+      - ../app/.env:/app/.env
 networks:
   default:
     external:
