@@ -5,6 +5,7 @@ import (
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
 	"tpk-backend/app/pkg"
+	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -39,8 +40,7 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (string, error) {
 	timenow := pkg.GetDatetime()
-	data := entity.Report{
-		ReportId:         req.ReportId,
+	data := entity.ReportInsert{
 		Title:            req.Title,
 		CategoriesReport: req.CategoriesReport,
 		ReportDes:        req.ReportDes,
@@ -53,6 +53,15 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 	if err != nil {
 		return "Can not insert", err
 	}
+
+	cus, err := repositories.GetUserByCustomerId(ctx, conn, req.CreatedBy)
+	if err != nil {
+		return "Can not find profile", err
+	}
+
+	rps := config.LoadReportSend()
+	pkg.SSLemail(cus.Email, rps.Subject, rps.Body)
+
 	return "Insert success", nil
 }
 

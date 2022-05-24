@@ -26,8 +26,16 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 	return &report, nil
 }
 
-func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.Report) error {
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) error {
 	err := conn.Table("reports").Create(&req).Error
+	// err := conn.Exec("INSERT INTO `reports` (`title`,`categoriesReport`,`reportDes`,`status`,`successDate`,`reportDate`,`createdBy`) VALUES (?,?,?,?,?,?,?)",
+	// 	req.Title,
+	// 	req.CategoriesReport,
+	// 	req.ReportDes,
+	// 	req.Status,
+	// 	req.SuccessDate,
+	// 	req.ReportDate,
+	// 	req.CreatedBy).Error
 	if err != nil {
 		return err
 	}
