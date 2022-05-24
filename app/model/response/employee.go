@@ -1,7 +1,7 @@
 package response
 
 type Employee struct {
-	EmployeeId  string `json:"employeeId" gorm:"column:employeeId"`
+	EmployeeId  int    `json:"employeeId" gorm:"column:employeeId"`
 	Fname       string `json:"fname" gorm:"column:fname"`
 	Lname       string `json:"lname" gorm:"column:lname"`
 	Phone       string `json:"phone" gorm:"column:phone"`

@@ -1,7 +1,7 @@
 package entity
 
 type Customer struct {
-	CustomerId  string `json:"customerId" gorm:"column:customerId"`
+	CustomerId  int    `json:"customerId" gorm:"column:customerId"`
 	Email       string `json:"email" gorm:"column:email"`
 	Fname       string `json:"fname" gorm:"column:fname"`
 	Lname       string `json:"lname" gorm:"column:lname"`

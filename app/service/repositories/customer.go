@@ -16,6 +16,24 @@ func Customer(ctx echo.Context, conn *gorm.DB) (*[]entity.Customer, error) {
 	return &Customer, nil
 }
 
+func GetUserByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.Customer, error) {
+	var Customer entity.Customer
+	err := conn.Table("customer").Where("customerId = ?", customerId).Find(&Customer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &Customer, nil
+}
+
+func CustomerById(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.Customer, error) {
+	var Customer entity.Customer
+	err := conn.Table("customer").Where("customerId = ?", customerId).Find(&Customer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &Customer, nil
+}
+
 func CustomerByUsername(ctx echo.Context, conn *gorm.DB, username int) (*entity.Customer, error) {
 	var Customer entity.Customer
 	err := conn.Table("customer").Where("username = ?", username).Find(&Customer).Error

@@ -40,8 +40,7 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (string, error) {
 	timenow := pkg.GetDatetime()
-	data := entity.Report{
-		ReportId:         req.ReportId,
+	data := entity.ReportInsert{
 		Title:            req.Title,
 		CategoriesReport: req.CategoriesReport,
 		ReportDes:        req.ReportDes,
@@ -55,7 +54,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 		return "Can not insert", err
 	}
 
-	cus, err := repositories.CustomerByUsername(ctx, conn, req.CreatedBy)
+	cus, err := repositories.GetUserByCustomerId(ctx, conn, req.CreatedBy)
 	if err != nil {
 		return "Can not find profile", err
 	}

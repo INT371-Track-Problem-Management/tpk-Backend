@@ -5,5 +5,5 @@ type HistoryCus struct {
 	DateOfEntry string `json:"dateOfEntry" gorm:"column:dateOfEntry"`
 	DateOfIssue string `json:"dateOfIssue" gorm:"column:dateOfIssue"`
 	RoomId      int    `json:"roomId" gorm:"column:roomId"`
-	CustomerId  string `json:"customerId" gorm:"column:customerId"`
+	CustomerId  int    `json:"customerId" gorm:"column:customerId"`
 }
