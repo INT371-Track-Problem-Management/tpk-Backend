@@ -9,7 +9,7 @@ import (
 	"tpk-backend/app/pkg/config"
 )
 
-func SSLemail(to string, subj string, body string) {
+func SSLemail(to *string, subj string, body string) {
 
 	// err := godotenv.Load("../.env")
 	// if err != nil {
@@ -33,7 +33,7 @@ func SSLemail(to string, subj string, body string) {
 
 	headers := make(map[string]string)
 	headers["From"] = from
-	headers["To"] = to
+	headers["To"] = *to
 	headers["Subject"] = subj
 
 	message := ""
@@ -62,7 +62,7 @@ func SSLemail(to string, subj string, body string) {
 	if err = c.Mail(from); err != nil {
 		log.Panic(err)
 	}
-	if err = c.Rcpt(to); err != nil {
+	if err = c.Rcpt(*to); err != nil {
 		log.Panic(err)
 	}
 	w, err := c.Data()

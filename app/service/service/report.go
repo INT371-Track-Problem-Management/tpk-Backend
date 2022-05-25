@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
@@ -58,8 +59,11 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 		return "Can not find profile", err
 	}
 
-	rps := config.LoadReportSend()
-	pkg.SSLemail(cus.Email, rps.Subject, rps.Body)
+	if cus.Email != "" {
+		rps := config.LoadReportSend()
+		pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
+	}
+	fmt.Printf("customerId %v is not have email", req.CreatedBy)
 
 	return "Insert success", nil
 }
