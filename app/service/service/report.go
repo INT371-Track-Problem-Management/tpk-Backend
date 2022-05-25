@@ -46,7 +46,6 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 		ReportDes:        req.ReportDes,
 		Status:           req.Status,
 		ReportDate:       timenow,
-		SuccessDate:      timenow,
 		CreatedBy:        req.CreatedBy,
 	}
 	err := repositories.ReportInsert(ctx, conn, data)
