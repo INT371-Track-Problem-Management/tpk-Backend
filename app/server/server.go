@@ -101,7 +101,8 @@ func (h *FuncHandler) Initialize() {
 	h.DB = conn
 }
 func (h *FuncHandler) TestGmail(ctx echo.Context) error {
-	pkg.SSLemail("artid.vijitpanmai@mail.kmutt.ac.th", "Hello-World", "Hi")
+	testmail := "artid.vijitpanmai@mail.kmutt.ac.th"
+	pkg.SSLemail(&testmail, "Hello-World", "Hi")
 	return ctx.JSON(http.StatusOK, "send mail success")
 }
 
