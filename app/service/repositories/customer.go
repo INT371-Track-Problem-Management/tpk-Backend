@@ -25,7 +25,7 @@ func GetUserByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) (*enti
 	return Customer, nil
 }
 
-func CustomerByUsername(ctx echo.Context, conn *gorm.DB, username int) (*entity.Customer, error) {
+func CustomerByUsername(ctx echo.Context, conn *gorm.DB, username string) (*entity.Customer, error) {
 	var Customer entity.Customer
 	err := conn.Table("customer").Where("username = ?", username).Find(&Customer).Error
 	if err != nil {

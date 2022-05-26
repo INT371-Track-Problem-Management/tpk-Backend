@@ -45,3 +45,10 @@ func LoadReportSend() *ReportSend {
 		Body:    "รับเรื่องเรียบร้อยทางเรากำลังดำเนินการ",
 	}
 }
+
+func LoadRegisCustomerSend() *ReportSend {
+	return &ReportSend{
+		Subject: "ขอบคุณสำหรับการสมัรสมาชิก กรุณายืนยันตัวตนด้านล่าง",
+		Body:    "",
+	}
+}

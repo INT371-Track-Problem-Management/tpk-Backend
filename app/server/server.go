@@ -50,6 +50,7 @@ func StartServer() {
 	api.POST("report", h.ReportInsert)
 	api.PUT("statusReport", h.ReportChangeStatus)
 	api.GET("testEmail", h.TestGmail)
+	api.POST("registerCustomer", h.RegisterCustomer)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -256,4 +257,18 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 		return err
 	}
 	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) RegisterCustomer(ctx echo.Context) error {
+	var err error
+	req := new(authentication.RegisterCustomer)
+	err = ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	customerId, err := authentication.RegisterCustomers(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, customerId)
 }
