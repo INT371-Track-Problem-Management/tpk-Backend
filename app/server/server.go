@@ -54,18 +54,30 @@ func StartServer() {
 	api.GET("reportEngageAll", h.GetReportEngageAll)
 	api.GET("reportEngageById", h.GetReportEngageById)
 	api.POST("CreateReportEngage", h.InsertReportEngage)
+	api.GET("activateCus", h.ActivateCustomer)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
+
+var URI string
+var URIRedi string
 
 func SetEnv(key string) string {
 	var port string
 	if key == "PRD" {
 		port = "5000"
+		URI = "https://www.rungmod.com/"
 		return port
 	}
 	if key == "DEV" {
 		port = "3000"
+		URI = "https://dev.rungmod.com/"
+		return port
+	}
+	if key == "local" {
+		port = "3050"
+		URI = "http://localhost:3050/"
+		URIRedi = "https://dev.rungmod.com/"
 		return port
 	} else {
 		fmt.Printf("Invalid ENV")
@@ -269,7 +281,7 @@ func (h *FuncHandler) RegisterCustomer(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	customerId, err := authentication.RegisterCustomers(ctx, h.DB, *req)
+	customerId, err := authentication.RegisterCustomers(ctx, h.DB, *req, URI)
 	if err != nil {
 		return err
 	}
@@ -308,4 +320,16 @@ func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
 		return err
 	}
 	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ActivateCustomer(ctx echo.Context) error {
+	id := ctx.QueryParam("cusid")
+	err := authentication.ActivateCustomerCtr(ctx, h.DB, id, "A")
+	if err != nil {
+		return err
+	}
+	redir := URI + "login"
+	fmt.Println("----test----")
+	fmt.Println(redir)
+	return ctx.Redirect(http.StatusMovedPermanently, redir)
 }

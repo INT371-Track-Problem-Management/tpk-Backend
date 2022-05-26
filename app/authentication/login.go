@@ -18,6 +18,26 @@ type JwtCustomClaims struct {
 	jwt.StandardClaims
 }
 
+type JwtRegisterActivate struct {
+	CustomerId int
+	jwt.StandardClaims
+}
+
+func GenerateTokenRegister(cusId int) (*string, error) {
+	claims := &JwtRegisterActivate{
+		cusId,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	t, err := token.SignedString([]byte("abcdefghijkmn"))
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
 func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 	user, err := GetUser(ctx, conn, req)
 	if err != nil {
