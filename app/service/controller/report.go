@@ -26,12 +26,12 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 	return res, nil
 }
 
-func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*string, error) {
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*int, error) {
 	res, err := service.ReportInsert(ctx, conn, req)
 	if err != nil {
 		return nil, err
 	}
-	return &res, nil
+	return res, nil
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) (*string, error) {

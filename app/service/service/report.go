@@ -39,7 +39,7 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 	return res, nil
 }
 
-func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (string, error) {
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*int, error) {
 	timenow := pkg.GetDatetime()
 	data := entity.ReportInsert{
 		Title:            req.Title,
@@ -49,14 +49,14 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 		ReportDate:       timenow,
 		CreatedBy:        req.CreatedBy,
 	}
-	err := repositories.ReportInsert(ctx, conn, data)
+	reportid, err := repositories.ReportInsert(ctx, conn, data)
 	if err != nil {
-		return "Can not insert", err
+		return nil, err
 	}
 
 	cus, err := repositories.GetUserByCustomerId(ctx, conn, req.CreatedBy)
 	if err != nil {
-		return "Can not find profile", err
+		return nil, err
 	}
 
 	if cus.Email != "" {
@@ -65,7 +65,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (st
 	}
 	fmt.Printf("customerId %v is not have email", req.CreatedBy)
 
-	return "Insert success", nil
+	return reportid, nil
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) (string, error) {
