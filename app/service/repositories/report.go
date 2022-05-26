@@ -26,20 +26,18 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 	return &report, nil
 }
 
-func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) error {
-	err := conn.Table("reports").Create(&req).Error
-	// err := conn.Exec("INSERT INTO `reports` (`title`,`categoriesReport`,`reportDes`,`status`,`successDate`,`reportDate`,`createdBy`) VALUES (?,?,?,?,?,?,?)",
-	// 	req.Title,
-	// 	req.CategoriesReport,
-	// 	req.ReportDes,
-	// 	req.Status,
-	// 	req.SuccessDate,
-	// 	req.ReportDate,
-	// 	req.CreatedBy).Error
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*int, error) {
+	var err error
+	err = conn.Table("reports").Create(&req).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	var id int
+	err = conn.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createdBy = ?", req.CreatedBy).Where("reportDate = ?", req.ReportDate).Scan(&id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &id, nil
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {

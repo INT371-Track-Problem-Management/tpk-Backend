@@ -51,6 +51,9 @@ func StartServer() {
 	api.PUT("statusReport", h.ReportChangeStatus)
 	api.GET("testEmail", h.TestGmail)
 	api.POST("registerCustomer", h.RegisterCustomer)
+	api.GET("reportEngageAll", h.GetReportEngageAll)
+	api.GET("reportEngageById", h.GetReportEngageById)
+	api.POST("CreateReportEngage", h.InsertReportEngage)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -271,4 +274,38 @@ func (h *FuncHandler) RegisterCustomer(ctx echo.Context) error {
 		return err
 	}
 	return ctx.JSON(http.StatusOK, customerId)
+}
+
+func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
+	res, err := controller.GetReportEngageAll(ctx, h.DB)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) GetReportEngageById(ctx echo.Context) error {
+	req := new(request.ReportEngageById)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.GetReportEngageById(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
+	req := new(request.ReportEngage)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return err
+	}
+	res, err := controller.InsertReportEngage(ctx, h.DB, *req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, res)
 }
