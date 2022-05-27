@@ -55,6 +55,7 @@ func StartServer() {
 	api.GET("reportEngageById", h.GetReportEngageById)
 	api.POST("CreateReportEngage", h.InsertReportEngage)
 	api.GET("activateCus", h.ActivateCustomer)
+	api.DELETE("deleteReportById", h.DeleteReportById)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -100,11 +101,7 @@ func (h *FuncHandler) Login(ctx echo.Context) error {
 	}
 	token, err = authentication.Login(ctx, h.DB, *user)
 	if err != nil {
-		if err.Error() == "NonAct" {
-			return ctx.JSON(http.StatusUnauthorized, "plese activate your account befor login please check your email")
-		}
-		fmt.Println("Unatutherize")
-		return ctx.JSON(http.StatusUnauthorized, "Unatutherize")
+		return ctx.JSON(http.StatusUnauthorized, err.Error())
 	}
 	return ctx.JSON(http.StatusOK, token)
 }

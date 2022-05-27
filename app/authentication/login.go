@@ -2,7 +2,6 @@ package authentication
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"time"
 	"tpk-backend/app/model/entity"
@@ -57,8 +56,7 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, err
 	}
 	if cus.Status == "I" {
-		nonAct := fmt.Sprintln("nonAct")
-		errorstatus := errors.New(nonAct)
+		errorstatus := errors.New(`plese activate your account befor login please check your email`)
 		log.Println(errorstatus)
 		return nil, errorstatus
 
