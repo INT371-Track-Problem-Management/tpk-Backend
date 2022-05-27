@@ -41,3 +41,11 @@ func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChang
 	}
 	return &res, nil
 }
+
+func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error {
+	err := service.DeleteReportById(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return nil
+}

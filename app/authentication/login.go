@@ -2,9 +2,12 @@ package authentication
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"time"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/service/repositories"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
@@ -47,6 +50,18 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 	if req.Username != user.Username || req.Password != user.Password {
 		errUn := errors.New("Unatutherize")
 		return nil, errUn
+	}
+
+	cus, err := repositories.CustomerByUsername(ctx, conn, user.Username)
+	if err != nil {
+		return nil, err
+	}
+	if cus.Status == "I" {
+		nonAct := fmt.Sprintln("nonAct")
+		errorstatus := errors.New(nonAct)
+		log.Println(errorstatus)
+		return nil, errorstatus
+
 	}
 	// Set custom claims
 	claims := &JwtCustomClaims{
