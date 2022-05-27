@@ -1,0 +1,7 @@
+package response
+
+type Maintainer struct {
+	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
+	Fname        string `json:"fname" gorm:"column:fname"`
+	Phone        string `json:"phone" gorm:"column:phone"`
+}
