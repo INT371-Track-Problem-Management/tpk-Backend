@@ -14,9 +14,9 @@ import (
 )
 
 type JwtCustomClaims struct {
-	Username string `json:"username"`
-	Role     string `json:"role"`
-	Status   bool   `json:"status"`
+	Email  string `json:"email"`
+	Role   string `json:"role"`
+	Status bool   `json:"status"`
 	jwt.StandardClaims
 }
 
@@ -46,12 +46,12 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, err
 	}
 
-	if req.Username != user.Username || req.Password != user.Password {
+	if req.Email != user.Email || req.Password != user.Password {
 		errUn := errors.New("Unatutherize")
 		return nil, errUn
 	}
 
-	cus, err := repositories.CustomerByUsername(ctx, conn, user.Username)
+	cus, err := repositories.CustomerByEmail(ctx, conn, user.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 	}
 	// Set custom claims
 	claims := &JwtCustomClaims{
-		user.Username,
+		user.Email,
 		user.Role,
 		true,
 		jwt.StandardClaims{
@@ -80,7 +80,7 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 
 func GetUser(ctx echo.Context, conn *gorm.DB, req request.User) (*entity.User, error) {
 	user := new(entity.User)
-	err := conn.Table("user").Where("username = ?", req.Username).Find(&user).Error
+	err := conn.Table("user").Where("email = ?", req.Email).Find(&user).Error
 	if err != nil {
 		return nil, err
 	}

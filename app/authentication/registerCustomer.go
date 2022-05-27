@@ -13,7 +13,6 @@ import (
 )
 
 type RegisterCustomer struct {
-	Username    string `gorm:"column:username" json:"username"`
 	Password    string `gorm:"column:password" json:"password"`
 	Email       string `json:"email" gorm:"column:email"`
 	Fname       string `json:"fname" gorm:"column:fname"`
@@ -44,7 +43,7 @@ func ActivateCustomerCtr(ctx echo.Context, conn *gorm.DB, tokeni string, status 
 func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCustomer, uri string) (*int, error) {
 
 	regisUser := entity.User{
-		Username: req.Username,
+		Email:    req.Email,
 		Password: req.Password,
 		Role:     "C",
 	}
@@ -52,7 +51,7 @@ func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCusto
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Register username: " + regisUser.Username + " as a customer")
+	fmt.Println("Register email: " + regisUser.Email + " as a customer")
 
 	regisCus := request.CustomerRegis{
 		Email:       req.Email,
@@ -64,7 +63,6 @@ func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCusto
 		Phone:       req.Phone,
 		Address:     req.Address,
 		Status:      "I",
-		Username:    req.Username,
 	}
 	id, err := RegisterCustomersRepo(ctx, conn, regisCus)
 	if err != nil {
@@ -102,7 +100,7 @@ func RegisterCustomersRepo(ctx echo.Context, conn *gorm.DB, req request.Customer
 	}
 	fmt.Println("Register customer success")
 	var cusid int
-	err = conn.Table("customer").Select("customerId").Where("username = ?", req.Username).Scan(&cusid).Error
+	err = conn.Table("customer").Select("customerId").Where("email = ?", req.Email).Scan(&cusid).Error
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, err
