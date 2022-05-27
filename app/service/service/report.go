@@ -75,3 +75,12 @@ func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChang
 	}
 	return "Update success", nil
 }
+
+func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error {
+	err := repositories.DeleteReportById(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Delete report id %v success", req.ReportId)
+	return nil
+}

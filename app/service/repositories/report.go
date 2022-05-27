@@ -47,3 +47,26 @@ func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChang
 	}
 	return nil
 }
+
+func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error {
+	var err error
+	session := conn.Begin()
+	err = session.Exec("DELETE FROM reviewReports WHERE reportId = ?", req.ReportId).Error
+	if err != nil {
+		return err
+	}
+	err = session.Exec("DELETE FROM reportEngage WHERE reportId = ?", req.ReportId).Error
+	if err != nil {
+		return err
+	}
+	err = session.Exec("DELETE FROM assignReport WHERE reportId = ?", req.ReportId).Error
+	if err != nil {
+		return err
+	}
+	err = session.Exec("DELETE FROM reports WHERE reportId = ?", req.ReportId).Error
+	if err != nil {
+		return err
+	}
+	session.Commit()
+	return nil
+}
