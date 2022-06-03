@@ -18,6 +18,7 @@ import (
 )
 
 func StartServer() {
+	fmt.Println("test ci")
 	key := os.Getenv("KEY")
 	port := SetEnv(key)
 	fmt.Println("PROJECT RUN ON PORT: " + port)
