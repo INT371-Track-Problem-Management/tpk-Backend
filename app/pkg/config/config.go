@@ -23,8 +23,8 @@ type ReportSend struct {
 func LoadDB() *Database {
 	return &Database{
 		Username: "dev",
-		Password: "123456789",
-		Host:     "52.139.153.111",
+		Password: "P@ssw0rd2",
+		Host:     "172.18.0.2",
 		Port:     "3306",
 		Database: "project",
 	}
