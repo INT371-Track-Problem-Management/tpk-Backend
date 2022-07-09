@@ -10,5 +10,4 @@ type CustomerRegis struct {
 	Phone       string `json:"phone" gorm:"column:phone"`
 	Address     string `json:"address" gorm:"column:address"`
 	Status      string `json:"status" gorm:"column:status"`
-	Username    string `json:"username" gorm:"column:username"`
 }

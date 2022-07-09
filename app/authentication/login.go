@@ -2,9 +2,11 @@ package authentication
 
 import (
 	"errors"
+	"log"
 	"time"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/service/repositories"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
@@ -12,10 +14,30 @@ import (
 )
 
 type JwtCustomClaims struct {
-	Username string `json:"username"`
-	Role     string `json:"role"`
-	Status   bool   `json:"status"`
+	Email  string `json:"email"`
+	Role   string `json:"role"`
+	Status bool   `json:"status"`
 	jwt.StandardClaims
+}
+
+type JwtRegisterActivate struct {
+	CustomerId int
+	jwt.StandardClaims
+}
+
+func GenerateTokenRegister(cusId int) (*string, error) {
+	claims := &JwtRegisterActivate{
+		cusId,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	t, err := token.SignedString([]byte("abcdefghijkmn"))
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
 }
 
 func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
@@ -24,13 +46,24 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, err
 	}
 
-	if req.Username != user.Username || req.Password != user.Password {
+	if req.Email != user.Email || req.Password != user.Password {
 		errUn := errors.New("Unatutherize")
 		return nil, errUn
 	}
+
+	cus, err := repositories.CustomerByEmail(ctx, conn, user.Email)
+	if err != nil {
+		return nil, err
+	}
+	if cus.Status == "I" {
+		errorstatus := errors.New(`plese activate your account befor login please check your email`)
+		log.Println(errorstatus)
+		return nil, errorstatus
+
+	}
 	// Set custom claims
 	claims := &JwtCustomClaims{
-		user.Username,
+		user.Email,
 		user.Role,
 		true,
 		jwt.StandardClaims{
@@ -47,7 +80,7 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 
 func GetUser(ctx echo.Context, conn *gorm.DB, req request.User) (*entity.User, error) {
 	user := new(entity.User)
-	err := conn.Table("user").Where("username = ?", req.Username).Find(&user).Error
+	err := conn.Table("user").Where("email = ?", req.Email).Find(&user).Error
 	if err != nil {
 		return nil, err
 	}
