@@ -39,11 +39,11 @@ jobs:
             git pull
             git checkout prd
             git pull origin prd
-            sudo docker rm -f backend
-            sudo docker rmi ghcr.io/artidsun/int371-backend:latest
-            sudo docker pull ghcr.io/artidsun/int371-backend-:latest
+            docker rm -f backend
+            docker rmi ghcr.io/artidsun/int371-backend:latest
+            docker pull ghcr.io/artidsun/int371-backend-:latest
             cd PRD
-            sudo docker-compose up -d
+            docker-compose up -d
   CheckHealthy:
     needs: deploy
     runs-on: ubuntu-20.04
