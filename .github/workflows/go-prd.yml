@@ -18,7 +18,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          file: DEV/Dockerfile
+          file: PRD/Dockerfile
           push: true
           tags: ghcr.io/artidsun/int371-backend-prd:latest
   deploy:

@@ -6,6 +6,6 @@ COPY .. ./
 
 RUN GOOS=linux go build app/cmd/tpkBackend.go
 
-EXPOSE 9000
+EXPOSE 5000
 
 CMD KEY="PRD" ./tpkBackend
