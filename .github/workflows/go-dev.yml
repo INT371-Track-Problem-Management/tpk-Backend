@@ -39,7 +39,7 @@ jobs:
             git pull
             git checkout dev
             git pull origin dev
-            docker rm -f backend
+            docker rm -f backendDev
             docker rmi ghcr.io/artidsun/int371-backend-dev:latest
             docker pull ghcr.io/artidsun/int371-backend-dev:latest
             cd DEV
