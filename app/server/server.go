@@ -67,7 +67,7 @@ var URIRedi string
 func SetEnv(key string) string {
 	var port string
 	if key == "PRD" {
-		port = "9000"
+		port = "5000"
 		URI = "https://www.rungmod.com/"
 		return port
 	}
