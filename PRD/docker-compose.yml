@@ -2,7 +2,7 @@ version: "3.3"
 services:
   backend:
     container_name: "backendPrd"
-    image: ghcr.io/artidsun/int371-backend:latest
+    image: ghcr.io/artidsun/int371-backend-prd:latest
     ports:
       - "5000:5000"
     restart: on-failure

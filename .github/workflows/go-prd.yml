@@ -20,7 +20,7 @@ jobs:
         with:
           file: DEV/Dockerfile
           push: true
-          tags: ghcr.io/artidsun/int371-backend:latest
+          tags: ghcr.io/artidsun/int371-backend-prd:latest
   deploy:
     needs: build
     runs-on: ubuntu-20.04
@@ -39,9 +39,9 @@ jobs:
             git pull
             git checkout prd
             git pull origin prd
-            docker rm -f backend
-            docker rmi ghcr.io/artidsun/int371-backend:latest
-            docker pull ghcr.io/artidsun/int371-backend-:latest
+            docker rm -f backendPrd
+            docker rmi ghcr.io/artidsun/int371-backend-prd:latest
+            docker pull ghcr.io/artidsun/int371-backend-prd:latest
             cd PRD
             docker-compose up -d
   CheckHealthy:
