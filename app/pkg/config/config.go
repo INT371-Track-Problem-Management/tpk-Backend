@@ -24,8 +24,8 @@ func LoadDB() *Database {
 	return &Database{
 		Username: "dev",
 		Password: "P@ssw0rd2",
-		Host:     "172.18.0.2",
-		Port:     "3306",
+		Host:     "database-rungmod.sit.kmutt.ac.th",
+		Port:     "55013",
 		Database: "project",
 	}
 }
