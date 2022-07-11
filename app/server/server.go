@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"tpk-backend/app/authentication"
@@ -82,7 +83,7 @@ func SetEnv(key string) string {
 		URIRedi = "https://dev.rungmod.com/"
 		return port
 	} else {
-		fmt.Printf("Invalid ENV")
+		log.Println("Invalid port ENV")
 	}
 	return ""
 }
