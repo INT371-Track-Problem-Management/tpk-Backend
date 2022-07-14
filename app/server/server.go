@@ -58,6 +58,7 @@ func StartServer() {
 	api.POST("CreateReportEngage", h.InsertReportEngage)
 	api.GET("activateCus", h.ActivateCustomer)
 	api.DELETE("deleteReportById", h.DeleteReportById)
+	api.GET("reportByCreatedBy", h.GetReportByCreatedBy)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -77,12 +78,14 @@ func SetEnv(key string) string {
 		URI = "https://dev.rungmod.com/"
 		return port
 	}
-	if key == "local" {
+	if key == "" {
 		port = "3050"
 		URI = "http://localhost:3050/"
 		URIRedi = "https://dev.rungmod.com/"
 		return port
 	} else {
+		port = "3050"
+		URI = "http://localhost:3050/"
 		log.Println("Invalid port ENV")
 	}
 	return ""
@@ -381,4 +384,19 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, "")
 	}
 	return ctx.JSON(http.StatusNoContent, "")
+}
+
+func (h *FuncHandler) GetReportByCreatedBy(ctx echo.Context) error {
+	req := new(request.ReportByCreatedBy)
+	err := ctx.Bind(&req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	res, err := controller.GetReportByCreatedBy(ctx, h.DB, *req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
 }
