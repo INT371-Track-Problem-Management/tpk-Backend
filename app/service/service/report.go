@@ -39,6 +39,14 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 	return res, nil
 }
 
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
+	res, err := repositories.ReportByCreatedBy(ctx, conn, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*int, error) {
 	timenow := pkg.GetDatetime()
 	data := entity.ReportInsert{

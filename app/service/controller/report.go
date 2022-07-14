@@ -18,6 +18,14 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	return res, nil
 }
 
+func GetReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
+	res, err := service.ReportByCreatedBy(ctx, conn, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.Report, error) {
 	res, err := service.ReportById(ctx, conn, req)
 	if err != nil {

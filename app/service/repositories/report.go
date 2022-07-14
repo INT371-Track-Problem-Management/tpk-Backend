@@ -17,6 +17,15 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	return &report, nil
 }
 
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
+	var report []entity.Report
+	err := conn.Table("reports").Where(`createdBy = ?`, req.CreatedBy).Find(&report).Error
+	if err != nil {
+		return nil, err
+	}
+	return &report, nil
+}
+
 func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Report, error) {
 	var report entity.Report
 	err := conn.Table("reports").Where("reportId = ?", req.ReportId).Find(&report).Error
