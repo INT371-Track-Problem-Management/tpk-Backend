@@ -1,5 +1,7 @@
 package config
 
+import "os"
+
 type Database struct {
 	Username string
 	Password string
@@ -20,13 +22,23 @@ type ReportSend struct {
 	Body    string
 }
 
+type TestEnv struct {
+	test string
+}
+
+func LoadTest() *TestEnv {
+	return &TestEnv{
+		test: GetEnv("TEST", "Hello-World-Default"),
+	}
+}
+
 func LoadDB() *Database {
 	return &Database{
-		Username: "dev",
-		Password: "P@ssw0rd2",
-		Host:     "172.18.0.2",
-		Port:     "3306",
-		Database: "project",
+		Username: GetEnv("USER", "Dev"),
+		Password: GetEnv("PASSWORD", "P@ssw0rd2"),
+		Host:     GetEnv("HOST", "172.18.0.2"),
+		Port:     GetEnv("PORT", "3306"),
+		Database: GetEnv("DATABASE", "project"),
 	}
 }
 
@@ -51,4 +63,11 @@ func LoadRegisCustomerSend() *ReportSend {
 		Subject: "ขอบคุณสำหรับการสมัรสมาชิก กรุณายืนยันตัวตนด้านล่าง",
 		Body:    "",
 	}
+}
+
+func GetEnv(key string, defaultVal string) string {
+	if value, exits := os.LookupEnv(key); exits {
+		return value
+	}
+	return defaultVal
 }
