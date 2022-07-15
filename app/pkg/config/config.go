@@ -44,10 +44,10 @@ func LoadDB() *Database {
 
 func LoadGmail() *Gmail {
 	return &Gmail{
-		Host:     "smtp.gmail.com",
-		Port:     "465",
-		Username: "rungmod.sit.kmutt@gmail.com",
-		Password: "Project371@rungmod",
+		Host:     GetEnv("MAILER_HOST", "smtp.gmail.com"),
+		Port:     GetEnv("MAILER_PORT", "465"),
+		Username: GetEnv("MAILER_USERNAME", "rungmod.sit.kmutt@gmail.com"),
+		Password: GetEnv("MAILER_PASSWORD", "Project371@rungmod"),
 	}
 }
 
