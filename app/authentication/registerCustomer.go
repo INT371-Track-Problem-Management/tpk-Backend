@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
-	"tpk-backend/app/pkg"
-	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -69,16 +67,16 @@ func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCusto
 		return nil, err
 	}
 	fmt.Println("Register customer success id is " + fmt.Sprintln(*id))
-	rsp := config.LoadRegisCustomerSend()
-	if regisCus.Email != "" {
-		// token, err := GenerateTokenRegister(*id)
-		// if err != nil {
-		// 	return nil, err
-		// }
-		act := fmt.Sprintln(*id)
-		activate := uri + "api/activateCus?cusid=" + act
-		pkg.SSLemail(&regisCus.Email, rsp.Subject, activate)
-	}
+	// rsp := config.LoadRegisCustomerSend()
+	// if regisCus.Email != "" {
+	// 	// token, err := GenerateTokenRegister(*id)
+	// 	// if err != nil {
+	// 	// 	return nil, err
+	// 	// }
+	// 	act := fmt.Sprintln(*id)
+	// 	activate := uri + "api/activateCus?cusid=" + act
+	// 	pkg.SSLemail(&regisCus.Email, rsp.Subject, activate)
+	// }
 
 	return id, err
 }
