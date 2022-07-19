@@ -8,7 +8,7 @@ import (
 )
 
 func RegisUser(ctx echo.Context, conn *gorm.DB, req entity.User) error {
-	err := conn.Table("user").Create(&req).Error
+	err := conn.Table("userMaster").Create(&req).Error
 	if err != nil {
 		return err
 	}
