@@ -80,7 +80,7 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 
 func GetUser(ctx echo.Context, conn *gorm.DB, req request.User) (*entity.User, error) {
 	user := new(entity.User)
-	err := conn.Table("user").Where("email = ?", req.Email).Find(&user).Error
+	err := conn.Table("userMaster").Where("email = ?", req.Email).Find(&user).Error
 	if err != nil {
 		return nil, err
 	}
