@@ -19,6 +19,7 @@ import (
 )
 
 func StartServer() {
+
 	log.Println(config.LoadTest())
 	key := os.Getenv("KEY")
 	port := SetEnv(key)
@@ -40,6 +41,24 @@ func StartServer() {
 	api.POST("login", h.Login)
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
+	api.GET("testEmail", h.TestGmail)
+
+	// Customer Service
+	cus := api.Group("customer/")
+	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
+	cus.GET("checkHealthy", h.CheckHealthyJWT)
+	cus.GET("decodeRole", h.GetRoleJWT)
+	api.GET("activateCus", h.ActivateCustomer)
+	api.GET("reportByCreatedBy", h.GetReportByCreatedBy)
+	api.POST("report", h.ReportInsert)
+
+	// Owner Service
+	own := api.Group("owner/")
+	own.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
+	api.POST("reportEngageById", h.GetReportEngageById)
+	api.POST("CreateReportEngage", h.InsertReportEngage)
+	api.PUT("statusReport", h.ReportChangeStatus)
+	api.DELETE("deleteReportById", h.DeleteReportById)
 	api.GET("rooms", h.Rooms)
 	api.GET("customer", h.Customer)
 	api.PUT("rooms", h.RoomsStatus)
@@ -49,16 +68,8 @@ func StartServer() {
 	api.POST("dorm", h.DormInsert)
 	api.POST("rooms", h.RoomsInsert)
 	api.DELETE("dorm", h.DormDelete)
-	api.POST("report", h.ReportInsert)
-	api.PUT("statusReport", h.ReportChangeStatus)
-	api.GET("testEmail", h.TestGmail)
 	api.POST("registerCustomer", h.RegisterCustomer)
 	api.GET("reportEngageAll", h.GetReportEngageAll)
-	api.POST("reportEngageById", h.GetReportEngageById)
-	api.POST("CreateReportEngage", h.InsertReportEngage)
-	api.GET("activateCus", h.ActivateCustomer)
-	api.DELETE("deleteReportById", h.DeleteReportById)
-	api.GET("reportByCreatedBy", h.GetReportByCreatedBy)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -108,7 +119,7 @@ func (h *FuncHandler) Login(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusUnauthorized, err.Error())
 	}
-	return ctx.JSON(http.StatusOK, token)
+	return ctx.JSON(http.StatusOK, echo.Map{"token": token})
 }
 
 func (h *FuncHandler) Initialize() {
@@ -153,6 +164,24 @@ func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) CheckHealthyJWT(ctx echo.Context) error {
+	res, err := controller.CheckHealthy(ctx, h.DB)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) GetRoleJWT(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check)
+	}
+	user := authentication.DecodeJWT(ctx)
+	return ctx.String(http.StatusOK, user.Role)
 }
 
 func (h *FuncHandler) Rooms(ctx echo.Context) error {

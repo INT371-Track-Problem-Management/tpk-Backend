@@ -3,45 +3,16 @@ package authentication
 import (
 	"errors"
 	"log"
-	"time"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/repositories"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-type JwtCustomClaims struct {
-	Email  string `json:"email"`
-	Role   string `json:"role"`
-	Status bool   `json:"status"`
-	jwt.StandardClaims
-}
-
-type JwtRegisterActivate struct {
-	CustomerId int
-	jwt.StandardClaims
-}
-
-func GenerateTokenRegister(cusId int) (*string, error) {
-	claims := &JwtRegisterActivate{
-		cusId,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	t, err := token.SignedString([]byte("abcdefghijkmn"))
-	if err != nil {
-		return nil, err
-	}
-	return &t, nil
-}
-
 func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
-	user, err := GetUser(ctx, conn, req)
+	user, err := GetUser(conn, req)
 	if err != nil {
 		return nil, err
 	}
@@ -61,24 +32,15 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, errorstatus
 
 	}
-	// Set custom claims
-	claims := &JwtCustomClaims{
-		user.Email,
-		user.Role,
-		true,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	t, err := token.SignedString([]byte("abcdefghijkmn"))
+	token, err := GenerateTokenLogin(user.Email, user.Role)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
-	return &t, nil
+	return token, nil
 }
 
-func GetUser(ctx echo.Context, conn *gorm.DB, req request.User) (*entity.User, error) {
+func GetUser(conn *gorm.DB, req request.User) (*entity.User, error) {
 	user := new(entity.User)
 	err := conn.Table("userMaster").Where("email = ?", req.Email).Find(&user).Error
 	if err != nil {

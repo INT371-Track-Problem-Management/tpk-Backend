@@ -27,6 +27,10 @@ type TestEnv struct {
 	test string
 }
 
+type Jwt struct {
+	Secret string
+}
+
 func LoadTest() *TestEnv {
 	return &TestEnv{
 		test: GetEnv("TEST", "Hello-World-Default"),
@@ -64,6 +68,12 @@ func LoadRegisCustomerSend() *ReportSend {
 	return &ReportSend{
 		Subject: "ขอบคุณสำหรับการสมัรสมาชิก กรุณายืนยันตัวตนด้านล่าง",
 		Body:    "",
+	}
+}
+
+func LoadJWTConfig() *Jwt {
+	return &Jwt{
+		Secret: GetEnv("SECRET", "abcdefghijkmn"),
 	}
 }
 
