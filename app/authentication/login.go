@@ -22,16 +22,19 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, errUn
 	}
 
-	cus, err := repositories.CustomerByEmail(ctx, conn, user.Email)
-	if err != nil {
-		return nil, err
-	}
-	if cus.Status == "I" {
-		errorstatus := errors.New(`plese activate your account befor login please check your email`)
-		log.Println(errorstatus)
-		return nil, errorstatus
+	if user.Role == "C" {
+		cus, err := repositories.CustomerByEmail(ctx, conn, user.Email)
+		if err != nil {
+			return nil, err
+		}
+		if cus.Status == "I" {
+			errorstatus := errors.New(`plese activate your account befor login please check your email`)
+			log.Println(errorstatus)
+			return nil, errorstatus
 
+		}
 	}
+
 	token, err := GenerateTokenLogin(user.Email, user.Role)
 	if err != nil {
 		log.Println(err)

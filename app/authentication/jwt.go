@@ -82,7 +82,7 @@ func ValidateOwnerService(ctx echo.Context) (string, bool) {
 	if jwt.Expire < float64(time.Now().Unix()) {
 		return "Token is expired", false
 	}
-	if jwt.Role != "O" || jwt.Status == false {
+	if jwt.Role != "E" || jwt.Status == false {
 		return "Token can't use", false
 	}
 	return "Token can use", true

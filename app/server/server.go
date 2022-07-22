@@ -37,7 +37,8 @@ func StartServer() {
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
 	api.GET("testEmail", h.TestGmail)
-	api.POST("registerCustomer", h.RegisterCustomer) // RegisterCustomer
+	api.POST("registerCustomer", h.RegisterCustomer) // Register customer
+	api.POST("registerOwner", h.RegisterOwner)       // Register owner
 
 	// Customer Service
 	cus := api.Group("customer/")
