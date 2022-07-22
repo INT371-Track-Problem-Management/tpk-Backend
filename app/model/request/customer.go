@@ -11,3 +11,7 @@ type CustomerRegis struct {
 	Address     string `json:"address" gorm:"column:address"`
 	Status      string `json:"status" gorm:"column:status"`
 }
+
+type CustomerProfile struct {
+	Email string `json:"email" gorm:"column:email"`
+}

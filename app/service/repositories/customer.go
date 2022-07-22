@@ -2,6 +2,7 @@ package repositories
 
 import (
 	entity "tpk-backend/app/model/entity"
+	"tpk-backend/app/model/request"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -10,6 +11,15 @@ import (
 func Customer(ctx echo.Context, conn *gorm.DB) (*[]entity.Customer, error) {
 	var Customer []entity.Customer
 	err := conn.Table("customer").Find(&Customer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &Customer, nil
+}
+
+func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerProfile) (*entity.Customer, error) {
+	var Customer entity.Customer
+	err := conn.Table("customer").Where("email = ?", req.Email).Find(&Customer).Error
 	if err != nil {
 		return nil, err
 	}
