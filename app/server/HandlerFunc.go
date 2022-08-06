@@ -104,7 +104,7 @@ func (h *FuncHandler) CheckHealthyJWT(ctx echo.Context) error {
 func (h *FuncHandler) GetRoleJWT(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	user := authentication.DecodeJWT(ctx)
 	return ctx.String(http.StatusOK, user.Role)
