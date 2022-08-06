@@ -86,3 +86,23 @@ func (h *FuncHandler) GetCustomerProgfile(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) CustomerEditProfile(ctx echo.Context) error {
+	check, status := authentication.ValidateCustomerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check)
+	}
+	req := new(request.CustomerEditProfile)
+	err := ctx.Bind(&req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+	email := ctx.QueryParam("email")
+	err = controller.CustomerEditProfile(ctx, h.DB, *req, email)
+	if err != nil {
+		log.Println(err)
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+	return ctx.JSON(http.StatusOK, &req)
+}

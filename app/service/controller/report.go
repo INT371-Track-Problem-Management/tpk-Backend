@@ -57,3 +57,12 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	}
 	return nil
 }
+
+func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
+	res, err := service.ReportByDormId(ctx, conn, dormId)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

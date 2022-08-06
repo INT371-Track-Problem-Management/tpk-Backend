@@ -79,3 +79,12 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	session.Commit()
 	return nil
 }
+
+func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
+	var data *[]entity.Report
+	err := conn.Table("report").Where("dormId = ?", dormId).Find(&data).Error
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}

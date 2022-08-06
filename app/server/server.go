@@ -49,6 +49,7 @@ func StartServer() {
 	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)  // Get report by createdBy
 	cus.POST("report", h.ReportInsert)                    // Insert report
 	cus.GET("viewCustomerProfile", h.GetCustomerProgfile) // View profile customer by email
+	cus.PUT("editProfile", h.CustomerEditProfile)         // Edit customer profile
 
 	// Owner Service
 	emp := api.Group("employee/")
@@ -67,6 +68,8 @@ func StartServer() {
 	emp.POST("rooms", h.RoomsInsert)                     // Insert Room
 	emp.DELETE("dorm", h.DormDelete)                     // Delete dorm
 	emp.GET("reportEngageAll", h.GetReportEngageAll)     // Get all report engage
+	emp.GET("reportByDormId", h.ReportByDormId)          // Search report by dormId
+	emp.GET("roomByDormId", h.RoomByDormId)              // Search room by dormId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

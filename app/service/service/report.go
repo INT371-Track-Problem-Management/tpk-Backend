@@ -92,3 +92,11 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	fmt.Printf("Delete report id %v success", req.ReportId)
 	return nil
 }
+
+func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
+	res, err := repositories.ReportByDormId(ctx, conn, dormId)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

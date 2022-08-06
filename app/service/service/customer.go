@@ -35,3 +35,11 @@ func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerPr
 	}
 	return &profile, nil
 }
+
+func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEditProfile, email string) error {
+	err := repositories.CustomerEditProfile(ctx, conn, req, email)
+	if err != nil {
+		return err
+	}
+	return nil
+}

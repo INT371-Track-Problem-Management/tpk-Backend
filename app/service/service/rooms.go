@@ -32,3 +32,11 @@ func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (string
 	}
 	return "Insert success", nil
 }
+
+func RoomByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {
+	res, err := repositories.RoomByDormId(ctx, conn, dormId)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

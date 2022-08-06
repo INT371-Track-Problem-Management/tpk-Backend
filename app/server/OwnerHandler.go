@@ -254,3 +254,31 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusNoContent, "")
 }
+
+func (h *FuncHandler) RoomByDormId(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check)
+	}
+	dormId := ctx.QueryParam("dormId")
+	res, err := controller.RoomByDormId(ctx, h.DB, dormId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportByDormId(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check)
+	}
+	dormId := ctx.QueryParam("dormId")
+	res, err := controller.ReportByDormId(ctx, h.DB, dormId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

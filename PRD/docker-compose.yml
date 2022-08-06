@@ -1,6 +1,8 @@
 version: "3.3"
 services:
   backend:
+    env_file:
+      - ../app/.env.dev
     container_name: "backendPrd"
     image: ghcr.io/artidsun/int371-backend-prd:latest
     ports:
