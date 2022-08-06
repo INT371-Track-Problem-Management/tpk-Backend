@@ -15,7 +15,7 @@ import (
 func (h *FuncHandler) Rooms(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	res, err := controller.Rooms(ctx, h.DB)
 	if err != nil {
@@ -28,7 +28,7 @@ func (h *FuncHandler) Rooms(ctx echo.Context) error {
 func (h *FuncHandler) RoomsStatus(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.RoomsStatus)
 	err := ctx.Bind(&req)
@@ -47,7 +47,7 @@ func (h *FuncHandler) RoomsStatus(ctx echo.Context) error {
 func (h *FuncHandler) Customer(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	res, err := controller.Customer(ctx, h.DB)
 	if err != nil {
@@ -60,7 +60,7 @@ func (h *FuncHandler) Customer(ctx echo.Context) error {
 func (h *FuncHandler) Dorm(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.Dorm)
 	err := ctx.Bind(&req)
@@ -79,7 +79,7 @@ func (h *FuncHandler) Dorm(ctx echo.Context) error {
 func (h *FuncHandler) Report(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	res, err := controller.Report(ctx, h.DB)
 	if err != nil {
@@ -92,7 +92,7 @@ func (h *FuncHandler) Report(ctx echo.Context) error {
 func (h *FuncHandler) ReportById(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.Report)
 	err := ctx.Bind(&req)
@@ -111,7 +111,7 @@ func (h *FuncHandler) ReportById(ctx echo.Context) error {
 func (h *FuncHandler) DormInsert(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.DormInsert)
 	err := ctx.Bind(&req)
@@ -130,7 +130,7 @@ func (h *FuncHandler) DormInsert(ctx echo.Context) error {
 func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.RoomInsert)
 	err := ctx.Bind(&req)
@@ -149,7 +149,7 @@ func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
 func (h *FuncHandler) DormDelete(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.DormDelete)
 	err := ctx.Bind(&req)
@@ -168,7 +168,7 @@ func (h *FuncHandler) DormDelete(ctx echo.Context) error {
 func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.ReportChangeStatus)
 	err := ctx.Bind(&req)
@@ -187,7 +187,7 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	res, err := controller.GetReportEngageAll(ctx, h.DB)
 	if err != nil {
@@ -200,7 +200,7 @@ func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
 func (h *FuncHandler) GetReportEngageById(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.ReportEngageById)
 	err := ctx.Bind(&req)
@@ -219,7 +219,7 @@ func (h *FuncHandler) GetReportEngageById(ctx echo.Context) error {
 func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	req := new(request.ReportEngage)
 	err := ctx.Bind(&req)
@@ -238,7 +238,7 @@ func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
 func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 	check, status := authentication.ValidateOwnerService(ctx)
 	if status == false {
-		return ctx.String(http.StatusUnauthorized, check)
+		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
 	var err error
 	req := new(request.Report)
