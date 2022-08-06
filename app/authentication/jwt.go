@@ -18,6 +18,18 @@ type JwtCustomClaims struct {
 	jwt.StandardClaims
 }
 
+type CheckCustomerApplication struct {
+	Id     string
+	Token  string
+	Status bool
+}
+
+type CheckOwnerApplication struct {
+	Id     string
+	Token  string
+	Status bool
+}
+
 type JwtRegisterActivate struct {
 	CustomerId int
 	jwt.StandardClaims
@@ -66,26 +78,46 @@ func ValidateTokenJWTConfig() middleware.JWTConfig {
 	return config
 }
 
-func ValidateCustomerService(ctx echo.Context) (string, bool) {
+func ValidateCustomerService(ctx echo.Context) (*CheckCustomerApplication, bool) {
 	jwt := DecodeJWT(ctx)
+	app := new(CheckCustomerApplication)
 	if jwt.Expire < float64(time.Now().Unix()) {
-		return "Token is expired", false
+		app.Id = jwt.Id
+		app.Token = "Token is expired"
+		app.Status = false
+		return app, false
 	}
 	if jwt.Role != "C" && jwt.Status == false {
-		return "Token can't use", false
+		app.Id = jwt.Id
+		app.Token = "Token can't use"
+		app.Status = false
+		return app, false
 	}
-	return "Token can use", true
+	app.Id = jwt.Id
+	app.Token = "Token can use"
+	app.Status = true
+	return app, true
 }
 
-func ValidateOwnerService(ctx echo.Context) (string, bool) {
+func ValidateOwnerService(ctx echo.Context) (*CheckOwnerApplication, bool) {
 	jwt := DecodeJWT(ctx)
+	app := new(CheckOwnerApplication)
 	if jwt.Expire < float64(time.Now().Unix()) {
-		return "Token is expired", false
+		app.Id = jwt.Id
+		app.Token = "Token is expired"
+		app.Status = false
+		return app, false
 	}
 	if jwt.Role != "E" || jwt.Status == false {
-		return "Token can't use", false
+		app.Id = jwt.Id
+		app.Token = "Token can't use"
+		app.Status = false
+		return app, false
 	}
-	return "Token can use", true
+	app.Id = jwt.Id
+	app.Token = "Token can use"
+	app.Status = true
+	return app, true
 }
 
 func DecodeJWT(ctx echo.Context) JwtCustomClaims {
