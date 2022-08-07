@@ -60,6 +60,24 @@ func (h *FuncHandler) RegisterOwner(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, empId)
 }
 
+func (h *FuncHandler) ChangeEmail(ctx echo.Context) error {
+	var err error
+	req := new(request.ChangeEmail)
+	err = ctx.Bind(&req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+
+	token := authentication.DecodeJWT(ctx)
+
+	err = controller.ChangeEmail(ctx, h.DB, *req, token.Email)
+	if err != nil {
+		return ctx.JSON(http.StatusBadGateway, err)
+	}
+	return ctx.JSON(http.StatusCreated, nil)
+}
+
 func (h *FuncHandler) TestGmail(ctx echo.Context) error {
 	testmail := "artid.vijitpanmai@mail.kmutt.ac.th"
 	pkg.SSLemail(&testmail, "Hello-World", "Hi")
