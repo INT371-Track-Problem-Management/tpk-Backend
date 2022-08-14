@@ -333,3 +333,33 @@ func (h *FuncHandler) RoomAddCustomer(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, "sucess")
 }
+
+func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
+	var err error
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	param := ctx.QueryParam("id")
+	id, _ := strconv.ParseInt(param, 10, 64)
+	err = controller.RoomRemoveCustomer(ctx, h.DB, id)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, "sucess")
+}
+
+func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	param := ctx.QueryParam("dormId")
+	id, _ := strconv.ParseInt(param, 10, 64)
+	res, err := controller.GetAllRoomWithCustomer(ctx, h.DB, id)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

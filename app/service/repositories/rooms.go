@@ -41,29 +41,3 @@ func RoomByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Roo
 	}
 	return &room, nil
 }
-
-func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustomer) error {
-	var err error
-	stmt := conn.Begin()
-
-	err = stmt.Exec(`
-	INSERT INTO roomWithCustomer (roomId, customerId, status)
-	VALUES (?, ?, ?)
-	`,
-		req.RoomId,
-		req.CustomerId,
-		"A").Error
-	if err != nil {
-		stmt.Rollback()
-		return err
-	}
-
-	err = stmt.Exec("UPDATE room SET status = ? WHERE roomId = ?", "A", req.RoomId).Error
-	if err != nil {
-		stmt.Rollback()
-		return err
-	}
-
-	stmt.Commit()
-	return nil
-}
