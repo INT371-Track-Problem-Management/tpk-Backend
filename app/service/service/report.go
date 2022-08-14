@@ -62,7 +62,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		return nil, err
 	}
 
-	cus, err := repositories.GetUserByCustomerId(ctx, conn, req.CreatedBy)
+	cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
 	if err != nil {
 		return nil, err
 	}

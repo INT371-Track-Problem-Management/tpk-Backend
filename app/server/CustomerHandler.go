@@ -73,13 +73,8 @@ func (h *FuncHandler) GetCustomerProgfile(ctx echo.Context) error {
 	if status == false {
 		return ctx.String(http.StatusUnauthorized, check.Token)
 	}
-	req := new(request.CustomerProfile)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, err)
-	}
-	res, err := controller.CustomerViewProfile(ctx, h.DB, *req)
+	email := ctx.QueryParam("email")
+	res, err := controller.CustomerViewProfile(ctx, h.DB, email)
 	if err != nil {
 		log.Println(err)
 		return ctx.JSON(http.StatusBadRequest, err)

@@ -18,7 +18,10 @@ func Customer(ctx echo.Context, conn *gorm.DB) (*[]entity.Customer, error) {
 	return res, nil
 }
 
-func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerProfile) (*response.CustomerProfile, error) {
+func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, email string) (*response.CustomerProfile, error) {
+	req := request.CustomerProfile{
+		Email: email,
+	}
 	res, err := service.CustomerViewProfile(ctx, conn, req)
 	if err != nil {
 		return nil, err
@@ -32,4 +35,13 @@ func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEd
 		return err
 	}
 	return nil
+}
+
+func GetCustomerById(ctx echo.Context, conn *gorm.DB, customerId int64) (*entity.Customer, error) {
+	id := int(customerId)
+	cus, err := service.GetCustomerById(ctx, conn, id)
+	if err != nil {
+		return nil, err
+	}
+	return cus, nil
 }

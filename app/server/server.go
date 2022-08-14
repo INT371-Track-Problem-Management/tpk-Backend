@@ -48,13 +48,13 @@ func StartServer() {
 	// Customer Service
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	cus.GET("checkHealthy", h.CheckHealthyJWT)            //Check Heatkhy with Token
-	cus.GET("decodeRole", h.GetRoleJWT)                   // Decode TOken to get Role
-	api.GET("activateCus", h.ActivateCustomer)            // Activate user change status 'I' => 'A'
-	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)  // Search report by createdBy
-	cus.POST("report", h.ReportInsert)                    // Insert report
-	cus.GET("viewCustomerProfile", h.GetCustomerProgfile) // View profile customer by email
-	cus.PUT("editProfile/*", h.CustomerEditProfile)       // Edit customer profile
+	cus.GET("checkHealthy", h.CheckHealthyJWT)              //Check Heatkhy with Token
+	cus.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
+	api.GET("activateCus", h.ActivateCustomer)              // Activate user change status 'I' => 'A'
+	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)    // Search report by createdBy
+	cus.POST("report", h.ReportInsert)                      // Insert report
+	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile) // View profile customer by email
+	cus.PUT("editProfile/*", h.CustomerEditProfile)         // Edit customer profile
 
 	// Owner Service
 	emp := api.Group("employee/")
@@ -75,6 +75,7 @@ func StartServer() {
 	emp.GET("reportEngageAll", h.GetReportEngageAll)     // Search all report engage
 	emp.GET("reportByDormId/*", h.ReportByDormId)        // Search report by dormId
 	emp.GET("roomByDormId/*", h.RoomByDormId)            // Search room by dormId
+	emp.GET("customerById/*", h.GetCustomerById)         // Search customer by Id
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

@@ -43,3 +43,23 @@ func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEd
 	}
 	return nil
 }
+
+func GetCustomerById(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.Customer, error) {
+	cus, err := repositories.GetCustomerById(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	profile := entity.Customer{
+		CustomerId:  cus.CustomerId,
+		Email:       cus.Email,
+		Fname:       cus.Fname,
+		Lname:       cus.Lname,
+		Sex:         cus.Sex,
+		DateOfBirth: cus.DateOfBirth,
+		Phone:       cus.DateOfBirth,
+		Age:         cus.Age,
+		Address:     cus.Address,
+		Status:      cus.Status,
+	}
+	return &profile, nil
+}
