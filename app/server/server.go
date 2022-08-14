@@ -40,33 +40,43 @@ func StartServer() {
 	api.POST("registerCustomer", h.RegisterCustomer) // Register customer
 	api.POST("registerOwner", h.RegisterOwner)       // Register owner
 
+	// Both but need TOKEN
+	service := api.Group("service/")
+	service.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
+	service.POST("changeEmail", h.ChangeEmail) // Change email customer or employee
+
 	// Customer Service
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	cus.GET("checkHealthy", h.CheckHealthyJWT)            //Check Heatkhy with Token
-	cus.GET("decodeRole", h.GetRoleJWT)                   // Decode TOken to get Role
-	api.GET("activateCus", h.ActivateCustomer)            // Activate user change status 'I' => 'A'
-	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)  // Get report by createdBy
-	cus.POST("report", h.ReportInsert)                    // Insert report
-	cus.GET("viewCustomerProfile", h.GetCustomerProgfile) // View profile customer by email
+	cus.GET("checkHealthy", h.CheckHealthyJWT)              //Check Heatkhy with Token
+	cus.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
+	api.GET("activateCus", h.ActivateCustomer)              // Activate user change status 'I' => 'A'
+	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)    // Search report by createdBy
+	cus.POST("report", h.ReportInsert)                      // Insert report
+	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile) // View profile customer by email
+	cus.PUT("editProfile/*", h.CustomerEditProfile)         // Edit customer profile
 
 	// Owner Service
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	emp.POST("reportEngageById", h.GetReportEngageById)  // Get Report by engageId
+	emp.POST("reportEngageById", h.GetReportEngageById)  // Search Report by engageId
 	emp.POST("CreateReportEngage", h.InsertReportEngage) // Insert Report Engage
 	emp.PUT("statusReport", h.ReportChangeStatus)        // Update status Report
 	emp.DELETE("deleteReportById", h.DeleteReportById)   // Delete report by Id
-	emp.GET("rooms", h.Rooms)                            // Get all room
-	emp.GET("customer", h.Customer)                      // Get all customer
+	emp.GET("rooms", h.Rooms)                            // Search all room
+	emp.GET("customer", h.Customer)                      // Search all customer
 	emp.PUT("rooms", h.RoomsStatus)                      // Change room status
-	emp.GET("dorm", h.Dorm)                              // Get all dorm
-	emp.GET("report", h.Report)                          // Get all report
-	emp.POST("reportById", h.ReportById)                 // Get report by id
+	emp.GET("dorm", h.Dorm)                              // Search all dorm
+	emp.GET("report", h.Report)                          // Search all report
+	emp.POST("reportById", h.ReportById)                 // Search report by id
 	emp.POST("dorm", h.DormInsert)                       // Insert Dorm
 	emp.POST("rooms", h.RoomsInsert)                     // Insert Room
 	emp.DELETE("dorm", h.DormDelete)                     // Delete dorm
-	emp.GET("reportEngageAll", h.GetReportEngageAll)     // Get all report engage
+	emp.GET("reportEngageAll", h.GetReportEngageAll)     // Search all report engage
+	emp.GET("reportByDormId/*", h.ReportByDormId)        // Search report by dormId
+	emp.GET("roomByDormId/*", h.RoomByDormId)            // Search room by dormId
+	emp.GET("customerById/*", h.GetCustomerById)         // Search customer by Id
+	emp.GET("employeeById/*", h.EmployeeById)            // Search rmployee by Id
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

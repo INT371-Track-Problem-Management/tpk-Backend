@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"tpk-backend/app/authentication"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/controller"
@@ -253,4 +254,62 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, "")
 	}
 	return ctx.JSON(http.StatusNoContent, "")
+}
+
+func (h *FuncHandler) RoomByDormId(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	dormId := ctx.QueryParam("dormId")
+	res, err := controller.RoomByDormId(ctx, h.DB, dormId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportByDormId(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	dormId := ctx.QueryParam("dormId")
+	res, err := controller.ReportByDormId(ctx, h.DB, dormId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) GetCustomerById(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	param := ctx.QueryParam("customerId")
+	cusId, _ := strconv.ParseInt(param, 10, 32)
+	res, err := controller.GetCustomerById(ctx, h.DB, cusId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) EmployeeById(ctx echo.Context) error {
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	param := ctx.QueryParam("employeeId")
+	empId, _ := strconv.ParseInt(param, 10, 32)
+	res, err := controller.EmployeeById(ctx, h.DB, empId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, res)
 }

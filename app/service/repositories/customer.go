@@ -26,7 +26,7 @@ func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerPr
 	return &Customer, nil
 }
 
-func GetUserByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.Customer, error) {
+func GetCustomerById(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.Customer, error) {
 	var Customer *entity.Customer
 	err := conn.Table("customer").Where("customerId = ?", customerId).Find(&Customer).Error
 	if err != nil {
@@ -42,4 +42,12 @@ func CustomerByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Cus
 		return nil, err
 	}
 	return &Customer, nil
+}
+
+func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEditProfile, email string) error {
+	err := conn.Table("customer").Where("email = ?", email).Updates(req).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

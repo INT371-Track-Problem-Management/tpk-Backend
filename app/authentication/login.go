@@ -27,20 +27,28 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		if err != nil {
 			return nil, err
 		}
-		if cus.Status == "I" {
-			errorstatus := errors.New(`plese activate your account befor login please check your email`)
-			log.Println(errorstatus)
-			return nil, errorstatus
-
+		token, err := GenerateTokenLogin(cus.CustomerId, user.Email, user.Role)
+		if err != nil {
+			log.Println(err)
+			return nil, err
 		}
+		return token, nil
 	}
 
-	token, err := GenerateTokenLogin(user.Email, user.Role)
-	if err != nil {
-		log.Println(err)
-		return nil, err
+	if user.Role == "E" {
+		emp, err := repositories.EmployeeByEmail(ctx, conn, user.Email)
+		if err != nil {
+			return nil, err
+		}
+		token, err := GenerateTokenLogin(emp.EmployeeId, user.Email, user.Role)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		return token, nil
 	}
-	return token, nil
+
+	return nil, nil
 }
 
 func GetUser(conn *gorm.DB, req request.User) (*entity.User, error) {

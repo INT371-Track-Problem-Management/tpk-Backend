@@ -11,6 +11,7 @@ import (
 )
 
 type JwtCustomClaims struct {
+	Id     int     `json:"id"`
 	Email  string  `json:"email"`
 	Role   string  `json:"role"`
 	Status bool    `json:"status"`
@@ -19,13 +20,13 @@ type JwtCustomClaims struct {
 }
 
 type CheckCustomerApplication struct {
-	Id     string
+	Id     int
 	Token  string
 	Status bool
 }
 
 type CheckOwnerApplication struct {
-	Id     string
+	Id     int
 	Token  string
 	Status bool
 }
@@ -53,9 +54,10 @@ func GenerateTokenRegister(cusId int) (*string, error) {
 	return &t, nil
 }
 
-func GenerateTokenLogin(email string, role string) (*string, error) {
+func GenerateTokenLogin(id int, email string, role string) (*string, error) {
 	// Set custom claims
 	claims := &JwtCustomClaims{
+		id,
 		email,
 		role,
 		true,
@@ -129,11 +131,13 @@ func DecodeJWT(ctx echo.Context) JwtCustomClaims {
 		return signingKey, nil
 	})
 	claims := token.Claims.(jwt.MapClaims)
+	id := claims["id"].(float64)
 	email := claims["email"].(string)
 	role := claims["role"].(string)
 	status := claims["status"].(bool)
 	expire := claims["expire"].(float64)
 	jwtDecode := JwtCustomClaims{
+		Id:             int(id),
 		Email:          email,
 		Role:           role,
 		Status:         status,

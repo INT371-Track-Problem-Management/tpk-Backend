@@ -35,3 +35,31 @@ func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerPr
 	}
 	return &profile, nil
 }
+
+func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEditProfile, email string) error {
+	err := repositories.CustomerEditProfile(ctx, conn, req, email)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetCustomerById(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.Customer, error) {
+	cus, err := repositories.GetCustomerById(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	profile := entity.Customer{
+		CustomerId:  cus.CustomerId,
+		Email:       cus.Email,
+		Fname:       cus.Fname,
+		Lname:       cus.Lname,
+		Sex:         cus.Sex,
+		DateOfBirth: cus.DateOfBirth,
+		Phone:       cus.DateOfBirth,
+		Age:         cus.Age,
+		Address:     cus.Address,
+		Status:      cus.Status,
+	}
+	return &profile, nil
+}
