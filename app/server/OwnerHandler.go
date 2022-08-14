@@ -306,7 +306,7 @@ func (h *FuncHandler) EmployeeById(ctx echo.Context) error {
 	}
 	param := ctx.QueryParam("employeeId")
 	empId, _ := strconv.ParseInt(param, 10, 32)
-	res, err := controller.GetCustomerById(ctx, h.DB, empId)
+	res, err := controller.EmployeeById(ctx, h.DB, empId)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ctx.JSON(http.StatusBadRequest, "")

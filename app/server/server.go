@@ -76,6 +76,7 @@ func StartServer() {
 	emp.GET("reportByDormId/*", h.ReportByDormId)        // Search report by dormId
 	emp.GET("roomByDormId/*", h.RoomByDormId)            // Search room by dormId
 	emp.GET("customerById/*", h.GetCustomerById)         // Search customer by Id
+	emp.GET("employeeById/*", h.EmployeeById)            // Search rmployee by Id
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

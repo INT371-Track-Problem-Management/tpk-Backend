@@ -8,8 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func EmployeeById(ctx echo.Context, conn *gorm.DB, id int) (*entity.Employee, error) {
-	emp, err := service.EmployeeById(ctx, conn, id)
+func EmployeeById(ctx echo.Context, conn *gorm.DB, id int64) (*entity.Employee, error) {
+	empId := int(id)
+	emp, err := service.EmployeeById(ctx, conn, empId)
 	if err != nil {
 		return nil, err
 	}
