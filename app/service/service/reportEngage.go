@@ -27,7 +27,7 @@ func GetReportEngageById(ctx echo.Context, conn *gorm.DB, req request.ReportEnga
 	}
 	res := response.ReportEngage{
 		EngageId:   data.EngageId,
-		SelectDate: data.SelectDate,
+		SelectDate: data.SelectedDate,
 		Date1:      data.Date1,
 		Date2:      data.Date2,
 		Date3:      data.Date3,
