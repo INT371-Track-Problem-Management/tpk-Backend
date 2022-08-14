@@ -51,3 +51,8 @@ func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEd
 	}
 	return nil
 }
+
+func CustomerByDormId(ctx echo.Context, conn *gorm.DB, DormId int) ([]*entity.Customer, error) {
+	var customer []*entity.Customer
+	return customer, nil
+}
