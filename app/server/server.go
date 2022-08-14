@@ -77,6 +77,7 @@ func StartServer() {
 	emp.GET("roomByDormId/*", h.RoomByDormId)            // Search room by dormId
 	emp.GET("customerById/*", h.GetCustomerById)         // Search customer by Id
 	emp.GET("employeeById/*", h.EmployeeById)            // Search rmployee by Id
+	emp.POST("roomAddCustomer", h.RoomAddCustomer)       // Add customer into room and room status 'I'=> 'A'
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

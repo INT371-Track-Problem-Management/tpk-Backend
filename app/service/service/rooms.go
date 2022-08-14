@@ -40,3 +40,11 @@ func RoomByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Roo
 	}
 	return res, nil
 }
+
+func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustomer) error {
+	err := repositories.RoomAddCustomer(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return nil
+}

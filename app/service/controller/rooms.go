@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"net/http"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/service"
@@ -41,6 +42,10 @@ func RoomByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Roo
 	return res, nil
 }
 
-func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, dormId string) error {
-	return nil
+func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustomer) error {
+	err := service.RoomAddCustomer(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusCreated, nil)
 }

@@ -313,3 +313,23 @@ func (h *FuncHandler) EmployeeById(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) RoomAddCustomer(ctx echo.Context) error {
+	var err error
+	check, status := authentication.ValidateOwnerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+	req := new(request.RoomAddCustomer)
+	err = ctx.Bind(&req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	err = controller.RoomAddCustomer(ctx, h.DB, *req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ctx.JSON(http.StatusBadRequest, "")
+	}
+	return ctx.JSON(http.StatusOK, "sucess")
+}
