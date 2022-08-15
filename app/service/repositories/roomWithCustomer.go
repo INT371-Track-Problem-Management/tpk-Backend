@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"fmt"
-	"log"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -87,6 +86,5 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*ent
 	if err != nil {
 		return nil, err
 	}
-	log.Println(result[0])
 	return result, nil
 }
