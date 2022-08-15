@@ -24,7 +24,7 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 	}
 	return nil
 }
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomWithCustomer, error) {
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomJoinDorm, error) {
 	res, err := repositories.GetAllRoomWithCustomer(ctx, conn, dormId)
 	if err != nil {
 		return nil, err

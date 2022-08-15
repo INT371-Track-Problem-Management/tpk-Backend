@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+	"log"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -60,23 +62,31 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 	return nil
 }
 
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomWithCustomer, error) {
-	var result []*entity.RoomWithCustomer
-	err := conn.Exec(`
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomJoinDorm, error) {
+	var result []*entity.RoomJoinDorm
+
+	sql := fmt.Sprintf(`
 	SELECT
 		rwc.Id as id,
 		rwc.roomId as roomId,
 		rwc.customerId as customerId,
-		rwc.status as status
+		rwc.status as status,
+		r.roomNum as roomNum,
+		r.floors as floors,
+		r.description as description
 	FROM
 		roomWithCustomer rwc
 	JOIN room r
 	ON
 		r.roomId = rwc.roomId
 	WHERE
-		r.dormId = ?`, dormId).Scan(&result).Error
+		r.dormId = %v
+		`, dormId)
+
+	err := conn.Raw(sql).Scan(&result).Error
 	if err != nil {
 		return nil, err
 	}
+	log.Println(result[0])
 	return result, nil
 }
