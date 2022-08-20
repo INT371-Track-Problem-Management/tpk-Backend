@@ -7,6 +7,7 @@ import (
 	"os"
 	"tpk-backend/app/authentication"
 	"tpk-backend/app/pkg/config"
+	"tpk-backend/app/validator"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -49,38 +50,38 @@ func StartServer() {
 	// Customer Service
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	cus.GET("checkHealthy", h.CheckHealthyJWT)                            //Check Heatkhy with Token
-	cus.GET("activateCus", h.ActivateCustomer)                            // Activate user change status 'I' => 'A'
-	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)                  // Search report by createdBy
-	cus.POST("report", h.ReportInsert)                                    // Insert report
-	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile)               // View profile customer by email
-	cus.PUT("editProfile/*", h.CustomerEditProfile)                       // Edit customer profile
-	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport) // Seach reportEngage join with reports whare by customerId
-	cus.GET("selectedPlanFixDate", h.SelectedPlanFixDate)                 // customer selecting plan fix date
+	cus.GET("checkHealthy", h.CheckHealthyJWT, validator.CustomerValidation) //Check Heatkhy with Token
+	cus.GET("activateCus", h.ActivateCustomer)                               // Activate user change status 'I' => 'A'
+	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)                     // Search report by createdBy
+	cus.POST("report", h.ReportInsert)                                       // Insert report
+	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile)                  // View profile customer by email
+	cus.PUT("editProfile/*", h.CustomerEditProfile)                          // Edit customer profile
+	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport)    // Seach reportEngage join with reports whare by customerId
+	cus.GET("selectedPlanFixDate", h.SelectedPlanFixDate)                    // customer selecting plan fix date
 
 	// Owner Service
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	emp.POST("reportEngageById", h.GetReportEngageById)           // Search Report by engageId
-	emp.POST("CreateReportEngage", h.InsertReportEngage)          // Insert Report Engage
-	emp.PUT("statusReport", h.ReportChangeStatus)                 // Update status Report
-	emp.DELETE("deleteReportById", h.DeleteReportById)            // Delete report by Id
-	emp.GET("rooms", h.Rooms)                                     // Search all room
-	emp.GET("customer", h.Customer)                               // Search all customer
-	emp.PUT("rooms", h.RoomsStatus)                               // Change room status
-	emp.GET("dorm", h.Dorm)                                       // Search all dorm
-	emp.GET("report", h.Report)                                   // Search all report
-	emp.POST("reportById", h.ReportById)                          // Search report by id
-	emp.POST("dorm", h.DormInsert)                                // Insert Dorm
-	emp.POST("rooms", h.RoomsInsert)                              // Insert Room
-	emp.DELETE("dorm", h.DormDelete)                              // Delete dorm
-	emp.GET("reportEngageAll", h.GetReportEngageAll)              // Search all report engage
-	emp.GET("reportByDormId/*", h.ReportByDormId)                 // Search report by dormId
-	emp.GET("roomByDormId/*", h.RoomByDormId)                     // Search room by dormId
-	emp.GET("customerById/*", h.GetCustomerById)                  // Search customer by Id
-	emp.GET("employeeById/*", h.EmployeeById)                     // Search rmployee by Id
-	emp.POST("roomAddCustomer", h.RoomAddCustomer)                // Add customer into room and room status 'I'=> 'A'
-	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer) // Search all customer in their dormId
+	emp.POST("reportEngageById", h.GetReportEngageById, validator.EmployeeValidation) // Search Report by engageId
+	emp.POST("CreateReportEngage", h.InsertReportEngage)                              // Insert Report Engage
+	emp.PUT("statusReport", h.ReportChangeStatus)                                     // Update status Report
+	emp.DELETE("deleteReportById", h.DeleteReportById)                                // Delete report by Id
+	emp.GET("rooms", h.Rooms)                                                         // Search all room
+	emp.GET("customer", h.Customer)                                                   // Search all customer
+	emp.PUT("rooms", h.RoomsStatus)                                                   // Change room status
+	emp.GET("dorm", h.Dorm)                                                           // Search all dorm
+	emp.GET("report", h.Report)                                                       // Search all report
+	emp.POST("reportById", h.ReportById)                                              // Search report by id
+	emp.POST("dorm", h.DormInsert)                                                    // Insert Dorm
+	emp.POST("rooms", h.RoomsInsert)                                                  // Insert Room
+	emp.DELETE("dorm", h.DormDelete)                                                  // Delete dorm
+	emp.GET("reportEngageAll", h.GetReportEngageAll)                                  // Search all report engage
+	emp.GET("reportByDormId/*", h.ReportByDormId)                                     // Search report by dormId
+	emp.GET("roomByDormId/*", h.RoomByDormId)                                         // Search room by dormId
+	emp.GET("customerById/*", h.GetCustomerById)                                      // Search customer by Id
+	emp.GET("employeeById/*", h.EmployeeById)                                         // Search rmployee by Id
+	emp.POST("roomAddCustomer", h.RoomAddCustomer)                                    // Add customer into room and room status 'I'=> 'A'
+	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer)                     // Search all customer in their dormId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
