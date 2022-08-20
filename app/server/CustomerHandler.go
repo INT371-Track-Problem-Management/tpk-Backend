@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"tpk-backend/app/authentication"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/controller"
@@ -118,6 +119,47 @@ func (h *FuncHandler) GetCustomerReportApplication(ctx echo.Context) error {
 		fmt.Println(err.Error())
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
+	return ctx.JSON(http.StatusOK, res)
+
+}
+
+func (h *FuncHandler) FetchReportEngageJoinReport(ctx echo.Context) error {
+	check, status := authentication.ValidateCustomerService(ctx)
+	if status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+
+	id := ctx.QueryParam("customer_id")
+	customerId, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return ctx.JSON(http.StatusBadGateway, err)
+	}
+	res, err := controller.ReportEngageJoinReport(ctx, h.DB, customerId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) SelectedPlanFixDate(ctx echo.Context) error {
+	if check, status := authentication.ValidateCustomerService(ctx); status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+
+	req := new(request.SelectedPlanFixDate)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	if err := controller.SelectedDatePlanFix(ctx, h.DB, *req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	res := map[string]string{
+		"massage": "success",
+	}
+
 	return ctx.JSON(http.StatusOK, res)
 
 }
