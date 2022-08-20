@@ -37,3 +37,7 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int64) (
 	id := int(customerId)
 	return service.ReportEngageJoinReport(ctx, conn, id)
 }
+
+func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
+	return service.SelectedDatePlanFix(ctx, conn, req)
+}

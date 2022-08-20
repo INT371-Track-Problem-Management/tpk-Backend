@@ -56,6 +56,7 @@ func StartServer() {
 	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile)               // View profile customer by email
 	cus.PUT("editProfile/*", h.CustomerEditProfile)                       // Edit customer profile
 	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport) // Seach reportEngage join with reports whare by customerId
+	cus.GET("selectedPlanFixDate", h.SelectedPlanFixDate)                 // customer selecting plan fix date
 
 	// Owner Service
 	emp := api.Group("employee/")

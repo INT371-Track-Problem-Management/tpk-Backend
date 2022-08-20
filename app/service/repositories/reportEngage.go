@@ -29,16 +29,20 @@ func GetReportEngageById(ctx echo.Context, conn *gorm.DB, req request.ReportEnga
 }
 
 func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, req request.ReportEngage) (*int, error) {
+	stmt := conn.Begin()
 	var err error
-	err = conn.Table("reportEngage").Create(&req).Error
+	err = stmt.Table("reportEngage").Create(&req).Error
 	if err != nil {
+		stmt.Rollback()
 		return nil, err
 	}
 	var id int
-	err = conn.Table("reportEngage").Select("engageId").Where("reportId = ?", req.ReportId).Scan(&id).Error
+	err = stmt.Table("reportEngage").Select("engageId").Where("reportId = ?", req.ReportId).Scan(&id).Error
 	if err != nil {
+		stmt.Rollback()
 		return nil, err
 	}
+	stmt.Commit()
 	return &id, nil
 }
 
@@ -73,4 +77,14 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int) (*r
 	}
 
 	return result, nil
+}
+
+func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
+	stmt := conn.Begin()
+	err := stmt.Table("reportEngage").Where("engageId= ?", req.EngageId).Update("selectedDate = ?", req.SelectedDate).Error
+	if err != nil {
+		return err
+	}
+	stmt.Commit()
+	return nil
 }

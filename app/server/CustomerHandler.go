@@ -141,3 +141,25 @@ func (h *FuncHandler) FetchReportEngageJoinReport(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) SelectedPlanFixDate(ctx echo.Context) error {
+	if check, status := authentication.ValidateCustomerService(ctx); status == false {
+		return ctx.String(http.StatusUnauthorized, check.Token)
+	}
+
+	req := new(request.SelectedPlanFixDate)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	if err := controller.SelectedDatePlanFix(ctx, h.DB, *req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	res := map[string]string{
+		"massage": "success",
+	}
+
+	return ctx.JSON(http.StatusOK, res)
+
+}
