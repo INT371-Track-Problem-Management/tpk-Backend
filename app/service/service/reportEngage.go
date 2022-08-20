@@ -44,3 +44,7 @@ func InsertReportEngage(ctx echo.Context, conn *gorm.DB, req request.ReportEngag
 	}
 	return data, nil
 }
+
+func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int) (*response.ReportEngageJoinReport, error) {
+	return repositories.ReportEngageJoinReport(ctx, conn, customerId)
+}

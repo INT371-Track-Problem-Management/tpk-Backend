@@ -44,17 +44,18 @@ func StartServer() {
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
 	service.POST("changeEmail", h.ChangeEmail) // Change email customer or employee
+	service.GET("decodeRole", h.GetRoleJWT)    // Decode TOken to get Role
 
 	// Customer Service
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	cus.GET("checkHealthy", h.CheckHealthyJWT)              //Check Heatkhy with Token
-	cus.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
-	api.GET("activateCus", h.ActivateCustomer)              // Activate user change status 'I' => 'A'
-	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)    // Search report by createdBy
-	cus.POST("report", h.ReportInsert)                      // Insert report
-	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile) // View profile customer by email
-	cus.PUT("editProfile/*", h.CustomerEditProfile)         // Edit customer profile
+	cus.GET("checkHealthy", h.CheckHealthyJWT)                            //Check Heatkhy with Token
+	cus.GET("activateCus", h.ActivateCustomer)                            // Activate user change status 'I' => 'A'
+	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)                  // Search report by createdBy
+	cus.POST("report", h.ReportInsert)                                    // Insert report
+	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile)               // View profile customer by email
+	cus.PUT("editProfile/*", h.CustomerEditProfile)                       // Edit customer profile
+	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport) // Seach reportEngage join with reports whare by customerId
 
 	// Owner Service
 	emp := api.Group("employee/")

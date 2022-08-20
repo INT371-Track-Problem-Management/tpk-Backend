@@ -1,8 +1,10 @@
 package repositories
 
 import (
+	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/model/response"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -38,4 +40,37 @@ func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, req request.ReportEngag
 		return nil, err
 	}
 	return &id, nil
+}
+
+func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int) (*response.ReportEngageJoinReport, error) {
+	result := new(response.ReportEngageJoinReport)
+	sql := fmt.Sprintf(
+		`
+		SELECT 
+			re.engageId,
+			re.date1,
+			re.date2,
+			re.date3,
+			re.date4,
+			re.selectedDate,
+			re.reportId,
+			r.title,
+			r.categoriesReport,
+			r.reportDes,
+			r.status,
+			r.successDate,
+			r.reportDate,
+			r.createdBy
+		FROM reportEngage re 
+		JOIN reports r 
+		ON re.reportId = r.reportId 
+		WHERE r.createdBy = %v
+		`, customerId)
+
+	err := conn.Raw(sql).Scan(result).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
