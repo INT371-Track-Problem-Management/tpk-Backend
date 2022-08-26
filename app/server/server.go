@@ -52,11 +52,11 @@ func StartServer() {
 	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
 	cus.GET("checkHealthy", h.CheckHealthyJWT, validator.CustomerValidation) //Check Heatkhy with Token
 	cus.GET("activateCus", h.ActivateCustomer)                               // Activate user change status 'I' => 'A'
-	cus.GET("reportByCreatedBy", h.GetReportByCreatedBy)                     // Search report by createdBy
+	cus.POST("reportByCreatedBy", h.GetReportByCreatedBy)                     // Search report by createdBy
 	cus.POST("report", h.ReportInsert)                                       // Insert report
-	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile)                  // View profile customer by email
+	cus.POST("viewCustomerProfile/*", h.GetCustomerProgfile)                  // View profile customer by email
 	cus.PUT("editProfile/*", h.CustomerEditProfile)                          // Edit customer profile
-	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport)    // Seach reportEngage join with reports whare by customerId
+	cus.POST("getReportEngageWithReport/*", h.FetchReportEngageJoinReport)    // Seach reportEngage join with reports whare by customerId
 	cus.GET("selectedPlanFixDate", h.SelectedPlanFixDate)                    // customer selecting plan fix date
 
 	// Owner Service
@@ -76,10 +76,10 @@ func StartServer() {
 	emp.POST("rooms", h.RoomsInsert)                                                  // Insert Room
 	emp.DELETE("dorm", h.DormDelete)                                                  // Delete dorm
 	emp.GET("reportEngageAll", h.GetReportEngageAll)                                  // Search all report engage
-	emp.GET("reportByDormId/*", h.ReportByDormId)                                     // Search report by dormId
-	emp.GET("roomByDormId/*", h.RoomByDormId)                                         // Search room by dormId
-	emp.GET("customerById/*", h.GetCustomerById)                                      // Search customer by Id
-	emp.GET("employeeById/*", h.EmployeeById)                                         // Search rmployee by Id
+	emp.POST("reportByDormId/*", h.ReportByDormId)                                     // Search report by dormId
+	emp.POST("roomByDormId/*", h.RoomByDormId)                                         // Search room by dormId
+	emp.POST("customerById/*", h.GetCustomerById)                                      // Search customer by Id
+	emp.POST("employeeById/*", h.EmployeeById)                                         // Search rmployee by Id
 	emp.POST("roomAddCustomer", h.RoomAddCustomer)                                    // Add customer into room and room status 'I'=> 'A'
 	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer)                     // Search all customer in their dormId
 
