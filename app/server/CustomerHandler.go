@@ -22,13 +22,12 @@ func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
 	req := new(request.ReportInsert)
 	err := ctx.Bind(&req)
 	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusBadRequest, err)
 	}
+	log.Println(req)
 	res, err := controller.ReportInsert(ctx, h.DB, *req)
 	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, res)
 }

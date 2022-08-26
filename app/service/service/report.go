@@ -6,7 +6,6 @@ import (
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
 	"tpk-backend/app/pkg"
-	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -62,16 +61,16 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		return nil, err
 	}
 
-	cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
-	if err != nil {
-		return nil, err
-	}
+	// cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if cus.Email != "" {
-		rps := config.LoadReportSend()
-		pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
-	}
-	fmt.Printf("customerId %v is not have email", req.CreatedBy)
+	// if cus.Email != "" {
+	// 	rps := config.LoadReportSend()
+	// 	pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
+	// }
+	// fmt.Printf("customerId %v is not have email", req.CreatedBy)
 
 	return reportid, nil
 }
