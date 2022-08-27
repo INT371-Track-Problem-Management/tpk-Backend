@@ -289,5 +289,25 @@ func (h *FuncHandler) AddMaintainer(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
+	resdata := map[string]interface{}{
+		"maintainerId": res,
+		"message":      "success",
+	}
+	return ctx.JSON(http.StatusOK, resdata)
+}
+
+func (h *FuncHandler) CreateAssignFixReport(ctx echo.Context) error {
+	req := new(request.AssignReport)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	err := controller.CreateAssignFixReport(ctx, h.DB, *req)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]string{
+		"message": "success",
+	}
 	return ctx.JSON(http.StatusOK, res)
 }

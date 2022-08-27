@@ -83,6 +83,7 @@ func StartServer() {
 	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                // Add customer into room and room status 'I'=> 'A'
 	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation) // Search all customer in their dormId
 	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                       // Created maintainer and return Id
+	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)          // add maintainer to fix report
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
