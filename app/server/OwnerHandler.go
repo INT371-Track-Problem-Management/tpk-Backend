@@ -311,3 +311,13 @@ func (h *FuncHandler) CreateAssignFixReport(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) GetHistoryByEmployeeId(ctx echo.Context) error {
+	param := ctx.QueryParam("employeeId")
+	empId, _ := strconv.ParseInt(param, 10, 32)
+	res, err := controller.GetHistoryByEmployeeId(ctx, h.DB, empId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

@@ -44,8 +44,9 @@ func StartServer() {
 	// Both but need TOKEN
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	service.POST("changeEmail", h.ChangeEmail) // Change email customer or employee
-	service.GET("decodeRole", h.GetRoleJWT)    // Decode TOken to get Role
+	service.POST("changeEmail", h.ChangeEmail)                  // Change email customer or employee
+	service.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
+	service.GET("historyreportById/*", h.GetHistoryByHistoryId) // Search history by Id
 
 	// Customer Service
 	cus := api.Group("customer/")
@@ -58,6 +59,8 @@ func StartServer() {
 	cus.PUT("editProfile/*", h.CustomerEditProfile, validator.CustomerValidation)                        // Edit customer profile
 	cus.POST("getReportEngageWithReport/*", h.FetchReportEngageJoinReport, validator.CustomerValidation) // Seach reportEngage join with reports whare by customerId
 	cus.GET("selectedPlanFixDate", h.SelectedPlanFixDate, validator.CustomerValidation)                  // customer selecting plan fix date
+	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                               // end job report and review
+	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)              // Search all history by customerId
 
 	// Owner Service
 	emp := api.Group("employee/")
@@ -84,6 +87,7 @@ func StartServer() {
 	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation) // Search all customer in their dormId
 	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                       // Created maintainer and return Id
 	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)          // add maintainer to fix report
+	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)     // Search all history by employeeId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

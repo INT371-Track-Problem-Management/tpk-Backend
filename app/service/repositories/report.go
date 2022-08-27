@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"log"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -42,8 +41,6 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*in
 	if err != nil {
 		return nil, err
 	}
-	log.Println("cratedBy")
-	log.Println(req.CreatedBy)
 	var id int
 	err = conn.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createdBy = ?", req.CreatedBy).Where("reportDate = ?", req.ReportDate).Scan(&id).Error
 	if err != nil {
@@ -90,4 +87,9 @@ func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.R
 		return nil, err
 	}
 	return data, nil
+}
+
+func ReportEndJob(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) error {
+
+	return nil
 }
