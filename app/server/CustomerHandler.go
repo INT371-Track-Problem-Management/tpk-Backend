@@ -15,10 +15,6 @@ import (
 // Customer service
 
 func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.ReportInsert)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -33,10 +29,6 @@ func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) ActivateCustomer(ctx echo.Context) error {
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	id := ctx.QueryParam("cusid")
 	err := authentication.ActivateCustomerCtr(ctx, h.DB, id, "A")
 	if err != nil {
@@ -50,10 +42,6 @@ func (h *FuncHandler) ActivateCustomer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportByCreatedBy(ctx echo.Context) error {
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.ReportByCreatedBy)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -69,10 +57,6 @@ func (h *FuncHandler) GetReportByCreatedBy(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetCustomerProgfile(ctx echo.Context) error {
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	email := ctx.QueryParam("email")
 	res, err := controller.CustomerViewProfile(ctx, h.DB, email)
 	if err != nil {
@@ -83,10 +67,6 @@ func (h *FuncHandler) GetCustomerProgfile(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) CustomerEditProfile(ctx echo.Context) error {
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.CustomerEditProfile)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -109,10 +89,6 @@ func (h *FuncHandler) GetCustomerReportApplication(ctx echo.Context) error {
 		log.Println(err)
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -123,10 +99,6 @@ func (h *FuncHandler) GetCustomerReportApplication(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) FetchReportEngageJoinReport(ctx echo.Context) error {
-	check, status := authentication.ValidateCustomerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 
 	id := ctx.QueryParam("customer_id")
 	customerId, err := strconv.ParseInt(id, 10, 64)
@@ -142,9 +114,6 @@ func (h *FuncHandler) FetchReportEngageJoinReport(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) SelectedPlanFixDate(ctx echo.Context) error {
-	if check, status := authentication.ValidateCustomerService(ctx); status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 
 	req := new(request.SelectedPlanFixDate)
 	if err := ctx.Bind(&req); err != nil {

@@ -24,7 +24,7 @@ func CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusBadRequest, res)
 		}
-		if jwt.Role != "C" && jwt.Status == false {
+		if jwt.Role != "C" || jwt.Status == false {
 			app.Id = jwt.Id
 			app.Token = "Token can't use"
 			app.Status = false

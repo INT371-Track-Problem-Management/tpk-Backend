@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"tpk-backend/app/authentication"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/controller"
 
@@ -14,10 +13,6 @@ import (
 // Owner service
 
 func (h *FuncHandler) Rooms(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	res, err := controller.Rooms(ctx, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -27,10 +22,6 @@ func (h *FuncHandler) Rooms(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) RoomsStatus(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.RoomsStatus)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -46,10 +37,6 @@ func (h *FuncHandler) RoomsStatus(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) Customer(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	res, err := controller.Customer(ctx, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -59,10 +46,6 @@ func (h *FuncHandler) Customer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) Dorm(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.Dorm)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -78,10 +61,6 @@ func (h *FuncHandler) Dorm(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) Report(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	res, err := controller.Report(ctx, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -91,10 +70,6 @@ func (h *FuncHandler) Report(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) ReportById(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.Report)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -110,10 +85,6 @@ func (h *FuncHandler) ReportById(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) DormInsert(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.DormInsert)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -129,10 +100,6 @@ func (h *FuncHandler) DormInsert(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.RoomInsert)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -148,10 +115,6 @@ func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) DormDelete(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.DormDelete)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -167,10 +130,6 @@ func (h *FuncHandler) DormDelete(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.ReportChangeStatus)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -186,10 +145,6 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	res, err := controller.GetReportEngageAll(ctx, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -199,10 +154,6 @@ func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportEngageById(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.ReportEngageById)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -218,10 +169,6 @@ func (h *FuncHandler) GetReportEngageById(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.ReportEngage)
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -237,10 +184,6 @@ func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	var err error
 	req := new(request.Report)
 	err = ctx.Bind(&req)
@@ -257,10 +200,6 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) RoomByDormId(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	dormId := ctx.QueryParam("dormId")
 	res, err := controller.RoomByDormId(ctx, h.DB, dormId)
 	if err != nil {
@@ -271,10 +210,6 @@ func (h *FuncHandler) RoomByDormId(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) ReportByDormId(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	dormId := ctx.QueryParam("dormId")
 	res, err := controller.ReportByDormId(ctx, h.DB, dormId)
 	if err != nil {
@@ -285,10 +220,6 @@ func (h *FuncHandler) ReportByDormId(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetCustomerById(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	param := ctx.QueryParam("customerId")
 	cusId, _ := strconv.ParseInt(param, 10, 32)
 	res, err := controller.GetCustomerById(ctx, h.DB, cusId)
@@ -300,10 +231,6 @@ func (h *FuncHandler) GetCustomerById(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) EmployeeById(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	param := ctx.QueryParam("employeeId")
 	empId, _ := strconv.ParseInt(param, 10, 32)
 	res, err := controller.EmployeeById(ctx, h.DB, empId)
@@ -316,10 +243,6 @@ func (h *FuncHandler) EmployeeById(ctx echo.Context) error {
 
 func (h *FuncHandler) RoomAddCustomer(ctx echo.Context) error {
 	var err error
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	req := new(request.RoomAddCustomer)
 	err = ctx.Bind(&req)
 	if err != nil {
@@ -336,10 +259,6 @@ func (h *FuncHandler) RoomAddCustomer(ctx echo.Context) error {
 
 func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 	var err error
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	param := ctx.QueryParam("id")
 	id, _ := strconv.ParseInt(param, 10, 64)
 	err = controller.RoomRemoveCustomer(ctx, h.DB, id)
@@ -351,13 +270,22 @@ func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {
-	check, status := authentication.ValidateOwnerService(ctx)
-	if status == false {
-		return ctx.String(http.StatusUnauthorized, check.Token)
-	}
 	param := ctx.QueryParam("dormId")
 	id, _ := strconv.ParseInt(param, 10, 64)
 	res, err := controller.GetAllRoomWithCustomer(ctx, h.DB, id)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) AddMaintainer(ctx echo.Context) error {
+	req := new(request.Maintainer)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	res, err := controller.AddMaintainer(ctx, h.DB, *req)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
