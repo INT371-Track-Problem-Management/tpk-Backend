@@ -1,7 +1,6 @@
-package entity
+package request
 
 type AssignReport struct {
-	AssignId     int    `json:"assignId" gorm:"column:assignId"`
 	AssignDate   string `json:"assignDate" gorm:"column:assignDate"`
 	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
 	EmployeeId   int    `json:"employeeId" gorm:"column:employeeId"`

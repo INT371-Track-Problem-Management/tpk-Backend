@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"tpk-backend/app/authentication"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/pkg"
@@ -126,4 +127,14 @@ func (h *FuncHandler) GetRoleJWT(ctx echo.Context) error {
 	}
 	user := authentication.DecodeJWT(ctx)
 	return ctx.String(http.StatusOK, user.Role)
+}
+
+func (h *FuncHandler) GetHistoryByHistoryId(ctx echo.Context) error {
+	param := ctx.QueryParam("historyId")
+	id, _ := strconv.ParseInt(param, 10, 32)
+	res, err := controller.GetHistoryByHistoryId(ctx, h.DB, id)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
 }

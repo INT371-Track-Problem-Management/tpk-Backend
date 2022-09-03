@@ -5,6 +5,7 @@ type RoomWithCustomer struct {
 	RoomId     int    `json:"roomId" gorm:"column:roomId"`
 	CustomerId int    `json:"customerId" gorm:"column:customerId"`
 	Status     string `json:"status" gorm:"column:status"`
+	DormId     int    `json:"dormId" gorm:"column:dormId"`
 }
 
 type RoomJoinDorm struct {
@@ -15,4 +16,5 @@ type RoomJoinDorm struct {
 	RoomNum     string `json:"roomNum" gorm:"column:roomNum"`
 	Floors      int    `json:"floors" gorm:"column:floors"`
 	Description string `json:"description" gorm:"column:description"`
+	DormId      int    `json:"dormId" gorm:"column:dormId"`
 }

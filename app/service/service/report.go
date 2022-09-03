@@ -56,6 +56,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		ReportDate:       timenow,
 		CreatedBy:        req.CreatedBy,
 	}
+
 	reportid, err := repositories.ReportInsert(ctx, conn, data)
 	if err != nil {
 		return nil, err
