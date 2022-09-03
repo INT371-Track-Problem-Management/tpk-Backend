@@ -72,7 +72,8 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*ent
 		rwc.status as status,
 		r.roomNum as roomNum,
 		r.floors as floors,
-		r.description as description
+		r.description as description,
+		r.dormId as dormId	
 	FROM
 		roomWithCustomer rwc
 	JOIN room r
@@ -87,4 +88,14 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*ent
 		return nil, err
 	}
 	return result, nil
+}
+
+func GetRoomWithCustomerByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.RoomWithCustomer, error) {
+	roomProfile := new(entity.RoomWithCustomer)
+
+	err := conn.Table("roomWithCustomer").Where("customerId = ?", customerId).Find(roomProfile).Error
+	if err != nil {
+		return nil, err
+	}
+	return roomProfile, nil
 }

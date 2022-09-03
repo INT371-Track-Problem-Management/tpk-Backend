@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -10,7 +11,24 @@ import (
 
 func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	var report []entity.Report
-	err := conn.Table("reports").Find(&report).Error
+	sql :=
+		`
+	SELECT 
+		r.reportId as reportId,
+		r.title as title,
+		r.categoriesReport as categoriesReport ,
+		r.reportDes as reportDes ,
+		sm.status as status,
+		r.successDate as successDate ,
+		r.reportDate as reportDate ,
+		r.createdBy as createdBy 
+	FROM 
+		reports r 
+	JOIN
+		statusMaster sm 
+	ON r.status = sm.statusMasterId
+	`
+	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +37,24 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 
 func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
 	var report []entity.Report
-	err := conn.Table("reports").Where(`createdBy = ?`, req.CreatedBy).Find(&report).Error
+	sql := fmt.Sprintf(`	
+	SELECT 
+		r.reportId as reportId,
+		r.title as title,
+		r.categoriesReport as categoriesReport ,
+		r.reportDes as reportDes ,
+		sm.status as status,
+		r.successDate as successDate ,
+		r.reportDate as reportDate ,
+		r.createdBy as createdBy 
+	FROM 
+		reports r 
+	JOIN
+		statusMaster sm 
+	ON r.status = sm.statusMasterId
+	WHERE 
+		r.createdBy = %v`, req.CreatedBy)
+	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +63,24 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 
 func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Report, error) {
 	var report entity.Report
-	err := conn.Table("reports").Where("reportId = ?", req.ReportId).Find(&report).Error
+	sql := fmt.Sprintf(`	
+	SELECT 
+		r.reportId as reportId,
+		r.title as title,
+		r.categoriesReport as categoriesReport ,
+		r.reportDes as reportDes ,
+		sm.status as status,
+		r.successDate as successDate ,
+		r.reportDate as reportDate ,
+		r.createdBy as createdBy 
+	FROM 
+		reports r 
+	JOIN
+		statusMaster sm 
+	ON r.status = sm.statusMasterId
+	WHERE 
+		r.reportId = %v`, req.ReportId)
+	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
 	}
@@ -36,24 +88,48 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 }
 
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*int, error) {
+	stmt := conn.Begin()
 	var err error
-	err = conn.Table("reports").Create(&req).Error
+	err = stmt.Table("reports").Create(&req).Error
 	if err != nil {
 		return nil, err
 	}
+
+	roomProfile := new(entity.RoomWithCustomer)
+	err = stmt.Table("roomWithCustomer").Where("customerID = ?", req.CreatedBy).Find(roomProfile).Error
+	if err != nil {
+		return nil, err
+	}
+
 	var id int
-	err = conn.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createdBy = ?", req.CreatedBy).Where("reportDate = ?", req.ReportDate).Scan(&id).Error
+	err = stmt.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createdBy = ?", req.CreatedBy).Where("reportDate = ?", req.ReportDate).Scan(&id).Error
 	if err != nil {
 		return nil, err
 	}
+	historyReport := entity.CreateHistoryReport{
+		ReportId:    id,
+		ReportDate:  req.ReportDate,
+		DateOfIssue: "",
+		RoomId:      roomProfile.RoomId,
+		CustomerId:  roomProfile.CustomerId,
+		DormId:      roomProfile.DormId,
+	}
+	err = stmt.Table("historyReport").Create(&historyReport).Error
+	if err != nil {
+		return nil, err
+	}
+
+	stmt.Commit()
 	return &id, nil
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {
-	err := conn.Exec("UPDATE reports SET status = ? WHERE reportId = ?", req.Status, req.ReportId).Error
+	stmt := conn.Begin()
+	err := stmt.Exec("UPDATE reports SET status = ? WHERE reportId = ?", req.Status, req.ReportId).Error
 	if err != nil {
 		return err
 	}
+	stmt.Commit()
 	return nil
 }
 
