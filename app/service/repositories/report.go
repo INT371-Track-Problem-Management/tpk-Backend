@@ -106,10 +106,17 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*in
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {
+	var err error
 	stmt := conn.Begin()
-	err := stmt.Exec("UPDATE reports SET status = ? WHERE reportId = ?", req.Status, req.ReportId).Error
+	err = stmt.Exec("UPDATE reports SET status = ? WHERE reportId = ?", req.Status, req.ReportId).Error
 	if err != nil {
 		return err
+	}
+	if req.Status == "S2" {
+		err = stmt.Exec("UPDATE historyReport SET employeeId = ? WHERE reportId = ?", req.EmployeeId, req.ReportId).Error
+		if err != nil {
+			return err
+		}
 	}
 	stmt.Commit()
 	return nil
@@ -147,7 +154,30 @@ func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.R
 	return data, nil
 }
 
-func ReportEndJob(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) error {
+func ReportEndJob(ctx echo.Context, conn *gorm.DB, req entity.EndReport) error {
+	var err error
+	stmt := conn.Begin()
 
+	err = stmt.Table("reports").Where("reportId = ?", req.ReportId).Update("status = ?", "S7").Error
+	if err != nil {
+		return err
+	}
+
+	err = stmt.Table("historyReport").Where("reportId = ?", req.ReportId).Update("dateOfIssue = ?", req.DateOfIssue).Error
+	if err != nil {
+		return err
+	}
+
+	sql := fmt.Sprintf(
+		`
+		INSERT INTO reviewReports (des, reportId, score)
+		VALUES (%v, %v, %v)
+		`, req.Description, req.ReportId, req.Score)
+	err = stmt.Exec(sql).Error
+	if err != nil {
+		return err
+	}
+
+	stmt.Commit()
 	return nil
 }

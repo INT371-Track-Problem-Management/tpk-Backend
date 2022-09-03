@@ -14,12 +14,13 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustome
 	stmt := conn.Begin()
 
 	err = stmt.Exec(`
-	INSERT INTO roomWithCustomer (roomId, customerId, status)
-	VALUES (?, ?, ?)
+	INSERT INTO roomWithCustomer (roomId, customerId, status, dormId)
+	VALUES (?, ?, ?, ?)
 	`,
 		req.RoomId,
 		req.CustomerId,
-		"A").Error
+		"A",
+		req.DoomId).Error
 	if err != nil {
 		stmt.Rollback()
 		return err

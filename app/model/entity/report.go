@@ -19,3 +19,11 @@ type ReportInsert struct {
 	ReportDate       string `json:"reportDate" gorm:"column:reportDate"`
 	CreatedBy        int    `json:"createdBy" gorm:"column:createdBy"`
 }
+
+type EndReport struct {
+	ReportId    int    `json:"reportId" gorm:"column:reportId"`
+	Description string `json:"description" gorm:"column:des"`
+	Score       int    `json:"score" gorm:"column:score"`
+	CreatedBy   int    `json:"createdBy" gorm:"column:createdBy"`
+	DateOfIssue string `json:"dateOfIssue" gorm:"column:dateOfIssue"`
+}

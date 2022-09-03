@@ -26,6 +26,7 @@ func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (stri
 }
 
 func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (string, error) {
+	req.Status = "I"
 	err := repositories.RoomInsert(ctx, conn, req)
 	if err != nil {
 		return "Can not insert", err

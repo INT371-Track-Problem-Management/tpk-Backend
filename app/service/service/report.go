@@ -62,6 +62,24 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		return nil, err
 	}
 
+	roomProfile, err := repositories.GetRoomWithCustomerByCustomerId(ctx, conn, req.CreatedBy)
+	if err != nil {
+		return nil, err
+	}
+
+	history := entity.CreateHistoryReport{
+		ReportId:   *reportid,
+		ReportDate: timenow,
+		RoomId:     roomProfile.RoomId,
+		CustomerId: req.CreatedBy,
+		DormId:     roomProfile.DormId,
+	}
+
+	err = repositories.CreatedHistoryReport(ctx, conn, history)
+	if err != nil {
+		return nil, err
+	}
+
 	// cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
 	// if err != nil {
 	// 	return nil, err
