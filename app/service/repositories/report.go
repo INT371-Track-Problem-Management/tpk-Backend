@@ -95,26 +95,8 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*in
 		return nil, err
 	}
 
-	roomProfile := new(entity.RoomWithCustomer)
-	err = stmt.Table("roomWithCustomer").Where("customerID = ?", req.CreatedBy).Find(roomProfile).Error
-	if err != nil {
-		return nil, err
-	}
-
 	var id int
 	err = stmt.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createdBy = ?", req.CreatedBy).Where("reportDate = ?", req.ReportDate).Scan(&id).Error
-	if err != nil {
-		return nil, err
-	}
-	historyReport := entity.CreateHistoryReport{
-		ReportId:    id,
-		ReportDate:  req.ReportDate,
-		DateOfIssue: "",
-		RoomId:      roomProfile.RoomId,
-		CustomerId:  roomProfile.CustomerId,
-		DormId:      roomProfile.DormId,
-	}
-	err = stmt.Table("historyReport").Create(&historyReport).Error
 	if err != nil {
 		return nil, err
 	}

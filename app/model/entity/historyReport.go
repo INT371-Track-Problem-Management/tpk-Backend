@@ -3,7 +3,7 @@ package entity
 type HistoryReport struct {
 	HistoryId   int    `json:"historyId" gorm:"column:historyId"`
 	ReportId    int    `json:"reportId" gorm:"column:reportId"`
-	ReportDate  string `json:"dateOfEntry" gorm:"column:dateOfEntry"`
+	ReportDate  string `json:"reportDate" gorm:"column:reportDate"`
 	DateOfIssue string `json:"dateOfIssue" gorm:"column:dateOfIssue"`
 	RoomId      int    `json:"roomId" gorm:"column:roomId"`
 	CustomerId  int    `json:"customerId" gorm:"column:customerId"`
@@ -13,7 +13,7 @@ type HistoryReport struct {
 
 type CreateHistoryReport struct {
 	ReportId    int    `json:"reportId" gorm:"column:reportId"`
-	ReportDate  string `json:"dateOfEntry" gorm:"column:dateOfEntry"`
+	ReportDate  string `json:"reportDate" gorm:"column:reportDate"`
 	DateOfIssue string `json:"dateOfIssue" gorm:"column:dateOfIssue"`
 	RoomId      int    `json:"roomId" gorm:"column:roomId"`
 	CustomerId  int    `json:"customerId" gorm:"column:customerId"`
