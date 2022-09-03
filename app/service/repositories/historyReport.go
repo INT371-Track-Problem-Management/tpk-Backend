@@ -33,3 +33,11 @@ func GetHistoryByHistoryId(ctx echo.Context, conn *gorm.DB, historyId int) (*ent
 	}
 	return history, nil
 }
+
+func CreatedHistoryReport(ctx echo.Context, conn *gorm.DB, history entity.CreateHistoryReport) error {
+	err := conn.Table("historyReport").Create(history).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
