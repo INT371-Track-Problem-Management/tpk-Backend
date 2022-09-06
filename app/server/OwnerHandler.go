@@ -178,7 +178,7 @@ func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
 	res, err := controller.InsertReportEngage(ctx, h.DB, *req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
