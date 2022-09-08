@@ -55,9 +55,9 @@ func StartServer() {
 	cus.GET("activateCus", h.ActivateCustomer, validator.CustomerValidation)                             // Activate user change status 'I' => 'A'
 	cus.POST("reportByCreatedBy", h.GetReportByCreatedBy, validator.CustomerValidation)                  // Search report by createdBy
 	cus.POST("report", h.ReportInsert, validator.CustomerValidation)                                     // Insert report
-	cus.POST("viewCustomerProfile/*", h.GetCustomerProgfile, validator.CustomerValidation)               // View profile customer by email
+	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile, validator.CustomerValidation)               // View profile customer by email
 	cus.PUT("editProfile/*", h.CustomerEditProfile, validator.CustomerValidation)                        // Edit customer profile
-	cus.POST("getReportEngageWithReport/*", h.FetchReportEngageJoinReport, validator.CustomerValidation) // Seach reportEngage join with reports whare by customerId
+	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport, validator.CustomerValidation) // Seach reportEngage join with reports whare by customerId
 	cus.GET("selectedPlanFixDate", h.SelectedPlanFixDate, validator.CustomerValidation)                  // customer selecting plan fix date
 	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                               // end job report and review
 	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)              // Search all history by customerId
@@ -79,10 +79,10 @@ func StartServer() {
 	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                              // Insert Room
 	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                              // Delete dorm
 	emp.GET("reportEngageAll", h.GetReportEngageAll, validator.EmployeeValidation)              // Search all report engage
-	emp.POST("reportByDormId/*", h.ReportByDormId, validator.EmployeeValidation)                // Search report by dormId
-	emp.POST("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                    // Search room by dormId
-	emp.POST("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                 // Search customer by Id
-	emp.POST("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                    // Search rmployee by Id
+	emp.GET("reportByDormId/*", h.ReportByDormId, validator.EmployeeValidation)                // Search report by dormId
+	emp.GET("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                    // Search room by dormId
+	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                 // Search customer by Id
+	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                    // Search rmployee by Id
 	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                // Add customer into room and room status 'I'=> 'A'
 	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation) // Search all customer in their dormId
 	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                       // Created maintainer and return Id
