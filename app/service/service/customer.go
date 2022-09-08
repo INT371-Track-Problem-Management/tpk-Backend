@@ -56,7 +56,7 @@ func GetCustomerById(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.C
 		Lname:       cus.Lname,
 		Sex:         cus.Sex,
 		DateOfBirth: cus.DateOfBirth,
-		Phone:       cus.DateOfBirth,
+		Phone:       cus.Phone,
 		Age:         cus.Age,
 		Address:     cus.Address,
 		Status:      cus.Status,
