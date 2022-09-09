@@ -6,7 +6,10 @@ import (
 	"tpk-backend/app/authentication"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
+
+var conn *gorm.DB
 
 func EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 

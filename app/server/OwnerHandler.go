@@ -145,10 +145,12 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
-	res, err := controller.GetReportEngageAll(ctx, h.DB)
+	param := ctx.QueryParam("dormId")
+	id, _ := strconv.ParseInt(param, 10, 64)
+	res, err := controller.GetReportEngageAll(ctx, h.DB, id)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, res)
 }

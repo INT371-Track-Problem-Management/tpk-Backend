@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetReportEngageAll(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportEngage, error) {
+func GetReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int) (*[]entity.ReportEngage, error) {
 	var data []entity.ReportEngage
-	err := conn.Table("reportEngage").Find(&data).Error
+	err := conn.Table("reportEngage").Where("dormId = ?", dormId).Find(&data).Error
 	if err != nil {
 		return nil, err
 	}

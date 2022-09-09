@@ -1,16 +1,40 @@
 package controller
 
 import (
+	"errors"
+	"tpk-backend/app/authentication"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
+	"tpk-backend/app/service/repositories"
 	"tpk-backend/app/service/service"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-func GetReportEngageAll(ctx echo.Context, conn *gorm.DB) (*response.ReportEngageAll, error) {
-	res, err := service.GetReportEngageAll(ctx, conn)
+func GetReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int64) (*response.ReportEngageAll, error) {
+	id := int(dormId)
+
+	jwt := authentication.DecodeJWT(ctx)
+
+	checkDormId, err := repositories.SelectDormIdByEmployeeId(ctx, conn, jwt.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	if checkDormId != &id {
+		return nil, errors.New("Invalid_Token")
+	}
+
+	res, err := getReportEngageAll(ctx, conn, id)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func getReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int) (*response.ReportEngageAll, error) {
+	res, err := service.GetReportEngageAll(ctx, conn, dormId)
 	if err != nil {
 		return nil, err
 	}

@@ -6,6 +6,9 @@ type ReportEngage struct {
 	Date2        string `json:"date2" gorm:"column:date2"`
 	Date3        string `json:"date3" gorm:"column:date3"`
 	Date4        string `json:"date4" gorm:"column:date4"`
-	SelectedDate int    `json:"selectedDate" gorm:"column:selectedDate"`
+	SelectedDate string `json:"selectedDate" gorm:"column:selectedDate"`
 	ReportId     int    `json:"reportId" gorm:"column:reportId"`
+	DormId       int    `json:"dormId" gorm:"column:dormId"`
+	UpdatedBy    int    `json:"updatedBy" gorm:"column:updatedBy"`
+	SelectedBy   int    `json:"selectedBy" gorm:"column:selectedBy"`
 }

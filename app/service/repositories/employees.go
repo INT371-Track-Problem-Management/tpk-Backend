@@ -24,3 +24,12 @@ func EmployeeById(ctx echo.Context, conn *gorm.DB, id int) (*entity.Employee, er
 	}
 	return &emp, nil
 }
+
+func SelectDormIdByEmployeeId(ctx echo.Context, conn *gorm.DB, employeeId int) (*int, error) {
+	var dormId int
+	err := conn.Table("employeeWithDorm").Select("dormId").Where("employeeId = ?", employeeId).Scan(&dormId).Error
+	if err != nil {
+		return nil, err
+	}
+	return &dormId, nil
+}
