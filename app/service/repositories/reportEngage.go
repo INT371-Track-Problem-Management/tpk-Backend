@@ -81,7 +81,12 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int) (*r
 
 func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
 	stmt := conn.Begin()
-	err := stmt.Table("reportEngage").Where("engageId= ?", req.EngageId).Update("selectedDate = ?", req.SelectedDate).Error
+	err := stmt.Exec(
+		`
+		UPDATE reportEngage
+		SET selectedDate = ?
+		WHERE engageId  = ?
+		`, req.SelectedDate, req.EngageId).Error
 	if err != nil {
 		return err
 	}
