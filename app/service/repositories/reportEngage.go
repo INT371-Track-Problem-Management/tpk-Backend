@@ -91,5 +91,6 @@ func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPl
 		return err
 	}
 	stmt.Commit()
+
 	return nil
 }
