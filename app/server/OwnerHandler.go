@@ -323,3 +323,18 @@ func (h *FuncHandler) GetHistoryByEmployeeId(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) AddEmployeeInDorm(ctx echo.Context) error {
+	req := new(request.AddEmpInDorm)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+	err := controller.AddEmployeeInDorm(ctx, h.DB, *req)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

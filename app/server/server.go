@@ -88,6 +88,7 @@ func StartServer() {
 	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                       // Created maintainer and return Id
 	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)          // add maintainer to fix report
 	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)     // Search all history by employeeId
+	emp.POST("addEmployeeInDorm", h.AddEmployeeInDorm, validator.EmployeeValidation)            // Add employee in dorm and change position to staff
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
