@@ -191,12 +191,12 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 	err = ctx.Bind(&req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusBadRequest, err)
 	}
 	err = controller.DeleteReportById(ctx, h.DB, *req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusNoContent, "")
 }

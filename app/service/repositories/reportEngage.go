@@ -40,7 +40,10 @@ func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, reportId int) (*
 func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, req request.ReportEngage) (*int, error) {
 	stmt := conn.Begin()
 	var err error
-	err = stmt.Table("reportEngage").Create(&req).Error
+	err = stmt.Exec(`
+	INSERT INTO reportEngage (date1, date2, date3, date4, reportId, dormId, updatedBy)
+	VALUES (?, ?, ?, ?, ?, ?, ?)
+	`, req.Date1, req.Date2, req.Date3, req.Date4, req.ReportId, req.DormId, req.UpdatedBy).Error
 	if err != nil {
 		stmt.Rollback()
 		return nil, err
