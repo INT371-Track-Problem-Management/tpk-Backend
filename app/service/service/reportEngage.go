@@ -67,7 +67,11 @@ func InsertReportEngage(ctx echo.Context, conn *gorm.DB, req request.ReportEngag
 }
 
 func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*response.ReportEngageJoinReport, error) {
-	return repositories.ReportEngageJoinReport(ctx, conn, reportId)
+	data, err := repositories.ReportEngageJoinReport(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
