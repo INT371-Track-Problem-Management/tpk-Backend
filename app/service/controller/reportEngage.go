@@ -18,12 +18,14 @@ func GetReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int64) (*respons
 	jwt := authentication.DecodeJWT(ctx)
 
 	checkDormId, err := repositories.SelectDormIdByEmployeeId(ctx, conn, jwt.Id)
+	check := *checkDormId
 	if err != nil {
 		return nil, err
 	}
 
-	if checkDormId != &id {
-		return nil, errors.New("Invalid_Token")
+	if check != id {
+		err := errors.New("Invalid_Token")
+		return nil, err
 	}
 
 	res, err := getReportEngageAll(ctx, conn, id)
