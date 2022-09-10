@@ -58,7 +58,7 @@ func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, req request.ReportEngag
 	return &id, nil
 }
 
-func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int) (*response.ReportEngageJoinReport, error) {
+func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*response.ReportEngageJoinReport, error) {
 	result := new(response.ReportEngageJoinReport)
 	sql := fmt.Sprintf(
 		`
@@ -80,8 +80,8 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int) (*r
 		FROM reportEngage re 
 		JOIN reports r 
 		ON re.reportId = r.reportId 
-		WHERE r.createdBy = %v
-		`, customerId)
+		WHERE re.reportId = %v
+		`, reportId)
 
 	err := conn.Raw(sql).Scan(result).Error
 	if err != nil {

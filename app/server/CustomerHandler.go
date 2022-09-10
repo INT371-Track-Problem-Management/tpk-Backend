@@ -95,12 +95,12 @@ func (h *FuncHandler) GetCustomerReportApplication(ctx echo.Context) error {
 
 func (h *FuncHandler) FetchReportEngageJoinReport(ctx echo.Context) error {
 
-	id := ctx.QueryParam("customer_id")
-	customerId, err := strconv.ParseInt(id, 10, 64)
+	id := ctx.QueryParam("reportId")
+	reportId, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		return ctx.JSON(http.StatusBadGateway, err)
 	}
-	res, err := controller.ReportEngageJoinReport(ctx, h.DB, customerId)
+	res, err := controller.ReportEngageJoinReport(ctx, h.DB, reportId)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

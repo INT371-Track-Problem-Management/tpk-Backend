@@ -63,8 +63,8 @@ func InsertReportEngage(ctx echo.Context, conn *gorm.DB, req request.ReportEngag
 	return res, nil
 }
 
-func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, customerId int64) (*response.ReportEngageJoinReport, error) {
-	id := int(customerId)
+func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int64) (*response.ReportEngageJoinReport, error) {
+	id := int(reportId)
 	return service.ReportEngageJoinReport(ctx, conn, id)
 }
 
