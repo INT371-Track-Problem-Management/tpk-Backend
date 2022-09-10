@@ -137,6 +137,10 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	if err != nil {
 		return err
 	}
+	err = session.Exec("DELETE FROM historyReport WHERE reportId = ?", req.ReportId).Error
+	if err != nil {
+		return err
+	}
 	err = session.Exec("DELETE FROM reports WHERE reportId = ?", req.ReportId).Error
 	if err != nil {
 		return err
