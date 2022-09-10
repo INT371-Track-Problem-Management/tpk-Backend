@@ -25,7 +25,7 @@ type ReportEngageJoinReport struct {
 	Date2            string `json:"date2" gorm:"column:date2"`
 	Date3            string `json:"date3" gorm:"column:date3"`
 	Date4            string `json:"date4" gorm:"column:date4"`
-	SelectedDate     int    `json:"selectedDate" gorm:"column:selectedDate"`
+	SelectedDate     string `json:"selectedDate" gorm:"column:selectedDate"`
 	ReportId         int    `json:"reportId" gorm:"column:reportId"`
 	Title            string `json:"title" gorm:"column:title"`
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
