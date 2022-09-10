@@ -12,7 +12,7 @@ type ReportEngage struct {
 	ReportId     int    `json:"reportId" gorm:"column:reportId"`
 	DormId       int    `json:"dormId" gorm:"column:dormId"`
 	UpdatedBy    int    `json:"updatedBy" gorm:"column:updatedBy"`
-	SelectedBy   int    `json:"selectedBy" gorm:"column:selectedBy"`
+	SelectedBy   string `json:"selectedBy" gorm:"column:selectedBy"`
 }
 
 type ReportEngageAll struct {
