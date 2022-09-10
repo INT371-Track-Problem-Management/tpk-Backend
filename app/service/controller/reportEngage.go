@@ -73,5 +73,9 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int64) (*r
 }
 
 func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
-	return service.SelectedDatePlanFix(ctx, conn, req)
+	err := service.SelectedDatePlanFix(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return nil
 }
