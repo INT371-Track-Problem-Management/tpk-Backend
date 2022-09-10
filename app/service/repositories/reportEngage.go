@@ -28,6 +28,15 @@ func GetReportEngageById(ctx echo.Context, conn *gorm.DB, req request.ReportEnga
 	return &data, nil
 }
 
+func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, reportId int) (*entity.ReportEngage, error) {
+	var data entity.ReportEngage
+	err := conn.Table("reportEngage").Where("reportId = ?", reportId).Scan(&data).Error
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
+}
+
 func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, req request.ReportEngage) (*int, error) {
 	stmt := conn.Begin()
 	var err error

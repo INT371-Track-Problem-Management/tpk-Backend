@@ -338,3 +338,13 @@ func (h *FuncHandler) AddEmployeeInDorm(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) GetReportEngageByReportId(ctx echo.Context) error {
+	param := ctx.Param("reportId")
+	reportId, _ := strconv.ParseInt(param, 10, 32)
+	res, err := controller.GetReportEngageByReportId(ctx, h.DB, reportId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

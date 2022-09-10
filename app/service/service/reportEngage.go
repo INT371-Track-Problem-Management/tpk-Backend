@@ -33,6 +33,27 @@ func GetReportEngageById(ctx echo.Context, conn *gorm.DB, req request.ReportEnga
 		Date3:        data.Date3,
 		Date4:        data.Date4,
 		ReportId:     data.ReportId,
+		DormId:       data.DormId,
+		UpdatedBy:    data.UpdatedBy,
+	}
+	return &res, nil
+}
+
+func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, reportId int) (*response.ReportEngage, error) {
+	data, err := repositories.GetReportEngageByReportId(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	res := response.ReportEngage{
+		EngageId:     data.EngageId,
+		SelectedDate: data.SelectedDate,
+		Date1:        data.Date1,
+		Date2:        data.Date2,
+		Date3:        data.Date3,
+		Date4:        data.Date4,
+		ReportId:     data.ReportId,
+		DormId:       data.DormId,
+		UpdatedBy:    data.UpdatedBy,
 	}
 	return &res, nil
 }

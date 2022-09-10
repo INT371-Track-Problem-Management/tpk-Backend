@@ -65,30 +65,31 @@ func StartServer() {
 	// Owner Service
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	emp.POST("reportEngageById", h.GetReportEngageById, validator.EmployeeValidation)           // Search Report by engageId
-	emp.POST("CreateReportEngage", h.InsertReportEngage, validator.EmployeeValidation)          // Insert Report Engage
-	emp.PUT("statusReport", h.ReportChangeStatus, validator.EmployeeValidation)                 // Update status Report
-	emp.DELETE("deleteReportById", h.DeleteReportById, validator.EmployeeValidation)            // Delete report by Id
-	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)                                     // Search all room
-	emp.GET("customer", h.Customer, validator.EmployeeValidation)                               // Search all customer
-	emp.PUT("rooms", h.RoomsStatus, validator.EmployeeValidation)                               // Change room status
-	emp.GET("dorm", h.Dorm, validator.EmployeeValidation)                                       // Search all dorm
-	emp.GET("report", h.Report, validator.EmployeeValidation)                                   // Search all report
-	emp.POST("reportById", h.ReportById, validator.EmployeeValidation)                          // Search report by id
-	emp.POST("dorm", h.DormInsert, validator.EmployeeValidation)                                // Insert Dorm
-	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                              // Insert Room
-	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                              // Delete dorm
-	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)            // Search all report engage
-	emp.GET("reportByDormId/*", h.ReportByDormId, validator.EmployeeValidation)                 // Search report by dormId
-	emp.GET("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                     // Search room by dormId
-	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                  // Search customer by Id
-	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                     // Search rmployee by Id
-	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                // Add customer into room and room status 'I'=> 'A'
-	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation) // Search all customer in their dormId
-	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                       // Created maintainer and return Id
-	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)          // add maintainer to fix report
-	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)     // Search all history by employeeId
-	emp.POST("addEmployeeInDorm", h.AddEmployeeInDorm, validator.EmployeeValidation)            // Add employee in dorm and change position to staff
+	emp.POST("reportEngageById", h.GetReportEngageById, validator.EmployeeValidation)                      // Search Report by engageId
+	emp.POST("CreateReportEngage", h.InsertReportEngage, validator.EmployeeValidation)                     // Insert Report Engage
+	emp.PUT("statusReport", h.ReportChangeStatus, validator.EmployeeValidation)                            // Update status Report
+	emp.DELETE("deleteReportById", h.DeleteReportById, validator.EmployeeValidation)                       // Delete report by Id
+	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)                                                // Search all room
+	emp.GET("customer", h.Customer, validator.EmployeeValidation)                                          // Search all customer
+	emp.PUT("rooms", h.RoomsStatus, validator.EmployeeValidation)                                          // Change room status
+	emp.GET("dorm", h.Dorm, validator.EmployeeValidation)                                                  // Search all dorm
+	emp.GET("report", h.Report, validator.EmployeeValidation)                                              // Search all report
+	emp.POST("reportById", h.ReportById, validator.EmployeeValidation)                                     // Search report by id
+	emp.POST("dorm", h.DormInsert, validator.EmployeeValidation)                                           // Insert Dorm
+	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                                         // Insert Room
+	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                                         // Delete dorm
+	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)                       // Search all report engage
+	emp.GET("reportByDormId/*", h.ReportByDormId, validator.EmployeeValidation)                            // Search report by dormId
+	emp.GET("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                                // Search room by dormId
+	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                             // Search customer by Id
+	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                                // Search rmployee by Id
+	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                           // Add customer into room and room status 'I'=> 'A'
+	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation)            // Search all customer in their dormId
+	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                                  // Created maintainer and return Id
+	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)                     // add maintainer to fix report
+	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)                // Search all history by employeeId
+	emp.POST("addEmployeeInDorm", h.AddEmployeeInDorm, validator.EmployeeValidation)                       // Add employee in dorm and change position to staff
+	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

@@ -34,6 +34,11 @@ func GetReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int64) (*respons
 	return res, nil
 }
 
+func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, id int64) (*response.ReportEngage, error) {
+	reportId := int(id)
+	return service.GetReportEngageByReportId(ctx, conn, reportId)
+}
+
 func getReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int) (*response.ReportEngageAll, error) {
 	res, err := service.GetReportEngageAll(ctx, conn, dormId)
 	if err != nil {

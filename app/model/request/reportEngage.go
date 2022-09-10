@@ -15,6 +15,10 @@ type ReportEngageById struct {
 	EngageId int `json:"engageId" gorm:"column:engageId"`
 }
 
+type ReportEngageByReportId struct {
+	ReportId int `json:"reportId" gorm:"column:reportId"`
+}
+
 type SelectedPlanFixDate struct {
 	EngageId     int    `json:"engageId" gorm:"column:engageId"`
 	SelectedDate string `json:"selectedDate" gorm:"column:selectedDate"`
