@@ -10,14 +10,13 @@ import (
 
 func EndJobReport(ctx echo.Context, conn *gorm.DB, req entity.EndJobReport) error {
 	var err error
-	stmt := conn.Begin()
 	sql1 := fmt.Sprintf(
 		`
 		UPDATE reports
 		SET status = 'S7'
 		WHERE reportId = %v
 		`, req.ReportId)
-	err = stmt.Exec(sql1).Error
+	err = conn.Exec(sql1).Error
 	if err != nil {
 		return err
 	}
@@ -28,7 +27,7 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req entity.EndJobReport) erro
 	VALUES ('%v', %v, %v);
 	`, req.Des, req.ReportId, req.Score)
 
-	err = stmt.Exec(sql2).Error
+	err = conn.Exec(sql2).Error
 	if err != nil {
 		return err
 	}
@@ -40,11 +39,9 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req entity.EndJobReport) erro
 		SET dateOfIssue = DATE('%v')
 		WHERE reportId = %v;
 	`, req.DateOfIssue, req.ReportId)
-	err = stmt.Exec(sql3).Error
+	err = conn.Exec(sql3).Error
 	if err != nil {
 		return err
 	}
-
-	stmt.Commit()
 	return nil
 }
