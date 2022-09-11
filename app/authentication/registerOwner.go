@@ -31,12 +31,17 @@ func RegisterOwnerCtr(ctx echo.Context, conn *gorm.DB, req RegisterOwner) (*int,
 }
 
 func RegisterOwnerService(ctx echo.Context, conn *gorm.DB, req RegisterOwner) (*int, error) {
+	var err error
+	encryp, err := GenerateTokenFromPassword(req.Password)
+	if err != nil {
+		return nil, err
+	}
 	regisUser := entity.User{
 		Email:    req.Email,
-		Password: req.Password,
+		Password: *encryp,
 		Role:     "E",
 	}
-	err := repositories.RegisUser(ctx, conn, regisUser)
+	err = repositories.RegisUser(ctx, conn, regisUser)
 	if err != nil {
 		return nil, err
 	}
