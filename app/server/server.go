@@ -61,6 +61,7 @@ func StartServer() {
 	cus.PUT("selectedPlanFixDate", h.SelectedPlanFixDate, validator.CustomerValidation)                 // customer selecting plan fix date
 	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                              // end job report and review
 	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)             // Search all history by customerId
+	cus.POST("reportById", h.ReportById, validator.CustomerValidation)                                  // Search report by id
 
 	// Owner Service
 	emp := api.Group("employee/")
