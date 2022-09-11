@@ -80,18 +80,20 @@ func ActivateCustomer(conn *gorm.DB, cusId string, status string) error {
 
 func RegisterCustomersRepo(ctx echo.Context, conn *gorm.DB, req request.CustomerRegis) (*int, error) {
 	var err error
-	err = conn.Table("customer").Create(&req).Error
+	stmt := conn.Begin()
+	err = stmt.Table("customer").Create(&req).Error
 	if err != nil {
 		fmt.Println("Register customer unsuccess" + err.Error())
 		return nil, err
 	}
 	fmt.Println("Register customer success")
 	var cusid int
-	err = conn.Table("customer").Select("customerId").Where("email = ?", req.Email).Scan(&cusid).Error
+	err = stmt.Table("customer").Select("customerId").Where("email = ?", req.Email).Scan(&cusid).Error
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, err
 	}
+	stmt.Commit()
 	return &cusid, nil
 }
 

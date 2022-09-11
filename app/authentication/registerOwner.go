@@ -63,14 +63,18 @@ func RegisterOwnerService(ctx echo.Context, conn *gorm.DB, req RegisterOwner) (*
 }
 
 func RegisterOwnerRepo(ctx echo.Context, conn *gorm.DB, req entity.EmployeeRegis) (*int, error) {
-	err := conn.Table("employee").Create(&req).Error
+	stmt := conn.Begin()
+	err := stmt.Table("employee").Create(&req).Error
 	if err != nil {
+		stmt.Rollback()
 		return nil, err
 	}
 	var empId int
-	err = conn.Table("employee").Select("employeeId").Where("email = ?", req.Email).Scan(&empId).Error
+	err = stmt.Table("employee").Select("employeeId").Where("email = ?", req.Email).Scan(&empId).Error
 	if err != nil {
+		stmt.Rollback()
 		return nil, err
 	}
+	stmt.Commit()
 	return &empId, nil
 }
