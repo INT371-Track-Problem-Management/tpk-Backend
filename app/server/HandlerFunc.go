@@ -20,7 +20,7 @@ func (h *FuncHandler) Login(ctx echo.Context) error {
 	err = ctx.Bind(&user)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	token, err = authentication.Login(ctx, h.DB, *user)
 	if err != nil {
@@ -35,12 +35,11 @@ func (h *FuncHandler) RegisterCustomer(ctx echo.Context) error {
 	err = ctx.Bind(&req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	customerId, err := authentication.RegisterCustomers(ctx, h.DB, *req, URI)
 	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusUnauthorized, "this email can not use!!!")
 	}
 	return ctx.JSON(http.StatusOK, customerId)
 }
@@ -51,12 +50,12 @@ func (h *FuncHandler) RegisterOwner(ctx echo.Context) error {
 	err = ctx.Bind(&req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	empId, err := authentication.RegisterOwnerCtr(ctx, h.DB, *req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, err)
+		return ctx.JSON(http.StatusUnauthorized, "this email can not use!!!")
 	}
 	return ctx.JSON(http.StatusOK, empId)
 }
@@ -67,7 +66,7 @@ func (h *FuncHandler) ChangeEmail(ctx echo.Context) error {
 	err = ctx.Bind(&req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 
 	token := authentication.DecodeJWT(ctx)
@@ -90,12 +89,12 @@ func (h *FuncHandler) Test(ctx echo.Context) error {
 	err := ctx.Bind(&req)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	res, err := controller.TestController(ctx, *req, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 
 	return ctx.JSON(http.StatusOK, res)
@@ -105,7 +104,7 @@ func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
 	res, err := controller.CheckHealthy(ctx, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 
 	return ctx.JSON(http.StatusOK, res)
@@ -115,7 +114,7 @@ func (h *FuncHandler) CheckHealthyJWT(ctx echo.Context) error {
 	res, err := controller.CheckHealthy(ctx, h.DB)
 	if err != nil {
 		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
