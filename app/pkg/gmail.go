@@ -28,8 +28,9 @@ func SSLemail(to *string, subj string, body string) {
 	smtpHost := mail.Host
 	smtpPort := mail.Port
 	servername := smtpHost + ":" + smtpPort
-	hostdns := "smtp.example.tld:465"
+	hostdns := "smtp.gmail.com:465"
 	host, _, _ := net.SplitHostPort(hostdns)
+	fmt.Println(host)
 
 	headers := make(map[string]string)
 	headers["From"] = from

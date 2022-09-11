@@ -9,8 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetReportEngageAll(ctx echo.Context, conn *gorm.DB) (*response.ReportEngageAll, error) {
-	data, err := repositories.GetReportEngageAll(ctx, conn)
+func GetReportEngageAll(ctx echo.Context, conn *gorm.DB, dormId int) (*response.ReportEngageAll, error) {
+	data, err := repositories.GetReportEngageAll(ctx, conn, dormId)
 	if err != nil {
 		return nil, err
 	}
@@ -26,13 +26,34 @@ func GetReportEngageById(ctx echo.Context, conn *gorm.DB, req request.ReportEnga
 		return nil, err
 	}
 	res := response.ReportEngage{
-		EngageId:   data.EngageId,
-		SelectDate: data.SelectDate,
-		Date1:      data.Date1,
-		Date2:      data.Date2,
-		Date3:      data.Date3,
-		Date4:      data.Date4,
-		ReportId:   data.ReportId,
+		EngageId:     data.EngageId,
+		SelectedDate: data.SelectedDate,
+		Date1:        data.Date1,
+		Date2:        data.Date2,
+		Date3:        data.Date3,
+		Date4:        data.Date4,
+		ReportId:     data.ReportId,
+		DormId:       data.DormId,
+		UpdatedBy:    data.UpdatedBy,
+	}
+	return &res, nil
+}
+
+func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, reportId int) (*response.ReportEngage, error) {
+	data, err := repositories.GetReportEngageByReportId(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	res := response.ReportEngage{
+		EngageId:     data.EngageId,
+		SelectedDate: data.SelectedDate,
+		Date1:        data.Date1,
+		Date2:        data.Date2,
+		Date3:        data.Date3,
+		Date4:        data.Date4,
+		ReportId:     data.ReportId,
+		DormId:       data.DormId,
+		UpdatedBy:    data.UpdatedBy,
 	}
 	return &res, nil
 }
@@ -43,4 +64,20 @@ func InsertReportEngage(ctx echo.Context, conn *gorm.DB, req request.ReportEngag
 		return nil, err
 	}
 	return data, nil
+}
+
+func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*response.ReportEngageJoinReport, error) {
+	data, err := repositories.ReportEngageJoinReport(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
+	err := repositories.SelectedDatePlanFix(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return nil
 }

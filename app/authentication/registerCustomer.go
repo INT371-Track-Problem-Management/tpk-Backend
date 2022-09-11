@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
-	"tpk-backend/app/pkg"
-	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -41,13 +39,17 @@ func ActivateCustomerCtr(ctx echo.Context, conn *gorm.DB, tokeni string, status 
 }
 
 func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCustomer, uri string) (*int, error) {
-
+	var err error
+	encryp, err := GenerateTokenFromPassword(req.Password)
+	if err != nil {
+		return nil, err
+	}
 	regisUser := entity.User{
 		Email:    req.Email,
-		Password: req.Password,
+		Password: *encryp,
 		Role:     "C",
 	}
-	err := repositories.RegisUser(ctx, conn, regisUser)
+	err = repositories.RegisUser(ctx, conn, regisUser)
 	if err != nil {
 		return nil, err
 	}
@@ -69,17 +71,6 @@ func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCusto
 		return nil, err
 	}
 	fmt.Println("Register customer success id is " + fmt.Sprintln(*id))
-	rsp := config.LoadRegisCustomerSend()
-	if regisCus.Email != "" {
-		// token, err := GenerateTokenRegister(*id)
-		// if err != nil {
-		// 	return nil, err
-		// }
-		act := fmt.Sprintln(*id)
-		activate := uri + "api/activateCus?cusid=" + act
-		pkg.SSLemail(&regisCus.Email, rsp.Subject, activate)
-	}
-
 	return id, err
 }
 
@@ -93,18 +84,20 @@ func ActivateCustomer(conn *gorm.DB, cusId string, status string) error {
 
 func RegisterCustomersRepo(ctx echo.Context, conn *gorm.DB, req request.CustomerRegis) (*int, error) {
 	var err error
-	err = conn.Table("customer").Create(&req).Error
+	stmt := conn.Begin()
+	err = stmt.Table("customer").Create(&req).Error
 	if err != nil {
 		fmt.Println("Register customer unsuccess" + err.Error())
 		return nil, err
 	}
 	fmt.Println("Register customer success")
 	var cusid int
-	err = conn.Table("customer").Select("customerId").Where("email = ?", req.Email).Scan(&cusid).Error
+	err = stmt.Table("customer").Select("customerId").Where("email = ?", req.Email).Scan(&cusid).Error
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, err
 	}
+	stmt.Commit()
 	return &cusid, nil
 }
 

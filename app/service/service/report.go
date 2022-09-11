@@ -6,7 +6,6 @@ import (
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
 	"tpk-backend/app/pkg"
-	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -39,6 +38,14 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 	return res, nil
 }
 
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
+	res, err := repositories.ReportByCreatedBy(ctx, conn, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*int, error) {
 	timenow := pkg.GetDatetime()
 	data := entity.ReportInsert{
@@ -49,21 +56,40 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		ReportDate:       timenow,
 		CreatedBy:        req.CreatedBy,
 	}
+
 	reportid, err := repositories.ReportInsert(ctx, conn, data)
 	if err != nil {
 		return nil, err
 	}
 
-	cus, err := repositories.GetUserByCustomerId(ctx, conn, req.CreatedBy)
+	roomProfile, err := repositories.GetRoomWithCustomerByCustomerId(ctx, conn, req.CreatedBy)
 	if err != nil {
 		return nil, err
 	}
 
-	if cus.Email != "" {
-		rps := config.LoadReportSend()
-		pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
+	history := entity.CreateHistoryReport{
+		ReportId:   *reportid,
+		ReportDate: timenow,
+		RoomId:     roomProfile.RoomId,
+		CustomerId: req.CreatedBy,
+		DormId:     roomProfile.DormId,
 	}
-	fmt.Printf("customerId %v is not have email", req.CreatedBy)
+
+	err = repositories.CreatedHistoryReport(ctx, conn, history)
+	if err != nil {
+		return nil, err
+	}
+
+	// cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// if cus.Email != "" {
+	// 	rps := config.LoadReportSend()
+	// 	pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
+	// }
+	// fmt.Printf("customerId %v is not have email", req.CreatedBy)
 
 	return reportid, nil
 }
@@ -83,4 +109,12 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	}
 	fmt.Printf("Delete report id %v success", req.ReportId)
 	return nil
+}
+
+func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
+	res, err := repositories.ReportByDormId(ctx, conn, dormId)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

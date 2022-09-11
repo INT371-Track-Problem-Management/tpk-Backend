@@ -1,6 +1,8 @@
 version: "2.2"
 services:
   backend:
+    env_file:
+      - ../app/.env.dev
     container_name: "backendDev"
     image: ghcr.io/artidsun/int371-backend-dev:latest
     ports:

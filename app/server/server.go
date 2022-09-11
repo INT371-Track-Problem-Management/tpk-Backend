@@ -2,23 +2,21 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"tpk-backend/app/authentication"
-	"tpk-backend/app/model/request"
-	"tpk-backend/app/pkg"
 	"tpk-backend/app/pkg/config"
-	"tpk-backend/app/service/controller"
+	"tpk-backend/app/validator"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func StartServer() {
-	fmt.Println("test ci")
+
+	log.Println(config.LoadTest())
 	key := os.Getenv("KEY")
 	port := SetEnv(key)
 	fmt.Println("PROJECT RUN ON PORT: " + port)
@@ -27,8 +25,8 @@ func StartServer() {
 	h.Initialize()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowOrigins: []string{"*", "localhost"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
 	}))
 
@@ -39,24 +37,60 @@ func StartServer() {
 	api.POST("login", h.Login)
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
-	api.GET("rooms", h.Rooms)
-	api.GET("customer", h.Customer)
-	api.PUT("rooms", h.RoomsStatus)
-	api.GET("dorm", h.Dorm)
-	api.GET("report", h.Report)
-	api.POST("reportById", h.ReportById)
-	api.POST("dorm", h.DormInsert)
-	api.POST("rooms", h.RoomsInsert)
-	api.DELETE("dorm", h.DormDelete)
-	api.POST("report", h.ReportInsert)
-	api.PUT("statusReport", h.ReportChangeStatus)
 	api.GET("testEmail", h.TestGmail)
-	api.POST("registerCustomer", h.RegisterCustomer)
-	api.GET("reportEngageAll", h.GetReportEngageAll)
-	api.POST("reportEngageById", h.GetReportEngageById)
-	api.POST("CreateReportEngage", h.InsertReportEngage)
-	api.GET("activateCus", h.ActivateCustomer)
-	api.DELETE("deleteReportById", h.DeleteReportById)
+	api.POST("registerCustomer", h.RegisterCustomer) // Register customer
+	api.POST("registerOwner", h.RegisterOwner)       // Register owner
+
+	// Both but need TOKEN
+	service := api.Group("service/")
+	service.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
+	service.POST("changeEmail", h.ChangeEmail)                  // Change email customer or employee
+	service.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
+	service.GET("historyreportById/*", h.GetHistoryByHistoryId) // Search history by Id
+
+	// Customer Service
+	cus := api.Group("customer/")
+	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
+	cus.GET("checkHealthy", h.CheckHealthyJWT, validator.CustomerValidation)                            //Check Heatkhy with Token
+	cus.GET("activateCus", h.ActivateCustomer, validator.CustomerValidation)                            // Activate user change status 'I' => 'A'
+	cus.POST("reportByCreatedBy", h.GetReportByCreatedBy, validator.CustomerValidation)                 // Search report by createdBy
+	cus.POST("report", h.ReportInsert, validator.CustomerValidation)                                    // Insert report
+	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile, validator.CustomerValidation)               // View profile customer by email
+	cus.PUT("editProfile/*", h.CustomerEditProfile, validator.CustomerValidation)                       // Edit customer profile
+	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport, validator.CustomerValidation) // Seach reportEngage join with reports whare by customerId
+	cus.PUT("selectedPlanFixDate", h.SelectedPlanFixDate, validator.CustomerValidation)                 // customer selecting plan fix date
+	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                              // end job report and review
+	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)             // Search all history by customerId
+	cus.POST("reportById", h.ReportById, validator.CustomerValidation)                                  // Search report by id
+
+	// Owner Service
+	emp := api.Group("employee/")
+	emp.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
+	emp.POST("reportEngageById", h.GetReportEngageById, validator.EmployeeValidation)                      // Search Report by engageId
+	emp.POST("CreateReportEngage", h.InsertReportEngage, validator.EmployeeValidation)                     // Insert Report Engage
+	emp.PUT("statusReport", h.ReportChangeStatus, validator.EmployeeValidation)                            // Update status Report
+	emp.DELETE("deleteReportById", h.DeleteReportById, validator.EmployeeValidation)                       // Delete report by Id
+	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)                                                // Search all room
+	emp.GET("customer", h.Customer, validator.EmployeeValidation)                                          // Search all customer
+	emp.PUT("rooms", h.RoomsStatus, validator.EmployeeValidation)                                          // Change room status
+	emp.GET("dorm", h.Dorm, validator.EmployeeValidation)                                                  // Search all dorm
+	emp.GET("report", h.Report, validator.EmployeeValidation)                                              // Search all report
+	emp.POST("reportById", h.ReportById, validator.EmployeeValidation)                                     // Search report by id
+	emp.POST("dorm", h.DormInsert, validator.EmployeeValidation)                                           // Insert Dorm
+	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                                         // Insert Room
+	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                                         // Delete dorm
+	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)                       // Search all report engage
+	emp.GET("reportByDormId/*", h.ReportByDormId, validator.EmployeeValidation)                            // Search report by dormId
+	emp.GET("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                                // Search room by dormId
+	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                             // Search customer by Id
+	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                                // Search rmployee by Id
+	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                           // Add customer into room and room status 'I'=> 'A'
+	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation)            // Search all customer in their dormId
+	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                                  // Created maintainer and return Id
+	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)                     // add maintainer to fix report
+	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)                // Search all history by employeeId
+	emp.POST("addEmployeeInDorm", h.AddEmployeeInDorm, validator.EmployeeValidation)                       // Add employee in dorm and change position to staff
+	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
@@ -76,308 +110,19 @@ func SetEnv(key string) string {
 		URI = "https://dev.rungmod.com/"
 		return port
 	}
-	if key == "local" {
+	if key == "" {
 		port = "3050"
 		URI = "http://localhost:3050/"
 		URIRedi = "https://dev.rungmod.com/"
 		return port
 	} else {
-		fmt.Printf("Invalid ENV")
+		port = "3050"
+		URI = "http://localhost:3050/"
+		log.Println("Invalid port ENV")
 	}
 	return ""
 }
 
 type FuncHandler struct {
 	DB *gorm.DB
-}
-
-func (h *FuncHandler) Login(ctx echo.Context) error {
-	var token *string
-	var err error
-	user := new(request.User)
-	err = ctx.Bind(&user)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	token, err = authentication.Login(ctx, h.DB, *user)
-	if err != nil {
-		return ctx.JSON(http.StatusUnauthorized, err.Error())
-	}
-	return ctx.JSON(http.StatusOK, token)
-}
-
-func (h *FuncHandler) Initialize() {
-	db := config.LoadDB()
-	dns := fmt.Sprintf(`%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local`, db.Username, db.Password, db.Host, db.Port, db.Database)
-	conn, err := gorm.Open(mysql.Open(dns), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
-	if err != nil {
-		fmt.Println(err)
-	}
-	h.DB = conn
-}
-func (h *FuncHandler) TestGmail(ctx echo.Context) error {
-	testmail := "artid.vijitpanmai@mail.kmutt.ac.th"
-	pkg.SSLemail(&testmail, "Hello-World", "Hi")
-	return ctx.JSON(http.StatusOK, "send mail success")
-}
-
-func (h *FuncHandler) Test(ctx echo.Context) error {
-	req := new(request.Test)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.TestController(ctx, *req, h.DB)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) CheckHealthy(ctx echo.Context) error {
-	res, err := controller.CheckHealthy(ctx, h.DB)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) Rooms(ctx echo.Context) error {
-	res, err := controller.Rooms(ctx, h.DB)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) RoomsStatus(ctx echo.Context) error {
-	req := new(request.RoomsStatus)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.RoomsStatus(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) Customer(ctx echo.Context) error {
-	res, err := controller.Customer(ctx, h.DB)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) Dorm(ctx echo.Context) error {
-	req := new(request.Dorm)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.Dorm(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) Report(ctx echo.Context) error {
-	fmt.Println("test")
-	res, err := controller.Report(ctx, h.DB)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) ReportById(ctx echo.Context) error {
-	req := new(request.Report)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.ReportById(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) DormInsert(ctx echo.Context) error {
-	req := new(request.DormInsert)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.DormInsert(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
-	req := new(request.RoomInsert)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.RoomInsert(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) DormDelete(ctx echo.Context) error {
-	req := new(request.DormDelete)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.DormDelete(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
-	req := new(request.ReportInsert)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.ReportInsert(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
-	req := new(request.ReportChangeStatus)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.ReportChangeStatus(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) RegisterCustomer(ctx echo.Context) error {
-	var err error
-	req := new(authentication.RegisterCustomer)
-	err = ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	customerId, err := authentication.RegisterCustomers(ctx, h.DB, *req, URI)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, customerId)
-}
-
-func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
-	res, err := controller.GetReportEngageAll(ctx, h.DB)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) GetReportEngageById(ctx echo.Context) error {
-	req := new(request.ReportEngageById)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.GetReportEngageById(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) InsertReportEngage(ctx echo.Context) error {
-	req := new(request.ReportEngage)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	res, err := controller.InsertReportEngage(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) ActivateCustomer(ctx echo.Context) error {
-	id := ctx.QueryParam("cusid")
-	err := authentication.ActivateCustomerCtr(ctx, h.DB, id, "A")
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	redir := URI + "login"
-	fmt.Println("----test----")
-	fmt.Println(redir)
-	return ctx.Redirect(http.StatusMovedPermanently, redir)
-}
-
-func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
-	var err error
-	req := new(request.Report)
-	err = ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	err = controller.DeleteReportById(ctx, h.DB, *req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, "")
-	}
-	return ctx.JSON(http.StatusNoContent, "")
 }
