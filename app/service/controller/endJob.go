@@ -9,5 +9,9 @@ import (
 )
 
 func EndJobReport(ctx echo.Context, conn *gorm.DB, req request.EndJobReport) error {
-	return service.EndJobReport(ctx, conn, req)
+	err := service.EndJobReport(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return nil
 }

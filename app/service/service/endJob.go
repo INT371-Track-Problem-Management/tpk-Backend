@@ -18,5 +18,9 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req request.EndJobReport) err
 		Score:       req.Score,
 		DateOfIssue: now,
 	}
-	return repositories.EndJobReport(ctx, conn, entity)
+	err := repositories.EndJobReport(ctx, conn, entity)
+	if err != nil {
+		return err
+	}
+	return nil
 }

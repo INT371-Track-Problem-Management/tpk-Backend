@@ -12,7 +12,7 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req entity.EndJobReport) erro
 	var err error
 	stmt := conn.Begin()
 
-	err = stmt.Table("reports").Where("reportId = ?", req.ReportId).Update("status = ?", "success").Error
+	err = stmt.Table("reports").Where("reportId = ?", req.ReportId).Update("status = ?", "S7").Error
 	if err != nil {
 		return err
 	}
