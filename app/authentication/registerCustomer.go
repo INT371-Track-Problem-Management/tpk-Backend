@@ -39,13 +39,17 @@ func ActivateCustomerCtr(ctx echo.Context, conn *gorm.DB, tokeni string, status 
 }
 
 func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCustomer, uri string) (*int, error) {
-
+	var err error
+	encryp, err := GenerateTokenFromPassword(req.Password)
+	if err != nil {
+		return nil, err
+	}
 	regisUser := entity.User{
 		Email:    req.Email,
-		Password: req.Password,
+		Password: *encryp,
 		Role:     "C",
 	}
-	err := repositories.RegisUser(ctx, conn, regisUser)
+	err = repositories.RegisUser(ctx, conn, regisUser)
 	if err != nil {
 		return nil, err
 	}

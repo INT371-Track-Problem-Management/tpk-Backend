@@ -1,6 +1,7 @@
 package authentication
 
 import (
+	"log"
 	"strings"
 	"time"
 	"tpk-backend/app/pkg/config"
@@ -36,8 +37,26 @@ type JwtRegisterActivate struct {
 	jwt.StandardClaims
 }
 
+type JWTPassword struct {
+	Password string
+	jwt.StandardClaims
+}
+
 var secrete = config.LoadJWTConfig().Secret
 var signingKey = []byte(secrete)
+
+func GenerateTokenFromPassword(password string) (*string, error) {
+	claims := &JWTPassword{
+		password,
+		jwt.StandardClaims{},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	t, err := token.SignedString(signingKey)
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
 
 func GenerateTokenRegister(cusId int) (*string, error) {
 	claims := &JwtRegisterActivate{
@@ -145,4 +164,25 @@ func DecodeJWT(ctx echo.Context) JwtCustomClaims {
 		StandardClaims: jwt.StandardClaims{},
 	}
 	return jwtDecode
+}
+
+func DecodeJWTPassword(password string) JWTPassword {
+	claimsDecode := jwt.MapClaims{}
+	token, _ := jwt.ParseWithClaims(password, claimsDecode, func(token *jwt.Token) (interface{}, error) {
+		return signingKey, nil
+	})
+	claims := token.Claims.(jwt.MapClaims)
+	pwd := claims["Password"].(string)
+	jwtDecode := JWTPassword{
+		Password:       pwd,
+		StandardClaims: jwt.StandardClaims{},
+	}
+	log.Println(jwtDecode.Password)
+	return jwtDecode
+}
+
+func ComparePassword(reqPassword string, encrypPWD string) bool {
+	pwdDB := DecodeJWTPassword(encrypPWD)
+	log.Println(pwdDB)
+	return pwdDB.Password == reqPassword
 }

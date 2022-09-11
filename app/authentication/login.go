@@ -17,7 +17,15 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, err
 	}
 
-	if req.Email != user.Email || req.Password != user.Password {
+	if req.Email != user.Email {
+		errUn := errors.New("Unatutherize")
+		return nil, errUn
+	}
+
+	log.Println(req.Password)
+	log.Println(user.Password)
+
+	if pwd := ComparePassword(req.Password, user.Password); !pwd {
 		errUn := errors.New("Unatutherize")
 		return nil, errUn
 	}
