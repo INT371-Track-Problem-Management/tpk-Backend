@@ -29,6 +29,17 @@ func (h *FuncHandler) Login(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, echo.Map{"token": token})
 }
 
+func (h *FuncHandler) Logout(ctx echo.Context) error {
+	err := authentication.Logout(ctx, h.DB)
+	if err != nil {
+		return ctx.JSON(http.StatusUnauthorized, err)
+	}
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
 func (h *FuncHandler) RegisterCustomer(ctx echo.Context) error {
 	var err error
 	req := new(authentication.RegisterCustomer)

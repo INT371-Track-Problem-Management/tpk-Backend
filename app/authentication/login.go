@@ -22,9 +22,6 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		return nil, errUn
 	}
 
-	log.Println(req.Password)
-	log.Println(user.Password)
-
 	if pwd := ComparePassword(req.Password, user.Password); !pwd {
 		errUn := errors.New("Unatutherize")
 		return nil, errUn
@@ -40,6 +37,10 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 			log.Println(err)
 			return nil, err
 		}
+		err = SaveToken(conn, token)
+		if err != nil {
+			return nil, err
+		}
 		return token, nil
 	}
 
@@ -53,6 +54,10 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 			log.Println(err)
 			return nil, err
 		}
+		err = SaveToken(conn, token)
+		if err != nil {
+			return nil, err
+		}
 		return token, nil
 	}
 
@@ -61,9 +66,21 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 
 func GetUser(conn *gorm.DB, req request.User) (*entity.User, error) {
 	user := new(entity.User)
-	err := conn.Table("userMaster").Where("email = ?", req.Email).Find(&user).Error
+	err := conn.Table("userApp").Where("email = ?", req.Email).Find(&user).Error
 	if err != nil {
 		return nil, err
 	}
 	return user, nil
+}
+
+func SaveToken(conn *gorm.DB, token *string) error {
+	save := entity.SaveToken{
+		Token:  *token,
+		Status: `A`,
+	}
+	err := conn.Table("tokenApp").Create(save).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

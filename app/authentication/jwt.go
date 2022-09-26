@@ -166,6 +166,13 @@ func DecodeJWT(ctx echo.Context) JwtCustomClaims {
 	return jwtDecode
 }
 
+func GetTokenFromHeadler(ctx echo.Context) string {
+	reqToken := ctx.Request().Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
+	return reqToken
+}
+
 func DecodeJWTPassword(password string) JWTPassword {
 	claimsDecode := jwt.MapClaims{}
 	token, _ := jwt.ParseWithClaims(password, claimsDecode, func(token *jwt.Token) (interface{}, error) {

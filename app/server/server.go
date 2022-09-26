@@ -35,6 +35,7 @@ func StartServer() {
 	})
 	api := e.Group("/api/")
 	api.POST("login", h.Login)
+	api.POST("logout", h.Logout)
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
 	api.GET("testEmail", h.TestGmail)
