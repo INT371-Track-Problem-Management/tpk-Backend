@@ -14,7 +14,6 @@ import (
 
 // Free Service
 func (h *FuncHandler) Login(ctx echo.Context) error {
-	var token *string
 	var err error
 	user := new(request.User)
 	err = ctx.Bind(&user)
@@ -22,11 +21,15 @@ func (h *FuncHandler) Login(ctx echo.Context) error {
 		fmt.Println(err.Error())
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	token, err = authentication.Login(ctx, h.DB, *user)
+	authen, err := authentication.Login(ctx, h.DB, *user)
 	if err != nil {
 		return ctx.JSON(http.StatusUnauthorized, err.Error())
 	}
-	return ctx.JSON(http.StatusOK, echo.Map{"token": token})
+	response := map[string]string{
+		"token": authen.Token,
+		"name":  authen.Name,
+	}
+	return ctx.JSON(http.StatusOK, response)
 }
 
 func (h *FuncHandler) Logout(ctx echo.Context) error {

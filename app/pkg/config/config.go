@@ -43,8 +43,8 @@ func LoadDB() *Database {
 		Password: GetEnv("PASSWORD", "P@ssw0rd2"),
 		Host:     GetEnv("HOST", "database-rungmod.sit.kmutt.ac.th"),
 		Port:     GetEnv("PORT", "55013"),
-		// Host:     GetEnv("HOST", "10.4.56.39"),
-		// Port:     GetEnv("PORT", "3306"),
+		// Host: GetEnv("HOST", "10.4.56.39"),
+		// Port: GetEnv("PORT", "3306"),
 		// Database: GetEnv("DATABASE", "project"),
 		Database: GetEnv("DATABASE", "rungmodDev"),
 	}

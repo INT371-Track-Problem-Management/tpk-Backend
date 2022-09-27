@@ -17,10 +17,25 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req request.EndJobReport) err
 		ReportId:    req.ReportId,
 		Score:       req.Score,
 		DateOfIssue: now,
+		UpdateBy:    req.UpdateBy,
 	}
-	err := repositories.EndJobReport(ctx, conn, entity)
+	status := request.ReportStatus{
+		ReportId:  req.ReportId,
+		Status:    "S7",
+		UpdateAt:  now,
+		UpdateBy:  req.UpdateBy,
+		CreatedAt: now,
+	}
+
+	session := conn.Begin()
+	err := repositories.EndJobReport(ctx, session, entity)
 	if err != nil {
 		return err
 	}
+	err = repositories.ReportStatus(ctx, session, status)
+	if err != nil {
+		return err
+	}
+	session.Commit()
 	return nil
 }

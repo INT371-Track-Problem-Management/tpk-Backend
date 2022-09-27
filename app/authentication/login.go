@@ -11,7 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
+type ResponseToken struct {
+	Token string
+	Name  string
+}
+
+func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*ResponseToken, error) {
 	user, err := GetUser(conn, req)
 	if err != nil {
 		return nil, err
@@ -41,7 +46,11 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		if err != nil {
 			return nil, err
 		}
-		return token, nil
+		res := ResponseToken{
+			Token: *token,
+			Name:  cus.Fname,
+		}
+		return &res, nil
 	}
 
 	if user.Role == "E" {
@@ -58,7 +67,12 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		if err != nil {
 			return nil, err
 		}
-		return token, nil
+
+		res := ResponseToken{
+			Token: *token,
+			Name:  emp.Fname,
+		}
+		return &res, nil
 	}
 
 	return nil, nil

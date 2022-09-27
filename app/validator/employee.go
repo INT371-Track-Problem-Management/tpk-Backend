@@ -16,8 +16,8 @@ func EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		jwt := authentication.DecodeJWT(c)
 		app := new(authentication.CheckOwnerApplication)
-		token := authentication.GetTokenFromHeadler(c)
-		statusToken := CheckStatusToken(token)
+		// token := authentication.GetTokenFromHeadler(c)
+		// statusToken := CheckStatusToken(token)
 
 		if jwt.Expire < float64(time.Now().Unix()) {
 			app.Id = jwt.Id
@@ -30,7 +30,7 @@ func EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusBadRequest, res)
 		}
-		if jwt.Role != "E" || jwt.Status == false || statusToken == false {
+		if jwt.Role != "E" || jwt.Status == false {
 			app.Id = jwt.Id
 			app.Token = "Token can't use"
 			app.Status = false

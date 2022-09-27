@@ -196,22 +196,15 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	return ctx.JSON(http.StatusNoContent, "")
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
 }
 
 func (h *FuncHandler) RoomByDormId(ctx echo.Context) error {
 	dormId := ctx.QueryParam("dormId")
 	res, err := controller.RoomByDormId(ctx, h.DB, dormId)
-	if err != nil {
-
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
-func (h *FuncHandler) ReportByDormId(ctx echo.Context) error {
-	dormId := ctx.QueryParam("dormId")
-	res, err := controller.ReportByDormId(ctx, h.DB, dormId)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)

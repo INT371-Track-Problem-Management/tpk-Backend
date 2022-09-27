@@ -13,8 +13,8 @@ func CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		jwt := authentication.DecodeJWT(c)
 		app := new(authentication.CheckCustomerApplication)
-		token := authentication.GetTokenFromHeadler(c)
-		statusToken := CheckStatusToken(token)
+		// token := authentication.GetTokenFromHeadler(c)
+		// statusToken := CheckStatusToken(token)
 
 		if jwt.Expire < float64(time.Now().Unix()) {
 			app.Id = jwt.Id
@@ -27,7 +27,7 @@ func CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusBadRequest, res)
 		}
-		if jwt.Role != "C" || jwt.Status == false || statusToken == false {
+		if jwt.Role != "C" || jwt.Status == false {
 			app.Id = jwt.Id
 			app.Token = "Token can't use"
 			app.Status = false

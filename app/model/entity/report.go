@@ -6,9 +6,10 @@ type Report struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
-	SuccessDate      string `json:"successDate" gorm:"column:successDate"`
-	ReportDate       string `json:"reportDate" gorm:"column:reportDate"`
-	CreatedBy        int    `json:"createdBy" gorm:"column:createdBy"`
+	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
+	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
+	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
+	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
 }
 
 type ReportInsert struct {
@@ -16,8 +17,10 @@ type ReportInsert struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
-	ReportDate       string `json:"reportDate" gorm:"column:reportDate"`
-	CreatedBy        int    `json:"createdBy" gorm:"column:createdBy"`
+	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
+	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
+	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
+	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
 }
 
 type EndReport struct {
@@ -26,4 +29,11 @@ type EndReport struct {
 	Score       int    `json:"score" gorm:"column:score"`
 	CreatedBy   int    `json:"createdBy" gorm:"column:createdBy"`
 	DateOfIssue string `json:"dateOfIssue" gorm:"column:dateOfIssue"`
+}
+
+type ReportChangeStatus struct {
+	ReportId   int    `json:"reportId" gorm:"column:reportId"`
+	Status     string `json:"status" gorm:"column:status"`
+	UpdateAt   string `json:"updateAt" gorm:"column:updateAt"`
+	EmployeeId int    `json:"employeeId" gorm:"column:employeeId"`
 }
