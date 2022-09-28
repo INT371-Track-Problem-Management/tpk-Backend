@@ -30,10 +30,11 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		Title:            data.Title,
 		CategoriesReport: data.CategoriesReport,
 		ReportDes:        data.ReportDes,
-		ReportDate:       data.ReportDate,
-		SuccessDate:      data.SuccessDate,
 		Status:           data.Status,
-		CreatedBy:        data.CreatedBy,
+		UpdateAt:         data.UpdateAt,
+		UpdateBy:         data.UpdateBy,
+		CreateAt:         data.CreateAt,
+		CreateBy:         data.CreateBy,
 	}
 	return res, nil
 }
@@ -53,52 +54,61 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		CategoriesReport: req.CategoriesReport,
 		ReportDes:        req.ReportDes,
 		Status:           req.Status,
-		ReportDate:       timenow,
-		CreatedBy:        req.CreatedBy,
+		CreateAt:         timenow,
+		CreateBy:         req.CreateBy,
+		UpdateAt:         timenow,
+		UpdateBy:         req.CreateBy,
 	}
 
-	reportid, err := repositories.ReportInsert(ctx, conn, data)
+	session := conn.Begin()
+	reportid, err := repositories.ReportInsert(ctx, session, data)
 	if err != nil {
 		return nil, err
 	}
 
-	roomProfile, err := repositories.GetRoomWithCustomerByCustomerId(ctx, conn, req.CreatedBy)
+	status := request.ReportStatus{
+		ReportId:  *reportid,
+		Status:    req.Status,
+		UpdateAt:  timenow,
+		UpdateBy:  req.CreateBy,
+		CreatedAt: timenow,
+	}
+
+	err = repositories.ReportStatus(ctx, session, status)
 	if err != nil {
 		return nil, err
 	}
 
-	history := entity.CreateHistoryReport{
-		ReportId:   *reportid,
-		ReportDate: timenow,
-		RoomId:     roomProfile.RoomId,
-		CustomerId: req.CreatedBy,
-		DormId:     roomProfile.DormId,
-	}
-
-	err = repositories.CreatedHistoryReport(ctx, conn, history)
-	if err != nil {
-		return nil, err
-	}
-
-	// cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// if cus.Email != "" {
-	// 	rps := config.LoadReportSend()
-	// 	pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
-	// }
-	// fmt.Printf("customerId %v is not have email", req.CreatedBy)
+	session.Commit()
 
 	return reportid, nil
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) (string, error) {
-	err := repositories.ReportChangeStatus(ctx, conn, req)
+	timenow := pkg.GetDatetime()
+	status := request.ReportStatus{
+		ReportId:  req.ReportId,
+		Status:    req.Status,
+		UpdateAt:  timenow,
+		UpdateBy:  req.EmployeeId,
+		CreatedAt: timenow,
+	}
+	insert := entity.ReportChangeStatus{
+		ReportId:   req.ReportId,
+		Status:     req.Status,
+		UpdateAt:   timenow,
+		EmployeeId: req.EmployeeId,
+	}
+	session := conn.Begin()
+	err := repositories.ReportChangeStatus(ctx, session, insert)
 	if err != nil {
 		return "Can not update", err
 	}
+	err = repositories.ReportStatus(ctx, session, status)
+	if err != nil {
+		return "Can not update", err
+	}
+	session.Commit()
 	return "Update success", nil
 }
 
@@ -109,12 +119,4 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	}
 	fmt.Printf("Delete report id %v success", req.ReportId)
 	return nil
-}
-
-func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
-	res, err := repositories.ReportByDormId(ctx, conn, dormId)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
 }

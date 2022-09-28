@@ -35,6 +35,7 @@ func StartServer() {
 	})
 	api := e.Group("/api/")
 	api.POST("login", h.Login)
+	api.POST("logout", h.Logout)
 	api.GET("test", h.Test)
 	api.GET("checkHealthy", h.CheckHealthy)
 	api.GET("testEmail", h.TestGmail)
@@ -80,7 +81,6 @@ func StartServer() {
 	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                                         // Insert Room
 	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                                         // Delete dorm
 	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)                       // Search all report engage
-	emp.GET("reportByDormId/*", h.ReportByDormId, validator.EmployeeValidation)                            // Search report by dormId
 	emp.GET("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                                // Search room by dormId
 	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                             // Search customer by Id
 	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                                // Search rmployee by Id

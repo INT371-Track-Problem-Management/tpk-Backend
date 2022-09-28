@@ -9,7 +9,7 @@ import (
 )
 
 func RegisUser(ctx echo.Context, conn *gorm.DB, req entity.User) error {
-	err := conn.Table("userMaster").Create(&req).Error
+	err := conn.Table("userApp").Create(&req).Error
 	if err != nil {
 		return err
 	}
@@ -19,7 +19,7 @@ func RegisUser(ctx echo.Context, conn *gorm.DB, req entity.User) error {
 func ChangeEmail(ctx echo.Context, conn *gorm.DB, req request.ChangeEmail, oldEmail string) error {
 	var err error
 	stmt := conn.Begin()
-	err = stmt.Table("userMaster").Where("email = ?", oldEmail).Update("email = ?", req.NewEmail).Error
+	err = stmt.Table("userApp").Where("email = ?", oldEmail).Update("email = ?", req.NewEmail).Error
 	if err != nil {
 		stmt.Rollback()
 		return err

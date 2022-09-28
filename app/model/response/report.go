@@ -6,7 +6,8 @@ type Report struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
-	SuccessDate      string `json:"successDate" gorm:"column:successDate"`
-	ReportDate       string `json:"reportDate" gorm:"column:reportDate"`
-	CreatedBy        int    `json:"createdBy" gorm:"column:createdBy"`
+	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
+	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
+	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
+	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
 }

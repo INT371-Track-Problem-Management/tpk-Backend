@@ -11,7 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
+type ResponseToken struct {
+	Token string
+	Name  string
+}
+
+func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*ResponseToken, error) {
 	user, err := GetUser(conn, req)
 	if err != nil {
 		return nil, err
@@ -21,9 +26,6 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 		errUn := errors.New("Unatutherize")
 		return nil, errUn
 	}
-
-	log.Println(req.Password)
-	log.Println(user.Password)
 
 	if pwd := ComparePassword(req.Password, user.Password); !pwd {
 		errUn := errors.New("Unatutherize")
@@ -40,7 +42,15 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 			log.Println(err)
 			return nil, err
 		}
-		return token, nil
+		err = SaveToken(conn, token)
+		if err != nil {
+			return nil, err
+		}
+		res := ResponseToken{
+			Token: *token,
+			Name:  cus.Fname,
+		}
+		return &res, nil
 	}
 
 	if user.Role == "E" {
@@ -53,7 +63,16 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 			log.Println(err)
 			return nil, err
 		}
-		return token, nil
+		err = SaveToken(conn, token)
+		if err != nil {
+			return nil, err
+		}
+
+		res := ResponseToken{
+			Token: *token,
+			Name:  emp.Fname,
+		}
+		return &res, nil
 	}
 
 	return nil, nil
@@ -61,9 +80,21 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*string, error) {
 
 func GetUser(conn *gorm.DB, req request.User) (*entity.User, error) {
 	user := new(entity.User)
-	err := conn.Table("userMaster").Where("email = ?", req.Email).Find(&user).Error
+	err := conn.Table("userApp").Where("email = ?", req.Email).Find(&user).Error
 	if err != nil {
 		return nil, err
 	}
 	return user, nil
+}
+
+func SaveToken(conn *gorm.DB, token *string) error {
+	save := entity.SaveToken{
+		Token:  *token,
+		Status: `A`,
+	}
+	err := conn.Table("tokenApp").Create(save).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

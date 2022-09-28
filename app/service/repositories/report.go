@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"log"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -19,9 +20,9 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.successDate as successDate ,
-		r.reportDate as reportDate ,
-		r.createdBy as createdBy 
+		r.updateAt as updateAt ,
+		r.createAt as createAt ,
+		r.createBy as createBy
 	FROM 
 		reports r 
 	JOIN
@@ -44,16 +45,16 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.successDate as successDate ,
-		r.reportDate as reportDate ,
-		r.createdBy as createdBy 
+		r.updateAt as updateAt ,
+		r.createAt as createAt ,
+		r.createBy as createBy
 	FROM 
 		reports r 
 	JOIN
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
 	WHERE 
-		r.createdBy = %v`, req.CreatedBy)
+		r.createBy = %v`, req.CreatedBy)
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
@@ -70,9 +71,9 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.successDate as successDate ,
-		r.reportDate as reportDate ,
-		r.createdBy as createdBy 
+		r.updateAt as updateAt ,
+		r.createAt as createAt ,
+		r.createBy as createBy
 	FROM 
 		reports r 
 	JOIN
@@ -88,37 +89,27 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 }
 
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*int, error) {
-	stmt := conn.Begin()
+	log.Println(req)
 	var err error
-	err = stmt.Table("reports").Create(&req).Error
+	err = conn.Table("reports").Create(&req).Error
 	if err != nil {
 		return nil, err
 	}
 
 	var id int
-	err = stmt.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createdBy = ?", req.CreatedBy).Where("reportDate = ?", req.ReportDate).Scan(&id).Error
+	err = conn.Table("reports").Select("reportId").Where("title = ?", req.Title).Where("createBy = ?", req.CreateBy).Where("createAt = ?", req.CreateAt).Scan(&id).Error
 	if err != nil {
 		return nil, err
 	}
 
-	stmt.Commit()
 	return &id, nil
 }
 
-func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {
-	var err error
-	stmt := conn.Begin()
-	err = stmt.Exec("UPDATE reports SET status = ? WHERE reportId = ?", req.Status, req.ReportId).Error
+func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req entity.ReportChangeStatus) error {
+	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.EmployeeId, req.UpdateAt, req.ReportId).Error
 	if err != nil {
 		return err
 	}
-	if req.Status == "S2" {
-		err = stmt.Exec("UPDATE historyReport SET employeeId = ? WHERE reportId = ?", req.EmployeeId, req.ReportId).Error
-		if err != nil {
-			return err
-		}
-	}
-	stmt.Commit()
 	return nil
 }
 
@@ -133,11 +124,7 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	if err != nil {
 		return err
 	}
-	err = session.Exec("DELETE FROM assignReport WHERE reportId = ?", req.ReportId).Error
-	if err != nil {
-		return err
-	}
-	err = session.Exec("DELETE FROM historyReport WHERE reportId = ?", req.ReportId).Error
+	err = session.Exec("DELETE FROM reportStatus WHERE reportId = ?", req.ReportId).Error
 	if err != nil {
 		return err
 	}
@@ -149,25 +136,11 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	return nil
 }
 
-func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
-	var data *[]entity.Report
-	err := conn.Table("report").Where("dormId = ?", dormId).Find(&data).Error
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
-}
-
 func ReportEndJob(ctx echo.Context, conn *gorm.DB, req entity.EndReport) error {
 	var err error
 	stmt := conn.Begin()
 
 	err = stmt.Table("reports").Where("reportId = ?", req.ReportId).Update("status = ?", "S7").Error
-	if err != nil {
-		return err
-	}
-
-	err = stmt.Table("historyReport").Where("reportId = ?", req.ReportId).Update("dateOfIssue = ?", req.DateOfIssue).Error
 	if err != nil {
 		return err
 	}
@@ -183,5 +156,13 @@ func ReportEndJob(ctx echo.Context, conn *gorm.DB, req entity.EndReport) error {
 	}
 
 	stmt.Commit()
+	return nil
+}
+
+func ReportStatus(ctx echo.Context, conn *gorm.DB, status request.ReportStatus) error {
+	err := conn.Table("reportStatus").Create(status).Error
+	if err != nil {
+		return err
+	}
 	return nil
 }
