@@ -198,6 +198,7 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 	}
 	res := map[string]string{
 		"message": "success",
+		
 	}
 	return ctx.JSON(http.StatusOK, res)
 }

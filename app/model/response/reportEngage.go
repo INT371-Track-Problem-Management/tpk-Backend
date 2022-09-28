@@ -10,9 +10,11 @@ type ReportEngage struct {
 	Date4        string `json:"date4" gorm:"column:date4"`
 	SelectedDate string `json:"selectedDate" gorm:"column:selectedDate"`
 	ReportId     int    `json:"reportId" gorm:"column:reportId"`
-	DormId       int    `json:"dormId" gorm:"column:dormId"`
-	UpdatedBy    int    `json:"updatedBy" gorm:"column:updatedBy"`
-	SelectedBy   string `json:"selectedBy" gorm:"column:selectedBy"`
+	BuildingId   int    `json:"buildingId" gorm:"column:buildingId"`
+	CreateBy     int    `json:"createBy" gorm:"column:createBy"`
+	CreateAt     string `json:"createdAt" gorm:"column:createAt"`
+	UpdateAt     string `json:"updateAt" gorm:"column:updateAt"`
+	UpdateBy     int    `json:"updateBy" gorm:"column:updateBy"`
 }
 
 type ReportEngageAll struct {
