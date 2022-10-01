@@ -9,7 +9,7 @@ type Report struct {
 	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
-	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
+	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
 }
 
 type ReportInsert struct {

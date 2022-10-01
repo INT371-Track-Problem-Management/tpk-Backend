@@ -3,6 +3,7 @@ package service
 import (
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -18,7 +19,14 @@ func Rooms(ctx echo.Context, conn *gorm.DB) (*[]entity.Room, error) {
 }
 
 func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (string, error) {
-	err := repositories.RoomsStatus(ctx, conn, req)
+	timenow := pkg.GetDatetime()
+	model := entity.RoomsStatus{
+		RoomId:   req.RoomId,
+		Status:   req.Status,
+		UpdateAt: timenow,
+		UpdateBy: req.UpdateBy,
+	}
+	err := repositories.RoomsStatus(ctx, conn, model)
 	if err != nil {
 		return "Can not update", err
 	}
@@ -26,8 +34,19 @@ func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (stri
 }
 
 func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (string, error) {
+	timenow := pkg.GetDatetime()
 	req.Status = "I"
-	err := repositories.RoomInsert(ctx, conn, req)
+	model := entity.RoomInsert{
+		RoomNum:     req.RoomNum,
+		Floors:      req.Floors,
+		Description: req.Description,
+		BuildingId:  req.BuildingId,
+		Status:      req.Status,
+		UpdateAt:    timenow,
+		UpdateBy:    req.UpdateBy,
+		CreateAt:    timenow,
+	}
+	err := repositories.RoomInsert(ctx, conn, model)
 	if err != nil {
 		return "Can not insert", err
 	}

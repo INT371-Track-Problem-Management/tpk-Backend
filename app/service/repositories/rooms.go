@@ -2,7 +2,6 @@ package repositories
 
 import (
 	entity "tpk-backend/app/model/entity"
-	"tpk-backend/app/model/request"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -17,16 +16,16 @@ func Rooms(ctx echo.Context, conn *gorm.DB) (*[]entity.Room, error) {
 	return &room, nil
 }
 
-func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) error {
-	err := conn.Exec("UPDATE room SET status = ? WHERE roomId = ?", req.Status, req.RoomId).Error
+func RoomsStatus(ctx echo.Context, conn *gorm.DB, req entity.RoomsStatus) error {
+	err := conn.Exec("UPDATE room SET status = ?, updateAt = ?, updateBy = ? WHERE roomId = ?", req.Status, req.UpdateAt, req.UpdateBy, req.RoomId).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) error {
-	err := conn.Table("room").Create(&req).Error
+func RoomInsert(ctx echo.Context, conn *gorm.DB, model entity.RoomInsert) error {
+	err := conn.Table("room").Create(&model).Error
 	if err != nil {
 		return err
 	}
