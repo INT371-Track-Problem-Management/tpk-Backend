@@ -53,10 +53,26 @@ func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (string
 	return "Insert success", nil
 }
 
-func RoomByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {
-	res, err := repositories.RoomByDormId(ctx, conn, dormId)
+func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {
+	res, err := repositories.RoomByBuildingId(ctx, conn, dormId)
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
+}
+
+func RoomByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*entity.Room, error) {
+	room, err := repositories.RoomByRoomId(ctx, conn, roomId)
+	if err != nil {
+		return nil, err
+	}
+	return room, nil
+}
+
+func RoomByRoomNum(ctx echo.Context, conn *gorm.DB, roomNum string) (*entity.Room, error) {
+	room, err := repositories.RoomByRoomNum(ctx, conn, roomNum)
+	if err != nil {
+		return nil, err
+	}
+	return room, nil
 }

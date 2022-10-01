@@ -32,9 +32,27 @@ func RoomInsert(ctx echo.Context, conn *gorm.DB, model entity.RoomInsert) error 
 	return nil
 }
 
-func RoomByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {
+func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string) (*[]entity.Room, error) {
 	var room []entity.Room
-	err := conn.Table("room").Where("dormId = ?", dormId).Find(&room).Error
+	err := conn.Table("room").Where("buildingId = ?", buildingId).Find(&room).Error
+	if err != nil {
+		return nil, err
+	}
+	return &room, nil
+}
+
+func RoomByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*entity.Room, error) {
+	var room entity.Room
+	err := conn.Table("room").Where("roomId = ?", roomId).Find(&room).Error
+	if err != nil {
+		return nil, err
+	}
+	return &room, nil
+}
+
+func RoomByRoomNum(ctx echo.Context, conn *gorm.DB, roomNum string) (*entity.Room, error) {
+	var room entity.Room
+	err := conn.Table("room").Where("roomNum = ?", roomNum).Find(&room).Error
 	if err != nil {
 		return nil, err
 	}
