@@ -24,4 +24,5 @@ type CustomerEditProfile struct {
 	Age         int    `json:"age" gorm:"column:age"`
 	Phone       string `json:"phone" gorm:"column:phone"`
 	Address     string `json:"address" gorm:"column:address"`
+	UpdateBy    int    `json:"updateBy" gorm:"column:updateBy"`
 }
