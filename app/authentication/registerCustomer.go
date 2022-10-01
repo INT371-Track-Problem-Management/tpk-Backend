@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"fmt"
+	"time"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/repositories"
@@ -54,7 +55,7 @@ func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCusto
 		return nil, err
 	}
 	fmt.Println("Register email: " + regisUser.Email + " as a customer")
-
+	timenow := getDatetime()
 	regisCus := request.CustomerRegis{
 		Email:       req.Email,
 		Fname:       req.Fname,
@@ -65,6 +66,7 @@ func RegisterCustomersService(ctx echo.Context, conn *gorm.DB, req RegisterCusto
 		Phone:       req.Phone,
 		Address:     req.Address,
 		Status:      "I",
+		CreateAt:    timenow,
 	}
 	id, err := RegisterCustomersRepo(ctx, conn, regisCus)
 	if err != nil {
@@ -108,4 +110,12 @@ func ChangeStatus(conn *gorm.DB, cusId string, status string) error {
 	}
 	fmt.Println("status customerId " + cusId + " change to " + status)
 	return nil
+}
+
+func getDatetime() string {
+	fmt.Print(time.Now())
+	timenow := time.Now().UTC().Format("2006-01-02 15:04:05")
+	date := fmt.Sprintf("%v\n", timenow)
+	fmt.Println(date)
+	return date
 }

@@ -10,6 +10,7 @@ type CustomerRegis struct {
 	Phone       string `json:"phone" gorm:"column:phone"`
 	Address     string `json:"address" gorm:"column:address"`
 	Status      string `json:"status" gorm:"column:status"`
+	CreateAt    string `json:"createAt" gorm:"column:createAt"`
 }
 
 type CustomerProfile struct {
