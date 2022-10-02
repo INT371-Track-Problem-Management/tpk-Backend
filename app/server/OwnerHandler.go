@@ -263,7 +263,7 @@ func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {
-	param := ctx.QueryParam("dormId")
+	param := ctx.QueryParam("buildingind")
 	id, _ := strconv.ParseInt(param, 10, 64)
 	res, err := controller.GetAllRoomWithCustomer(ctx, h.DB, id)
 	if err != nil {

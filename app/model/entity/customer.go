@@ -11,6 +11,9 @@ type Customer struct {
 	Phone       string `json:"phone" gorm:"column:phone"`
 	Address     string `json:"address" gorm:"column:address"`
 	Status      string `json:"status" gorm:"column:status"`
+	CreateAt    string `json:"createAt" gorm:"column:createAt"`
+	UpdateAt    string `json:"updateAt" gorm:"column:updateAt"`
+	UpdateBy    int    `json:"updateBy" gorm:"column:updateBy"`
 }
 
 type CustomerEditProfile struct {
