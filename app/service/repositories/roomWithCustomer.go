@@ -3,30 +3,21 @@ package repositories
 import (
 	"fmt"
 	entity "tpk-backend/app/model/entity"
-	"tpk-backend/app/model/request"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustomer) error {
+func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, model entity.RoomAddCustomer) error {
 	var err error
 	stmt := conn.Begin()
-
-	err = stmt.Exec(`
-	INSERT INTO roomWithCustomer (roomId, customerId, status, dormId)
-	VALUES (?, ?, ?, ?)
-	`,
-		req.RoomId,
-		req.CustomerId,
-		"A",
-		req.DoomId).Error
+	err = stmt.Table("roomWithCustomer").Create(&model).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
 	}
 
-	err = stmt.Exec("UPDATE room SET status = ? WHERE roomId = ?", "A", req.RoomId).Error
+	err = stmt.Exec("UPDATE room SET status = ?, updateAt = ?, updateBy = ? WHERE roomId = ?", "A", model.UpdateAt, model.UpdateBy, model.RoomId).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
