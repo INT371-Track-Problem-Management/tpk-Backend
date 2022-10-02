@@ -9,5 +9,9 @@ import (
 )
 
 func AddMaintainer(ctx echo.Context, conn *gorm.DB, req request.Maintainer) (*int, error) {
-	return service.AddMaintainer(ctx, conn, req)
+	id, err := service.AddMaintainer(ctx, conn, req)
+	if err != nil {
+		return nil, err
+	}
+	return id, nil
 }
