@@ -71,9 +71,10 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*res
 			r.categoriesReport,
 			r.reportDes,
 			r.status,
-			r.successDate,
-			r.reportDate,
-			r.createdBy
+			r.createAt,
+			r.updateAt,
+			r.updateBy,
+			r.createBy
 		FROM reportEngage re 
 		JOIN reports r 
 		ON re.reportId = r.reportId 

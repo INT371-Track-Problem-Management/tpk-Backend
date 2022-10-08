@@ -44,8 +44,8 @@ func CustomerByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Cus
 	return &Customer, nil
 }
 
-func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEditProfile, email string) error {
-	err := conn.Table("customer").Where("email = ?", email).Updates(req).Error
+func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, model entity.CustomerEditProfile, email string) error {
+	err := conn.Table("customer").Where("email = ?", email).Updates(model).Error
 	if err != nil {
 		return err
 	}

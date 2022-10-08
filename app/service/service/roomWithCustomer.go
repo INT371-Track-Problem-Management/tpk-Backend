@@ -3,6 +3,7 @@ package service
 import (
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -10,7 +11,17 @@ import (
 )
 
 func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustomer) error {
-	err := repositories.RoomAddCustomer(ctx, conn, req)
+	timenow := pkg.GetDatetime()
+	model := entity.RoomAddCustomer{
+		RoomId:     req.RoomId,
+		CustomerId: req.CustomerId,
+		BuildingId: req.BuildingId,
+		Status:     "A",
+		CreateAt:   timenow,
+		UpdateAt:   timenow,
+		UpdateBy:   req.UpdateBy,
+	}
+	err := repositories.RoomAddCustomer(ctx, conn, model)
 	if err != nil {
 		return err
 	}

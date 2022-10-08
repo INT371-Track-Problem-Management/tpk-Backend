@@ -3,30 +3,21 @@ package repositories
 import (
 	"fmt"
 	entity "tpk-backend/app/model/entity"
-	"tpk-backend/app/model/request"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustomer) error {
+func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, model entity.RoomAddCustomer) error {
 	var err error
 	stmt := conn.Begin()
-
-	err = stmt.Exec(`
-	INSERT INTO roomWithCustomer (roomId, customerId, status, dormId)
-	VALUES (?, ?, ?, ?)
-	`,
-		req.RoomId,
-		req.CustomerId,
-		"A",
-		req.DoomId).Error
+	err = stmt.Table("roomWithCustomer").Create(&model).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
 	}
 
-	err = stmt.Exec("UPDATE room SET status = ? WHERE roomId = ?", "A", req.RoomId).Error
+	err = stmt.Exec("UPDATE room SET status = ?, updateAt = ?, updateBy = ? WHERE roomId = ?", "A", model.UpdateAt, model.UpdateBy, model.RoomId).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
@@ -62,7 +53,7 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 	return nil
 }
 
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomJoinDorm, error) {
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]*entity.RoomJoinDorm, error) {
 	var result []*entity.RoomJoinDorm
 
 	sql := fmt.Sprintf(`
@@ -71,18 +62,21 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*ent
 		rwc.roomId as roomId,
 		rwc.customerId as customerId,
 		rwc.status as status,
+		rwc.createAt as createAt,
+		rwc.updateAt as updateAt,
+		rwc.updateBy as updateBy,
 		r.roomNum as roomNum,
 		r.floors as floors,
 		r.description as description,
-		r.dormId as dormId	
+		r.buildingId as buildingId	
 	FROM
 		roomWithCustomer rwc
 	JOIN room r
 	ON
 		r.roomId = rwc.roomId
 	WHERE
-		r.dormId = %v
-		`, dormId)
+		r.buildingId = %v
+		`, buildingId)
 
 	err := conn.Raw(sql).Scan(&result).Error
 	if err != nil {

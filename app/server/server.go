@@ -67,11 +67,14 @@ func StartServer() {
 	// Owner Service
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	emp.POST("reportEngageById", h.GetReportEngageById, validator.EmployeeValidation)                      // Search Report by engageId
-	emp.POST("CreateReportEngage", h.InsertReportEngage, validator.EmployeeValidation)                     // Insert Report Engage
-	emp.PUT("statusReport", h.ReportChangeStatus, validator.EmployeeValidation)                            // Update status Report
-	emp.DELETE("deleteReportById", h.DeleteReportById, validator.EmployeeValidation)                       // Delete report by Id
-	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)                                                // Search all room
+	emp.POST("reportEngageById", h.GetReportEngageById, validator.EmployeeValidation)  // Search Report by engageId
+	emp.POST("CreateReportEngage", h.InsertReportEngage, validator.EmployeeValidation) // Insert Report Engage
+	emp.PUT("statusReport", h.ReportChangeStatus, validator.EmployeeValidation)        // Update status Report
+	emp.DELETE("deleteReportById", h.DeleteReportById, validator.EmployeeValidation)   // Delete report by Id
+	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)                            // Search all room
+	emp.GET("roomByRoomNum/*", h.RoomByRoomNum, validator.EmployeeValidation)          // Search room by roomNum
+	emp.GET("roomByRoomId/*", h.RoomByRoomId, validator.EmployeeValidation)            // Search room by roomId
+	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)
 	emp.GET("customer", h.Customer, validator.EmployeeValidation)                                          // Search all customer
 	emp.PUT("rooms", h.RoomsStatus, validator.EmployeeValidation)                                          // Change room status
 	emp.GET("dorm", h.Dorm, validator.EmployeeValidation)                                                  // Search all dorm
@@ -81,7 +84,7 @@ func StartServer() {
 	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                                         // Insert Room
 	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                                         // Delete dorm
 	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)                       // Search all report engage
-	emp.GET("roomByDormId/*", h.RoomByDormId, validator.EmployeeValidation)                                // Search room by dormId
+	emp.GET("roomByBuildingId/*", h.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by dormId
 	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                             // Search customer by Id
 	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                                // Search rmployee by Id
 	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                           // Add customer into room and room status 'I'=> 'A'
