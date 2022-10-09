@@ -359,3 +359,16 @@ func (h *FuncHandler) RoomByRoomNum(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) FetcStatDashBoard(ctx echo.Context) error {
+	req := new(request.Stat)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+	res, err := controller.FetcStatDashBoard(ctx, h.DB, *req)
+	if err != nil {
+
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
