@@ -11,3 +11,7 @@ type Report struct {
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
 }
+
+type Year struct {
+	Year []int `json:"year" gorm:"column:year"`
+}

@@ -41,6 +41,7 @@ func StartServer() {
 	api.GET("testEmail", h.TestGmail)
 	api.POST("registerCustomer", h.RegisterCustomer) // Register customer
 	api.POST("registerOwner", h.RegisterOwner)       // Register owner
+	api.GET("yearConfig", h.YearConfig)          // Get all year between 1901 - 2022
 
 	// Both but need TOKEN
 	service := api.Group("service/")
@@ -94,6 +95,7 @@ func StartServer() {
 	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)                // Search all history by employeeId
 	emp.POST("addEmployeeInDorm", h.AddEmployeeInDorm, validator.EmployeeValidation)                       // Add employee in dorm and change position to staff
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
+	emp.GET("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                                // Get stat for dashboard
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
