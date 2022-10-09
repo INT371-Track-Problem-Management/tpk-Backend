@@ -57,3 +57,11 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	}
 	return nil
 }
+
+func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
+	year, err := service.YearConfig(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+	return year, nil
+}

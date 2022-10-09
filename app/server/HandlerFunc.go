@@ -151,3 +151,11 @@ func (h *FuncHandler) GetHistoryByHistoryId(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) YearConfig(ctx echo.Context) error {
+	res, err := controller.YearConfig(ctx, h.DB)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

@@ -120,3 +120,11 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	fmt.Printf("Delete report id %v success", req.ReportId)
 	return nil
 }
+
+func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error)  {
+	year, err := repositories.YearConfig(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+	return year, nil
+}

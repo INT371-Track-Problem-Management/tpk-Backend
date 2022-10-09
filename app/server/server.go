@@ -41,6 +41,7 @@ func StartServer() {
 	api.GET("testEmail", h.TestGmail)
 	api.POST("registerCustomer", h.RegisterCustomer) // Register customer
 	api.POST("registerOwner", h.RegisterOwner)       // Register owner
+	api.GET("yearConfig", h.YearConfig)          // Get all year between 1901 - 2022
 
 	// Both but need TOKEN
 	service := api.Group("service/")
