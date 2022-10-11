@@ -11,57 +11,57 @@ import (
 
 func FetcStatDashBoard(ctx echo.Context, conn *gorm.DB, req request.Stat) (*entity.Stat, error) {
 
-	count_all := 
-	`
+	count_all :=
+		`
 	SELECT COUNT(r.reportId) as total_report
 	FROM reports r
 	WHERE 1=1
 	`
 
-	count_electric := 
-	`
+	count_electric :=
+		`
 	SELECT COUNT(r.reportId) as electric
 	FROM reports r
 	WHERE r.categoriesReport = 'electric'
 	`
 
-	count_water := 
-	`
+	count_water :=
+		`
 	SELECT COUNT(r.reportId) as water
 	FROM reports r
 	WHERE r.categoriesReport = 'water'
 	`
 
-	count_electric_device := 
-	`
+	count_electric_device :=
+		`
 	SELECT COUNT(r.reportId) as electric_device
 	FROM reports r
 	WHERE r.categoriesReport = 'electric_device'
 	`
 
-	count_water_machine := 
-	`
+	count_water_machine :=
+		`
 	SELECT COUNT(r.reportId) as water_machine
 	FROM reports r
 	WHERE r.categoriesReport = 'water_machine'
 	`
 
-	count_furniture := 
-	`
+	count_furniture :=
+		`
 	SELECT COUNT(r.reportId) as furniture
 	FROM reports r
 	WHERE r.categoriesReport = 'furniture'
 	`
 
-	count_building := 
-	`
+	count_building :=
+		`
 	SELECT COUNT(r.reportId) as building
 	FROM reports r
 	WHERE r.categoriesReport = 'building'
 	`
 
-	count_other := 
-	`
+	count_other :=
+		`
 	SELECT COUNT(r.reportId) as other
 	FROM reports r
 	WHERE r.categoriesReport = 'other'
@@ -89,7 +89,7 @@ func FetcStatDashBoard(ctx echo.Context, conn *gorm.DB, req request.Stat) (*enti
 	}
 
 	sql := fmt.Sprintf(
-		`git
+		`
 		SELECT total_report, electric, water, electric_device, water_machine, furniture, building, other
 		FROM 
 		(
