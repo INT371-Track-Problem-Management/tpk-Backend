@@ -89,7 +89,7 @@ func FetcStatDashBoard(ctx echo.Context, conn *gorm.DB, req request.Stat) (*enti
 	}
 
 	sql := fmt.Sprintf(
-		`
+		`git
 		SELECT total_report, electric, water, electric_device, water_machine, furniture, building, other
 		FROM 
 		(
