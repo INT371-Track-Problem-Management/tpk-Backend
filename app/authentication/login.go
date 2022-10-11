@@ -75,6 +75,28 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*ResponseToken, e
 		return &res, nil
 	}
 
+	if user.Role == "A" {
+		emp, err := repositories.EmployeeByEmail(ctx, conn, user.Email)
+		if err != nil {
+			return nil, err
+		}
+		token, err := GenerateTokenLogin(emp.EmployeeId, user.Email, user.Role)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		err = SaveToken(conn, token)
+		if err != nil {
+			return nil, err
+		}
+
+		res := ResponseToken{
+			Token: *token,
+			Name:  emp.Fname,
+		}
+		return &res, nil
+	}
+
 	return nil, nil
 }
 
