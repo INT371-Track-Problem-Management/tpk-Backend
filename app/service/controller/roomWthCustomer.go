@@ -24,7 +24,7 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int64) error {
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusCreated, "sucess")
+	return ctx.JSON(http.StatusCreated, "success")
 }
 
 func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int64) ([]*entity.RoomJoinDorm, error) {
