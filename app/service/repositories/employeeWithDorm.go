@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func AddEmployeeInDorm(ctx echo.Context, conn *gorm.DB, req request.AddEmpInDorm) error {
+func AddEmployeeInBuilding(ctx echo.Context, conn *gorm.DB, req request.AddEmpInBuilding) error {
 	var err error
 	stmt := conn.Begin()
 
 	err = stmt.Exec(`
-	INSERT INTO employeeWithDorm (employeeId, dormId)
+	INSERT INTO employeeWithBuilding (employeeId, dormId)
 	VALUES (?, ?)
 	`,
-		req.EmployeeId, req.DormId).Error
+		req.EmployeeId, req.BuildingId).Error
 	if err != nil {
 		stmt.Rollback()
 		return err

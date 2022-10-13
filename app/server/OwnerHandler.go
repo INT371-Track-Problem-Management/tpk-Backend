@@ -43,14 +43,14 @@ func (h *FuncHandler) Customer(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-func (h *FuncHandler) Dorm(ctx echo.Context) error {
-	req := new(request.Dorm)
+func (h *FuncHandler) Building(ctx echo.Context) error {
+	req := new(request.Building)
 	err := ctx.Bind(&req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.Dorm(ctx, h.DB, *req)
+	res, err := controller.Building(ctx, h.DB, *req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
@@ -82,17 +82,21 @@ func (h *FuncHandler) ReportById(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-func (h *FuncHandler) DormInsert(ctx echo.Context) error {
-	req := new(request.DormInsert)
+func (h *FuncHandler) BuildingInsert(ctx echo.Context) error {
+	req := new(request.BuildingInsert)
 	err := ctx.Bind(&req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.DormInsert(ctx, h.DB, *req)
+	id, err := controller.BuildingInsert(ctx, h.DB, *req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]interface{}{
+		"message":    "Insert success",
+		"BuildingId": id,
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
@@ -112,14 +116,14 @@ func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-func (h *FuncHandler) DormDelete(ctx echo.Context) error {
-	req := new(request.DormDelete)
+func (h *FuncHandler) BuildingDelete(ctx echo.Context) error {
+	req := new(request.BuildingDelete)
 	err := ctx.Bind(&req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.DormDelete(ctx, h.DB, *req)
+	res, err := controller.BuildingDelete(ctx, h.DB, *req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
@@ -143,7 +147,7 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
-	param := ctx.QueryParam("dormId")
+	param := ctx.QueryParam("buildingId")
 	id, _ := strconv.ParseInt(param, 10, 64)
 	res, err := controller.GetReportEngageAll(ctx, h.DB, id)
 	if err != nil {
@@ -206,7 +210,6 @@ func (h *FuncHandler) RoomByBuildingId(ctx echo.Context) error {
 	buildingId := ctx.QueryParam("buildingId")
 	res, err := controller.RoomByBuildingId(ctx, h.DB, buildingId)
 	if err != nil {
-
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, res)
@@ -315,12 +318,12 @@ func (h *FuncHandler) GetHistoryByEmployeeId(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-func (h *FuncHandler) AddEmployeeInDorm(ctx echo.Context) error {
-	req := new(request.AddEmpInDorm)
+func (h *FuncHandler) AddEmployeeInBuilding(ctx echo.Context) error {
+	req := new(request.AddEmpInBuilding)
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
-	err := controller.AddEmployeeInDorm(ctx, h.DB, *req)
+	err := controller.AddEmployeeInBuilding(ctx, h.DB, *req)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

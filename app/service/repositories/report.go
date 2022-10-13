@@ -25,7 +25,7 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 		r.createAt as createAt ,
 		r.createBy as createBy
 	FROM 
-		reports r 
+		reports r
 	JOIN
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
@@ -39,7 +39,7 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 
 func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
 	var report []entity.Report
-	sql := fmt.Sprintf(`	
+	sql := fmt.Sprintf(`
 	SELECT 
 		r.reportId as reportId,
 		r.title as title,
@@ -55,7 +55,7 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
 	WHERE 
-		r.createBy = %v`, req.CreatedBy)
+		r.createBy = %v`, req.CreateBy)
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
