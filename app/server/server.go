@@ -95,7 +95,7 @@ func StartServer() {
 	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)                // Search all history by employeeId
 	emp.POST("addEmployeeInBuilding", h.AddEmployeeInBuilding, validator.EmployeeValidation)               // Add employee in building and change position to staff
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
-	emp.GET("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                                // Get stat for dashboard
+	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                                // Get stat for dashboard
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
