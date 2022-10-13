@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
@@ -17,17 +16,16 @@ func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*response.
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(data)
 	res := &response.Building{
-		BuildingId:  data.BuildingId,
-		Address: data.Address,
-		Phone:   data.Phone,
-		Email:   data.Email,
+		BuildingId: data.BuildingId,
+		Address:    data.Address,
+		Phone:      data.Phone,
+		Email:      data.Email,
 	}
 	return res, nil
 }
 
-func BuildingInsert(ctx echo.Context, conn *gorm.DB, req request.BuildingInsert) (string, error) {
+func BuildingInsert(ctx echo.Context, conn *gorm.DB, req request.BuildingInsert) (*int64, error) {
 	timenow := pkg.GetDatetime()
 	model := entity.BuildingInsert{
 		BuildingName: req.BuildingName,
@@ -35,11 +33,11 @@ func BuildingInsert(ctx echo.Context, conn *gorm.DB, req request.BuildingInsert)
 		UpdateAt:     timenow,
 		UpdateBy:     req.UpdateBy,
 	}
-	err := repositories.BuildingInsert(ctx, conn, model)
+	id, err := repositories.BuildingInsert(ctx, conn, model)
 	if err != nil {
-		return "Can not insert building", err
+		return nil, err
 	}
-	return "Insert success", nil
+	return id, nil
 }
 
 func BuildingDelete(ctx echo.Context, conn *gorm.DB, req request.BuildingDelete) (string, error) {

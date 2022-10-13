@@ -17,12 +17,12 @@ func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*response.
 	return res, nil
 }
 
-func BuildingInsert(ctx echo.Context, conn *gorm.DB, req request.BuildingInsert) (*string, error) {
+func BuildingInsert(ctx echo.Context, conn *gorm.DB, req request.BuildingInsert) (*int64, error) {
 	res, err := service.BuildingInsert(ctx, conn, req)
 	if err != nil {
 		return nil, err
 	}
-	return &res, nil
+	return res, nil
 }
 
 func BuildingDelete(ctx echo.Context, conn *gorm.DB, req request.BuildingDelete) (*string, error) {

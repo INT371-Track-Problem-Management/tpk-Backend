@@ -15,5 +15,5 @@ type BuildingInsert struct {
 	BuildingName string `json:"buildingName" gorm:"column:buildingName"`
 	CreateAt     string `json:"createdAt" gorm:"column:createAt"`
 	UpdateAt     string `json:"updateAt" gorm:"column:updateAt"`
-	UpdateBy     int    `json:"createBy" gorm:"column:createBy"`
+	UpdateBy     int    `json:"createBy" gorm:"column:updateBy"`
 }

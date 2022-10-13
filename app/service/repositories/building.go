@@ -17,12 +17,17 @@ func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*entity.Bu
 	return &building, nil
 }
 
-func BuildingInsert(ctx echo.Context, conn *gorm.DB, model entity.BuildingInsert) error {
+func BuildingInsert(ctx echo.Context, conn *gorm.DB, model entity.BuildingInsert) (*int64, error) {
 	err := conn.Table("building").Create(&model).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	var id int64
+	err = conn.Table("building").Where("createAt = ?", model.CreateAt).Select("buildingId").Scan(&id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &id, nil
 }
 
 func BuildingDelete(ctx echo.Context, conn *gorm.DB, req request.BuildingDelete) error {

@@ -89,10 +89,14 @@ func (h *FuncHandler) BuildingInsert(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.BuildingInsert(ctx, h.DB, *req)
+	id, err := controller.BuildingInsert(ctx, h.DB, *req)
 	if err != nil {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]interface{}{
+		"message":    "Insert success",
+		"BuildingId": id,
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
