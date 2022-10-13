@@ -18,6 +18,7 @@ func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*response.
 	}
 	res := &response.Building{
 		BuildingId: data.BuildingId,
+		BuildingName: data.BuildingName,
 		Address:    data.Address,
 		Phone:      data.Phone,
 		Email:      data.Email,
