@@ -5,7 +5,7 @@ type Report struct {
 }
 
 type ReportByCreatedBy struct {
-	CreatedBy int `json:"createBy" gorm:"column:createBy"`
+	CreateBy int `json:"createBy" gorm:"column:createBy"`
 }
 
 type ReportInsert struct {

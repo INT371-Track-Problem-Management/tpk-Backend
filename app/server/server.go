@@ -78,22 +78,22 @@ func StartServer() {
 	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)
 	emp.GET("customer", h.Customer, validator.EmployeeValidation)                                          // Search all customer
 	emp.PUT("rooms", h.RoomsStatus, validator.EmployeeValidation)                                          // Change room status
-	emp.GET("dorm", h.Dorm, validator.EmployeeValidation)                                                  // Search all dorm
+	emp.GET("building", h.Building, validator.EmployeeValidation)                                          // Search all building
 	emp.GET("report", h.Report, validator.EmployeeValidation)                                              // Search all report
 	emp.POST("reportById", h.ReportById, validator.EmployeeValidation)                                     // Search report by id
-	emp.POST("dorm", h.DormInsert, validator.EmployeeValidation)                                           // Insert Dorm
+	emp.POST("building", h.BuildingInsert, validator.EmployeeValidation)                                   // Insert Building
 	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                                         // Insert Room
-	emp.DELETE("dorm", h.DormDelete, validator.EmployeeValidation)                                         // Delete dorm
+	emp.DELETE("building", h.BuildingDelete, validator.EmployeeValidation)                                 // Delete building
 	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)                       // Search all report engage
-	emp.GET("roomByBuildingId/*", h.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by dormId
+	emp.GET("roomByBuildingId/*", h.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by buildingId
 	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                             // Search customer by Id
 	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                                // Search rmployee by Id
 	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                           // Add customer into room and room status 'I'=> 'A'
-	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation)            // Search all customer in their dormId
+	emp.GET("GetAllRoomWithCustomer/*", h.GetAllRoomWithCustomer, validator.EmployeeValidation)            // Search all customer in their buildingId
 	emp.POST("maintainer", h.AddMaintainer, validator.EmployeeValidation)                                  // Created maintainer and return Id
 	emp.POST("assignFixReport", h.CreateAssignFixReport, validator.EmployeeValidation)                     // add maintainer to fix report
 	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)                // Search all history by employeeId
-	emp.POST("addEmployeeInDorm", h.AddEmployeeInDorm, validator.EmployeeValidation)                       // Add employee in dorm and change position to staff
+	emp.POST("addEmployeeInBuilding", h.AddEmployeeInBuilding, validator.EmployeeValidation)               // Add employee in building and change position to staff
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
 	emp.GET("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                                // Get stat for dashboard
 

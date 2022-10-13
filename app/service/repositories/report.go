@@ -55,7 +55,7 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
 	WHERE 
-		r.createBy = %v`, req.CreatedBy)
+		r.createBy = %v`, req.CreateBy)
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
