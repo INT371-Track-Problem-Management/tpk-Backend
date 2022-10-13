@@ -78,7 +78,7 @@ func StartServer() {
 	emp.GET("rooms", h.Rooms, validator.EmployeeValidation)
 	emp.GET("customer", h.Customer, validator.EmployeeValidation)                                          // Search all customer
 	emp.PUT("rooms", h.RoomsStatus, validator.EmployeeValidation)                                          // Change room status
-	emp.POST("getbuilding", h.Building, validator.EmployeeValidation)                                          // Search all building
+	emp.GET("building", h.Building, validator.EmployeeValidation)                                          // Search all building
 	emp.GET("report", h.Report, validator.EmployeeValidation)                                              // Search all report
 	emp.POST("reportById", h.ReportById, validator.EmployeeValidation)                                     // Search report by id
 	emp.POST("building", h.BuildingInsert, validator.EmployeeValidation)                                   // Insert Building
