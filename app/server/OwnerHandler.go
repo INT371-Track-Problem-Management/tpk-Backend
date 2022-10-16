@@ -108,10 +108,16 @@ func (h *FuncHandler) RoomsInsert(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.RoomInsert(ctx, h.DB, *req)
+	err = controller.RoomInsert(ctx, h.DB, *req)
 	if err != nil {
-
-		return ctx.JSON(http.StatusInternalServerError, err)
+		errmsg := map[string]interface{}{
+			"message":           "Can not create rooms",
+			"error description": err,
+		}
+		return ctx.JSON(http.StatusInternalServerError, errmsg)
+	}
+	res := map[string]string{
+		"message": "success",
 	}
 	return ctx.JSON(http.StatusOK, res)
 }

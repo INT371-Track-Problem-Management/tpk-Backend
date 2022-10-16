@@ -25,12 +25,12 @@ func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (stri
 	return res, nil
 }
 
-func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (*string, error) {
-	res, err := service.RoomInsert(ctx, conn, req)
+func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) error {
+	err := service.RoomInsert(ctx, conn, req)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &res, nil
+	return nil
 }
 
 func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {

@@ -33,24 +33,27 @@ func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (stri
 	return "Update success", nil
 }
 
-func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (string, error) {
+func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) error {
+	session := conn.Begin()
 	timenow := pkg.GetDatetime()
-	req.Status = "I"
-	model := entity.RoomInsert{
-		RoomNum:     req.RoomNum,
-		Floors:      req.Floors,
-		Description: req.Description,
-		BuildingId:  req.BuildingId,
-		Status:      req.Status,
-		UpdateAt:    timenow,
-		UpdateBy:    req.UpdateBy,
-		CreateAt:    timenow,
+	for _, room := range req.Rooms {
+		model := entity.RoomInsert{
+			RoomNum:     room.RoomNum,
+			Floors:      room.Floors,
+			Description: room.Description,
+			BuildingId:  req.BuildingId,
+			Status:      "I",
+			UpdateAt:    timenow,
+			UpdateBy:    req.UpdateBy,
+			CreateAt:    timenow,
+		}
+		err := repositories.RoomInsert(ctx, session, model)
+		if err != nil {
+			return err
+		}
 	}
-	err := repositories.RoomInsert(ctx, conn, model)
-	if err != nil {
-		return "Can not insert", err
-	}
-	return "Insert success", nil
+	session.Commit()
+	return nil
 }
 
 func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {
