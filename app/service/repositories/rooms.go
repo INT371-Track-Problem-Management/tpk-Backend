@@ -32,8 +32,8 @@ func RoomInsert(ctx echo.Context, conn *gorm.DB, model entity.RoomInsert) error 
 	return nil
 }
 
-func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string) (*[]entity.Room, error) {
-	var room []entity.Room
+func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string) (*[]entity.RoomByBuildingId, error) {
+	var room []entity.RoomByBuildingId
 	err := conn.Table("room").Where("buildingId = ?", buildingId).Find(&room).Error
 	if err != nil {
 		return nil, err

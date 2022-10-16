@@ -213,7 +213,7 @@ func (h *FuncHandler) DeleteReportById(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) RoomByBuildingId(ctx echo.Context) error {
-	buildingId := ctx.QueryParam("buildingId")
+	buildingId := ctx.Param("buildingId")
 	res, err := controller.RoomByBuildingId(ctx, h.DB, buildingId)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)

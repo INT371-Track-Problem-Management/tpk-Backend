@@ -85,7 +85,7 @@ func StartServer() {
 	emp.POST("rooms", h.RoomsInsert, validator.EmployeeValidation)                                         // Insert Room
 	emp.DELETE("building", h.BuildingDelete, validator.EmployeeValidation)                                 // Delete building
 	emp.GET("reportEngageAll/*", h.GetReportEngageAll, validator.EmployeeValidation)                       // Search all report engage
-	emp.GET("roomByBuildingId/*", h.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by buildingId
+	emp.GET("roomByBuildingId/:buildingId", h.RoomByBuildingId, validator.EmployeeValidation)              // Search room by buildingId
 	emp.GET("customerById/*", h.GetCustomerById, validator.EmployeeValidation)                             // Search customer by Id
 	emp.GET("employeeById/*", h.EmployeeById, validator.EmployeeValidation)                                // Search rmployee by Id
 	emp.POST("roomAddCustomer", h.RoomAddCustomer, validator.EmployeeValidation)                           // Add customer into room and room status 'I'=> 'A'
@@ -95,7 +95,7 @@ func StartServer() {
 	emp.GET("historyReport/list/*", h.GetHistoryByEmployeeId, validator.EmployeeValidation)                // Search all history by employeeId
 	emp.POST("addEmployeeInBuilding", h.AddEmployeeInBuilding, validator.EmployeeValidation)               // Add employee in building and change position to staff
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
-	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                                // Get stat for dashboard
+	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                               // Get stat for dashboard
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
