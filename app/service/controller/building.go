@@ -9,8 +9,16 @@ import (
 	"gorm.io/gorm"
 )
 
-func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*response.Building, error) {
-	res, err := service.Building(ctx, conn, req)
+func BuildingById(ctx echo.Context, conn *gorm.DB, buildingId string) (*response.Building, error) {
+	res, err := service.BuildingById(ctx, conn, buildingId)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func AllBuilding(ctx echo.Context, conn *gorm.DB) (*[]response.AllBuilding, error) {
+	res, err := service.AllBuilding(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
