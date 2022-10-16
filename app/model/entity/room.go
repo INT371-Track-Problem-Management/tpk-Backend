@@ -29,3 +29,9 @@ type RoomsStatus struct {
 	UpdateAt string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy int    `json:"updateBy" gorm:"column:updateBy"`
 }
+
+type RoomByFloors struct {
+	RoomId  int    `json:"roomId" gorm:"column:roomId"`
+	RoomNum string `json:"roomNum" gorm:"column:roomNum"`
+	Status  string `json:"status" gorm:"column:status"`
+}

@@ -3,14 +3,24 @@ package repositories
 import (
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/model/response"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*entity.Building, error) {
+func AllBuilding(ctx echo.Context, conn *gorm.DB) (*[]response.AllBuilding, error) {
+	var building []response.AllBuilding
+	err := conn.Table("building").Find(&building).Error
+	if err != nil {
+		return nil, err
+	}
+	return &building, nil
+}
+
+func BuildingById(ctx echo.Context, conn *gorm.DB, buildingId string) (*entity.Building, error) {
 	var building entity.Building
-	err := conn.Table("building").Where("buildingId = ?", req.BuildingId).Find(&building).Error
+	err := conn.Table("building").Where("buildingId = ?", buildingId).Find(&building).Error
 	if err != nil {
 		return nil, err
 	}

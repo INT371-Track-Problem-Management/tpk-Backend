@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
 	entity "tpk-backend/app/model/entity"
 
@@ -10,13 +11,20 @@ import (
 
 func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, model entity.RoomAddCustomer) error {
 	var err error
+	roomId := fmt.Sprintf(`%v`, model.RoomId)
+	checkStatus, err := RoomByRoomId(ctx, conn, roomId)
+	if err != nil {
+		return err
+	}
+	if checkStatus.Status == "A" {
+		return errors.New("room taken")
+	}
 	stmt := conn.Begin()
 	err = stmt.Table("roomWithCustomer").Create(&model).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
 	}
-
 	err = stmt.Exec("UPDATE room SET status = ?, updateAt = ?, updateBy = ? WHERE roomId = ?", "A", model.UpdateAt, model.UpdateBy, model.RoomId).Error
 	if err != nil {
 		stmt.Rollback()

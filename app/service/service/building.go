@@ -11,19 +11,27 @@ import (
 	"gorm.io/gorm"
 )
 
-func Building(ctx echo.Context, conn *gorm.DB, req request.Building) (*response.Building, error) {
-	data, err := repositories.Building(ctx, conn, req)
+func BuildingById(ctx echo.Context, conn *gorm.DB, buildingId string) (*response.Building, error) {
+	data, err := repositories.BuildingById(ctx, conn, buildingId)
 	if err != nil {
 		return nil, err
 	}
 	res := &response.Building{
-		BuildingId: data.BuildingId,
+		BuildingId:   data.BuildingId,
 		BuildingName: data.BuildingName,
-		Address:    data.Address,
-		Phone:      data.Phone,
-		Email:      data.Email,
+		Address:      data.Address,
+		Phone:        data.Phone,
+		Email:        data.Email,
 	}
 	return res, nil
+}
+
+func AllBuilding(ctx echo.Context, conn *gorm.DB) (*[]response.AllBuilding, error) {
+	data, err := repositories.AllBuilding(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 func BuildingInsert(ctx echo.Context, conn *gorm.DB, req request.BuildingInsert) (*int64, error) {
