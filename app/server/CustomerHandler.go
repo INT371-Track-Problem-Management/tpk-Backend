@@ -155,3 +155,18 @@ func (h *FuncHandler) GetHistoryByCustomerId(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
+	customerId := ctx.QueryParam("customerId")
+	if customerId == "" {
+		msg := map[string]string{
+			"message": "Require param customerId",
+		}
+		ctx.JSON(http.StatusBadRequest, msg)
+	}
+	res, err := controller.GetRoomWithCustomerId(ctx, h.DB, customerId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

@@ -64,6 +64,7 @@ func StartServer() {
 	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                              // end job report and review
 	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)             // Search all history by customerId
 	cus.POST("reportById", h.ReportById, validator.CustomerValidation)                                  // Search report by id
+	cus.GET("getAllRoomByCustomerId/:customerId", h.GetRoomsByCustomerId, validator.CustomerValidation) // search all rooms by customerId
 
 	// Owner Service
 	emp := api.Group("employee/")
