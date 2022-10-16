@@ -1,8 +1,10 @@
 package service
 
 import (
+	"fmt"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/model/response"
 	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/repositories"
 
@@ -56,12 +58,30 @@ func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) error {
 	return nil
 }
 
-func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.RoomByBuildingId, error) {
-	res, err := repositories.RoomByBuildingId(ctx, conn, dormId)
+func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string) (*response.RoomByBuildingId, error) {
+	totalFloor, err := repositories.TotalFlooorsByBuildingId(ctx, conn, buildingId)
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	rooms := []interface{}{}
+	for i := 1; i < *totalFloor+1; i++ {
+		floorNum := fmt.Sprintf(`floor%v`, i)
+		allroomfloor, err := repositories.RoomInFloorByBuildingId(ctx, conn, buildingId, i)
+		if err != nil {
+			return nil, err
+		}
+		room := map[string]interface{}{
+			floorNum: allroomfloor,
+		}
+		rooms = append(rooms, room)
+	}
+
+	allroom := response.RoomByBuildingId{
+		BuildingId: buildingId,
+		Floors:     rooms,
+	}
+
+	return &allroom, nil
 }
 
 func RoomByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*entity.Room, error) {

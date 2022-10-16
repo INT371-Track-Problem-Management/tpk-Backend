@@ -12,12 +12,6 @@ type Room struct {
 	CreateAt    string `json:"createAt" gorm:"column:createAt"`
 }
 
-type RoomByBuildingId struct {
-	RoomId  int    `json:"roomId" gorm:"column:roomId"`
-	RoomNum string `json:"roomNum" gorm:"column:roomNum"`
-	Status  string `json:"status" gorm:"column:status"`
-}
-
 type RoomInsert struct {
 	RoomNum     string `json:"roomNum" gorm:"column:roomNum"`
 	Floors      int    `json:"floors" gorm:"column:floors"`
@@ -34,4 +28,10 @@ type RoomsStatus struct {
 	Status   string `json:"status" gorm:"column:status"`
 	UpdateAt string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy int    `json:"updateBy" gorm:"column:updateBy"`
+}
+
+type RoomByFloors struct {
+	RoomId  int    `json:"roomId" gorm:"column:roomId"`
+	RoomNum string `json:"roomNum" gorm:"column:roomNum"`
+	Status  string `json:"status" gorm:"column:status"`
 }
