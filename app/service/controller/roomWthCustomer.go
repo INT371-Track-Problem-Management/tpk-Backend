@@ -15,7 +15,7 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustome
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusCreated, nil)
+	return nil
 }
 
 func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int64) error {

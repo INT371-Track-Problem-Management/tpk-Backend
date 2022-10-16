@@ -121,10 +121,18 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	return nil
 }
 
-func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error)  {
+func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
 	year, err := repositories.YearConfig(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
 	return year, nil
+}
+
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.Report, error) {
+	reports, err := repositories.ReportByRoomId(ctx, conn, roomId)
+	if err != nil {
+		return nil, err
+	}
+	return reports, nil
 }

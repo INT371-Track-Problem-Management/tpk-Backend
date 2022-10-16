@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"fmt"
-	"log"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
@@ -21,6 +20,7 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
+		r.roomId as roomId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
@@ -46,6 +46,7 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
+		r.roomId as roomId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
@@ -72,6 +73,7 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
+		r.roomId as roomId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
@@ -90,7 +92,6 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 }
 
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*int, error) {
-	log.Println(req)
 	var err error
 	err = conn.Table("reports").Create(&req).Error
 	if err != nil {
@@ -175,4 +176,33 @@ func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
 		return nil, err
 	}
 	return &year, nil
+}
+
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.Report, error) {
+	var report []entity.Report
+	sql := fmt.Sprintf(
+		`
+	SELECT 
+		r.reportId as reportId,
+		r.title as title,
+		r.categoriesReport as categoriesReport ,
+		r.reportDes as reportDes ,
+		sm.status as status,
+		r.roomId as roomId,
+		r.updateAt as updateAt ,
+		r.createAt as createAt ,
+		r.createBy as createBy
+	FROM 
+		reports r
+	JOIN
+		statusMaster sm 
+	ON r.status = sm.statusMasterId
+	WHERE 
+		r.roomId = %v
+	`, roomId)
+	err := conn.Raw(sql).Scan(&report).Error
+	if err != nil {
+		return nil, err
+	}
+	return &report, nil
 }

@@ -65,6 +65,7 @@ func StartServer() {
 	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)             // Search all history by customerId
 	cus.POST("reportById", h.ReportById, validator.CustomerValidation)                                  // Search report by id
 	cus.GET("getAllRoomByCustomerId/:customerId", h.GetRoomsByCustomerId, validator.CustomerValidation) // search all rooms by customerId
+	cus.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.CustomerValidation)             // search reports by roomId
 
 	// Owner Service
 	emp := api.Group("employee/")
@@ -98,6 +99,7 @@ func StartServer() {
 	emp.POST("addEmployeeInBuilding", h.AddEmployeeInBuilding, validator.EmployeeValidation)               // Add employee in building and change position to staff
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
 	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                               // Get stat for dashboard
+	emp.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.EmployeeValidation)                // search reports by roomId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
