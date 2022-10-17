@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"tpk-backend/app/authentication"
@@ -154,6 +155,22 @@ func (h *FuncHandler) GetHistoryByHistoryId(ctx echo.Context) error {
 
 func (h *FuncHandler) YearConfig(ctx echo.Context) error {
 	res, err := controller.YearConfig(ctx, h.DB)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportByRoomId(ctx echo.Context) error {
+	roomId := ctx.Param("roomId")
+	log.Println(roomId)
+	if roomId == "" {
+		msg := map[string]string{
+			"message": "Require param roomId",
+		}
+		return ctx.JSON(http.StatusBadRequest, msg)
+	}
+	res, err := controller.ReportByRoomId(ctx, h.DB, roomId)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

@@ -6,6 +6,7 @@ type Report struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
+	RoomId           int    `json:"roomId" gorm:"column:roomId"`
 	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
@@ -17,6 +18,7 @@ type ReportInsert struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
+	RoomId           int    `json:"roomId" gorm:"column:roomId"`
 	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
@@ -36,4 +38,7 @@ type ReportChangeStatus struct {
 	Status     string `json:"status" gorm:"column:status"`
 	UpdateAt   string `json:"updateAt" gorm:"column:updateAt"`
 	EmployeeId int    `json:"employeeId" gorm:"column:employeeId"`
+}
+
+type ReportByRoomId struct {
 }

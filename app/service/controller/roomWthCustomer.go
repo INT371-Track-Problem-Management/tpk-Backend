@@ -15,7 +15,7 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustome
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusCreated, nil)
+	return nil
 }
 
 func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int64) error {
@@ -27,11 +27,19 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int64) error {
 	return ctx.JSON(http.StatusCreated, "success")
 }
 
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int64) ([]*entity.RoomJoinDorm, error) {
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int64) ([]*entity.RoomJoinBulding, error) {
 	id := int(dormId)
 	res, err := service.GetAllRoomWithCustomer(ctx, conn, id)
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetRoomWithCustomerId(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.RoomWithCustomerId, error) {
+	rooms, err := service.GetRoomWithCustomerId(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	return rooms, nil
 }

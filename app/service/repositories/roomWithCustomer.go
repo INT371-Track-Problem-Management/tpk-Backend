@@ -61,8 +61,8 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 	return nil
 }
 
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]*entity.RoomJoinDorm, error) {
-	var result []*entity.RoomJoinDorm
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]*entity.RoomJoinBulding, error) {
+	var result []*entity.RoomJoinBulding
 
 	sql := fmt.Sprintf(`
 	SELECT
@@ -76,7 +76,7 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]
 		r.roomNum as roomNum,
 		r.floors as floors,
 		r.description as description,
-		r.buildingId as buildingId	
+		r.buildingId as buildingId
 	FROM
 		roomWithCustomer rwc
 	JOIN room r
@@ -93,12 +93,23 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]
 	return result, nil
 }
 
-func GetRoomWithCustomerByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.RoomWithCustomer, error) {
-	roomProfile := new(entity.RoomWithCustomer)
-
-	err := conn.Table("roomWithCustomer").Where("customerId = ?", customerId).Find(roomProfile).Error
+func GetRoomWithCustomerId(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.RoomWithCustomerId, error) {
+	rooms := new([]entity.RoomWithCustomerId)
+	sql := fmt.Sprintf(`
+		SELECT 
+			rwc.roomId,
+			r.roomNum,
+			rwc.buildingId,
+			r.floors,
+			r.status 
+		FROM room r 
+		LEFT JOIN roomWithCustomer rwc
+		ON r.roomId = rwc.roomId
+		WHERE rwc.customerId = %v;
+	`, customerId)
+	err := conn.Raw(sql).Scan(rooms).Error
 	if err != nil {
 		return nil, err
 	}
-	return roomProfile, nil
+	return rooms, nil
 }

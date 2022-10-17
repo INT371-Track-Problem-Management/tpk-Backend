@@ -20,7 +20,6 @@ func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
-	log.Println(req)
 	res, err := controller.ReportInsert(ctx, h.DB, *req)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
@@ -150,6 +149,21 @@ func (h *FuncHandler) GetHistoryByCustomerId(ctx echo.Context) error {
 	param := ctx.QueryParam("customerId")
 	cusId, _ := strconv.ParseInt(param, 10, 32)
 	res, err := controller.GetHistoryByCustomerId(ctx, h.DB, cusId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
+	customerId := ctx.QueryParam("customerId")
+	if customerId == "" {
+		msg := map[string]string{
+			"message": "Require param customerId",
+		}
+		return ctx.JSON(http.StatusBadRequest, msg)
+	}
+	res, err := controller.GetRoomWithCustomerId(ctx, h.DB, customerId)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
