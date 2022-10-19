@@ -93,9 +93,17 @@ func (h *FuncHandler) ChangeEmail(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, nil)
 }
 
-func (h *FuncHandler) TestGmail(ctx echo.Context) error {
-	testmail := "artid.vijitpanmai@mail.kmutt.ac.th"
-	pkg.SSLemail(&testmail, "Hello-World", "Hi")
+func (h *FuncHandler) TestSMTP2(ctx echo.Context) error {
+	to := "sun_vijitpanmai@hotmail.com"
+	// to := "artid.vijitpanmai@mail.kmutt.ac.th"
+	// to := "zayori999@gmail.com"
+	// to := "paradios.00riser@gmail.com"
+	sub := "Test send mail"
+	body := "Hello-World"
+	err := pkg.Smtp2(sub, to, body)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
 	return ctx.JSON(http.StatusOK, "send mail success")
 }
 
