@@ -156,7 +156,7 @@ func (h *FuncHandler) GetHistoryByCustomerId(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
-	customerId := ctx.QueryParam("customerId")
+	customerId := ctx.Param("customerId")
 	if customerId == "" {
 		msg := map[string]string{
 			"message": "Require param customerId",
@@ -169,3 +169,4 @@ func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
