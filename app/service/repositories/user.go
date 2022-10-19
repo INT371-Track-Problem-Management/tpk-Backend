@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -20,6 +21,26 @@ func ChangeEmail(ctx echo.Context, conn *gorm.DB, req request.ChangeEmail, oldEm
 	var err error
 	stmt := conn.Begin()
 	err = stmt.Table("userApp").Where("email = ?", oldEmail).Update("email = ?", req.NewEmail).Error
+	if err != nil {
+		stmt.Rollback()
+		return err
+	}
+	stmt.Commit()
+	return nil
+}
+
+func ChangePassword(ctx echo.Context, conn *gorm.DB, model entity.ChangePassword) error {
+	var err error
+	sql := fmt.Sprintf(`
+		UPDATE userApp
+		SET password = '%v'
+		WHERE email = '%v'
+	`,
+		model.NewPassword,
+		model.Email)
+	fmt.Println(sql)
+	stmt := conn.Begin()
+	err = stmt.Exec(sql).Error
 	if err != nil {
 		stmt.Rollback()
 		return err

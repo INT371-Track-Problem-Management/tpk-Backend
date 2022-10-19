@@ -184,3 +184,22 @@ func (h *FuncHandler) ReportByRoomId(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) ChangePassword(ctx echo.Context) error {
+	req := new(request.ChangePassword)
+	err := ctx.Bind(&req)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	err = controller.ChangePassword(ctx, h.DB, *req)
+	if err != nil {
+		errmsg := map[string]interface{}{
+			"error": err.Error(),
+		}
+		return ctx.JSON(http.StatusInternalServerError, errmsg)
+	}
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

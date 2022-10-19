@@ -49,6 +49,7 @@ func StartServer() {
 	service.POST("changeEmail", h.ChangeEmail)                  // Change email customer or employee
 	service.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
 	service.GET("historyreportById/*", h.GetHistoryByHistoryId) // Search history by Id
+	service.POST("changePassword", h.ChangePassword)            // Change password
 
 	// Customer Service
 	cus := api.Group("customer/")
