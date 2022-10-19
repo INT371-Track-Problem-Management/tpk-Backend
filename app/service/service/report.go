@@ -58,6 +58,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		CreateBy:         req.CreateBy,
 		UpdateAt:         timenow,
 		UpdateBy:         req.CreateBy,
+		RoomId:			  req.RoomId,
 	}
 
 	session := conn.Begin()
