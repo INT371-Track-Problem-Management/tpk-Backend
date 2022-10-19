@@ -41,4 +41,14 @@ type ReportChangeStatus struct {
 }
 
 type ReportByRoomId struct {
+	ReportId         int    `json:"reportId" gorm:"column:reportId"`
+	Title            string `json:"title" gorm:"column:title"`
+	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
+	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
+	Status           string `json:"status" gorm:"column:status"`
+	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
+	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
+	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
+	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
+	RoomId           int    `json:"roomId" gorm:"column:roomId"`
 }
