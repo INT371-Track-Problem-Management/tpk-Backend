@@ -1,8 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"net/http"
 	"tpk-backend/app/authentication"
+	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/repositories"
 
@@ -26,6 +28,20 @@ func ChangeEmail(ctx echo.Context, conn *gorm.DB, req request.ChangeEmail, oldEm
 	}
 
 	err = repositories.ChangeEmail(ctx, conn, req, oldEmail)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ChangePassword(ctx echo.Context, conn *gorm.DB, req request.ChangePassword) error {
+	model := entity.ChangePassword{
+		Email:       req.Email,
+		OldPassword: req.OldPassword,
+		NewPassword: req.NewPassword,
+	}
+	fmt.Println(model.NewPassword)
+	err := repositories.ChangePassword(ctx, conn, model)
 	if err != nil {
 		return err
 	}
