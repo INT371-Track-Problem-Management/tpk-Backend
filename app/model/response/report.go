@@ -10,6 +10,7 @@ type Report struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
+	RoomId         	 int    `json:"roomId" gorm:"column:roomId"`
 }
 
 type Year struct {
