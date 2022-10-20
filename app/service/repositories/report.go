@@ -76,7 +76,8 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 		r.roomId as roomId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy
+		r.createBy as createBy,
+		r.updateBy as updateBy
 	FROM 
 		reports r 
 	JOIN
