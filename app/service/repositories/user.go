@@ -48,3 +48,21 @@ func ChangePassword(ctx echo.Context, conn *gorm.DB, model entity.ChangePassword
 	stmt.Commit()
 	return nil
 }
+
+func GetProfileEmpByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Employee, error) {
+	var emp entity.Employee
+	err := conn.Table("employee").Where("email = ?", email).Scan(&emp).Error
+	if err != nil {
+		return nil, err
+	}
+	return &emp, nil
+}
+
+func GetProfileCustomerByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Customer, error) {
+	var cus entity.Customer
+	err := conn.Table("customer").Where("email = ?", email).Scan(&cus).Error
+	if err != nil {
+		return nil, err
+	}
+	return &cus, nil
+}

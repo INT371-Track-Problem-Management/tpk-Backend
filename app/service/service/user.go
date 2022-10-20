@@ -18,7 +18,7 @@ func ChangeEmail(ctx echo.Context, conn *gorm.DB, req request.ChangeEmail, oldEm
 		Email: oldEmail,
 	}
 
-	oldpwd, err := authentication.GetUser(conn, user)
+	oldpwd, err := authentication.GetUser(conn, user.Email)
 	if err != nil {
 		return err
 	}
@@ -46,4 +46,26 @@ func ChangePassword(ctx echo.Context, conn *gorm.DB, req request.ChangePassword)
 		return err
 	}
 	return nil
+}
+
+func GetProfileByEmail(ctx echo.Context, conn *gorm.DB, email string) (interface{}, error) {
+	user, err := authentication.GetUser(conn, email)
+	if err != nil {
+		return nil, err
+	}
+	if user.Role == "C" {
+		customer, err := repositories.GetProfileCustomerByEmail(ctx, conn, email)
+		if err != nil {
+			return nil, err
+		}
+		return customer, err
+	}
+	if user.Role == "E" || user.Role == "A" {
+		employee, err := repositories.GetProfileEmpByEmail(ctx, conn, email)
+		if err != nil {
+			return nil, err
+		}
+		return employee, err
+	}
+	return nil, nil
 }

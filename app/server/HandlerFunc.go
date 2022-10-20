@@ -212,3 +212,15 @@ func (h *FuncHandler) MaintainerById(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) FetchProfile(ctx echo.Context) error {
+	param := ctx.Param("email")
+	profile, err := controller.GetProfileByEmail(ctx, h.DB, param)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]interface{}{
+		"Profile": profile,
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

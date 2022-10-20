@@ -68,6 +68,7 @@ func StartServer() {
 	cus.POST("reportById", h.ReportById, validator.CustomerValidation)                                  // Search report by id
 	cus.GET("getAllRoomByCustomerId/:customerId", h.GetRoomsByCustomerId, validator.CustomerValidation) // search all rooms by customerId
 	cus.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.CustomerValidation)             // search reports by roomId
+	cus.GET("FetchProfile/:email", h.FetchProfile, validator.CustomerValidation)                        // Search maintainer by Id
 
 	// Owner Service
 	emp := api.Group("employee/")
@@ -103,6 +104,7 @@ func StartServer() {
 	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                               // Get stat for dashboard
 	emp.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.EmployeeValidation)                // search reports by roomId
 	emp.GET("maintainerList", h.Maintainerlist, validator.EmployeeValidation)                              // Search all maintainer
+	emp.GET("FetchProfile/:email", h.FetchProfile, validator.EmployeeValidation)                           // Search maintainer by Id
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
