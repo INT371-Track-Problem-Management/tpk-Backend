@@ -25,7 +25,7 @@ func ChangePassword(ctx echo.Context, conn *gorm.DB, req request.ChangePassword)
 		Email:    req.Email,
 		Password: req.OldPassword,
 	}
-	getUser, err := authentication.GetUser(conn, user)
+	getUser, err := authentication.GetUser(conn, user.Email)
 	if err != nil {
 		return err
 	}
@@ -43,4 +43,12 @@ func ChangePassword(ctx echo.Context, conn *gorm.DB, req request.ChangePassword)
 		return err
 	}
 	return nil
+}
+
+func GetProfileByEmail(ctx echo.Context, conn *gorm.DB, email string) (interface{}, error) {
+	profile, err := service.GetProfileByEmail(ctx, conn, email)
+	if err != nil {
+		return nil, err
+	}
+	return profile, nil
 }

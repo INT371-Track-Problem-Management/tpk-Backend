@@ -386,3 +386,11 @@ func (h *FuncHandler) FetcStatDashBoard(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) Maintainerlist(ctx echo.Context) error {
+	res, err := controller.Maintainerlist(ctx, h.DB)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

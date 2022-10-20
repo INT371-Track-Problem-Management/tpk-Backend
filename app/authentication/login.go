@@ -17,7 +17,7 @@ type ResponseToken struct {
 }
 
 func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*ResponseToken, error) {
-	user, err := GetUser(conn, req)
+	user, err := GetUser(conn, req.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -100,9 +100,9 @@ func Login(ctx echo.Context, conn *gorm.DB, req request.User) (*ResponseToken, e
 	return nil, nil
 }
 
-func GetUser(conn *gorm.DB, req request.User) (*entity.User, error) {
+func GetUser(conn *gorm.DB, email string) (*entity.User, error) {
 	user := new(entity.User)
-	err := conn.Table("userApp").Where("email = ?", req.Email).Find(&user).Error
+	err := conn.Table("userApp").Where("email = ?", email).Find(&user).Error
 	if err != nil {
 		return nil, err
 	}

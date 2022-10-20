@@ -46,10 +46,11 @@ func StartServer() {
 	// Both but need TOKEN
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	service.POST("changeEmail", h.ChangeEmail)                  // Change email customer or employee
-	service.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
-	service.GET("historyreportById/*", h.GetHistoryByHistoryId) // Search history by Id
-	service.POST("changePassword", h.ChangePassword)            // Change password
+	service.POST("changeEmail", h.ChangeEmail)                    // Change email customer or employee
+	service.GET("decodeRole", h.GetRoleJWT)                       // Decode TOken to get Role
+	service.GET("historyreportById/*", h.GetHistoryByHistoryId)   // Search history by Id
+	service.POST("changePassword", h.ChangePassword)              // Change password
+	service.GET("maintainerById/:maintainerId", h.MaintainerById) // Search maintainer by Id
 
 	// Customer Service
 	cus := api.Group("customer/")
@@ -67,6 +68,7 @@ func StartServer() {
 	cus.POST("reportById", h.ReportById, validator.CustomerValidation)                                  // Search report by id
 	cus.GET("getAllRoomByCustomerId/:customerId", h.GetRoomsByCustomerId, validator.CustomerValidation) // search all rooms by customerId
 	cus.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.CustomerValidation)             // search reports by roomId
+	cus.GET("FetchProfile/:email", h.FetchProfile, validator.CustomerValidation)                        // Search maintainer by Id
 
 	// Owner Service
 	emp := api.Group("employee/")
@@ -101,6 +103,8 @@ func StartServer() {
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
 	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                               // Get stat for dashboard
 	emp.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.EmployeeValidation)                // search reports by roomId
+	emp.GET("maintainerList", h.Maintainerlist, validator.EmployeeValidation)                              // Search all maintainer
+	emp.GET("FetchProfile/:email", h.FetchProfile, validator.EmployeeValidation)                           // Search maintainer by Id
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
