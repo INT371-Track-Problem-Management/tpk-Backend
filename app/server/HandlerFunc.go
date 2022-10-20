@@ -203,3 +203,12 @@ func (h *FuncHandler) ChangePassword(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) MaintainerById(ctx echo.Context) error {
+	param := ctx.Param("maintainerId")
+	res, err := controller.MaintainerById(ctx, h.DB, param)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

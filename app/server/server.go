@@ -46,10 +46,11 @@ func StartServer() {
 	// Both but need TOKEN
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
-	service.POST("changeEmail", h.ChangeEmail)                  // Change email customer or employee
-	service.GET("decodeRole", h.GetRoleJWT)                     // Decode TOken to get Role
-	service.GET("historyreportById/*", h.GetHistoryByHistoryId) // Search history by Id
-	service.POST("changePassword", h.ChangePassword)            // Change password
+	service.POST("changeEmail", h.ChangeEmail)                    // Change email customer or employee
+	service.GET("decodeRole", h.GetRoleJWT)                       // Decode TOken to get Role
+	service.GET("historyreportById/*", h.GetHistoryByHistoryId)   // Search history by Id
+	service.POST("changePassword", h.ChangePassword)              // Change password
+	service.GET("maintainerById/:maintainerId", h.MaintainerById) // Search maintainer by Id
 
 	// Customer Service
 	cus := api.Group("customer/")
@@ -101,6 +102,7 @@ func StartServer() {
 	emp.GET("reportEngageByReportId/:reportId", h.GetReportEngageByReportId, validator.EmployeeValidation) // Search reportEngage by reportId
 	emp.POST("dashboard", h.FetcStatDashBoard, validator.EmployeeValidation)                               // Get stat for dashboard
 	emp.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.EmployeeValidation)                // search reports by roomId
+	emp.GET("maintainerList", h.Maintainerlist, validator.EmployeeValidation)                              // Search all maintainer
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
