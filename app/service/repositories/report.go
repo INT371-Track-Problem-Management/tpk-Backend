@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
-	var report []entity.Report
+func Report(ctx echo.Context, conn *gorm.DB) (*[]response.Report, error) {
+	var report []response.Report
 	sql :=
 		`
 		SELECT 

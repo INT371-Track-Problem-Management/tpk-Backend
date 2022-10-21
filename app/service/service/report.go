@@ -12,12 +12,30 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
-	report, err := repositories.Report(ctx, conn)
+func Report(ctx echo.Context, conn *gorm.DB) (*[]response.Report, error) {
+	data, err := repositories.Report(ctx, conn)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// return report, nil
 	if err != nil {
 		return nil, err
 	}
-	return report, nil
+	res := &response.Report{
+		ReportId:         data.ReportId,
+		Title:            data.Title,
+		CategoriesReport: data.CategoriesReport,
+		ReportDes:        data.ReportDes,
+		Status:           data.Status,
+		UpdateAt:         data.UpdateAt,
+		UpdateBy:         data.UpdateBy,
+		CreateAt:         data.CreateAt,
+		CreateBy:         data.CreateBy,
+		RoomId:			  data.RoomId,
+		RoomNum:		  data.RoomNum,
+		BuildingId:		  data.BuildingId,
+	}
+	return res, nil
 }
 
 func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.Report, error) {

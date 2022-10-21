@@ -11,7 +11,7 @@ type Report struct {
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
 	RoomId         	 int    `json:"roomId" gorm:"column:roomId"`
-	RoomNum          int    `json:"roomNum" gorm:"column:roomNum"`
+	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
 	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
 }
 
