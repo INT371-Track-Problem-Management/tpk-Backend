@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]response.Report, error) {
+func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	res, err := service.Report(ctx, conn)
 	if err != nil {
 		return nil, err

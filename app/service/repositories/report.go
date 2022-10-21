@@ -10,11 +10,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]response.Report, error) {
-	var report []response.Report
+func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
+	var report []entity.Report
 	sql :=
 		`
-		SELECT 
+	SELECT 
 		r.reportId as reportId,
 		r.title as title,
 		r.categoriesReport as categoriesReport ,
@@ -23,18 +23,12 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]response.Report, error) {
 		r.roomId as roomId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy,
-		r.updateBy as updateBy,
-		ro.roomNum as roomNum,
-        ro.buildingId as buildingId
+		r.createBy as createBy
 	FROM 
-		reports r 
+		reports r
 	JOIN
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
-	JOIN
-		room ro
-	ON r.roomId = ro.roomId
 	`
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
@@ -55,18 +49,12 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 		r.roomId as roomId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy,
-		r.updateBy as updateBy,
-		ro.roomNum as roomNum,
-        ro.buildingId as buildingId
+		r.createBy as createBy
 	FROM 
 		reports r 
 	JOIN
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
-	JOIN
-		room ro
-	ON r.roomId = ro.roomId
 	WHERE 
 		r.createBy = %v`, req.CreateBy)
 	err := conn.Raw(sql).Scan(&report).Error
