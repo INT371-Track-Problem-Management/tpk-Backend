@@ -36,6 +36,9 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		UpdateBy:         data.UpdateBy,
 		CreateAt:         data.CreateAt,
 		CreateBy:         data.CreateBy,
+		RoomId:			  data.RoomId,
+		RoomNum:		  data.RoomNum,
+		BuildingId:		  data.BuildingId,
 	}
 	return res, nil
 }
