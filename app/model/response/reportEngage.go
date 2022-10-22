@@ -37,4 +37,6 @@ type ReportEngageJoinReport struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
+	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
+	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
 }
