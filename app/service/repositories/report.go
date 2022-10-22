@@ -20,7 +20,8 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.roomId as roomId,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
@@ -29,6 +30,9 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	JOIN
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
+	JOIN
+		room r2 
+	ON r.roomId  = r2.roomNum
 	`
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
@@ -184,25 +188,37 @@ func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
 	return &year, nil
 }
 
-func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.Report, error) {
-	var report []entity.Report
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.ReportJoinEngage, error) {
+	var report []entity.ReportJoinEngage
 	sql := fmt.Sprintf(
 		`
 	SELECT 
 		r.reportId as reportId,
 		r.title as title,
-		r.categoriesReport as categoriesReport ,
-		r.reportDes as reportDes ,
+		r.categoriesReport as categoriesReport,
+		r.reportDes as reportDes,
 		sm.status as status,
-		r.roomId as roomId,
-		r.updateAt as updateAt ,
-		r.createAt as createAt ,
+		r2.roomNum as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
+		r.updateAt as updateAt,
+		r.updateBy as updateBy,
+		r.createAt as createAt,
 		r.createBy as createBy
-	FROM 
+	FROM
 		reports r
-	JOIN
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
+	ON
+		r.status = sm.statusMasterId 
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
+	LEFT JOIN
+		room r2
+	ON
+		r.roomId = r2.roomId 
 	WHERE 
 		r.roomId = %v
 	`, roomId)

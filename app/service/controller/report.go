@@ -66,7 +66,7 @@ func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
 	return year, nil
 }
 
-func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.Report, error) {
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.ReportJoinEngage, error) {
 	reports, err := service.ReportByRoomId(ctx, conn, roomId)
 	if err != nil {
 		return nil, err
