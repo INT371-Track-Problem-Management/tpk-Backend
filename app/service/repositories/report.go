@@ -212,3 +212,27 @@ func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.R
 	}
 	return &report, nil
 }
+
+func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*[]entity.ReportStatus, error) {
+	var status []entity.ReportStatus
+	sql := fmt.Sprintf(`
+		SELECT 
+			rs.statusId,
+			rs.reportId,
+			sm.status,
+			rs.createAt
+		FROM
+			reportStatus rs
+		LEFT JOIN
+			statusMaster sm 
+		ON
+			rs.status = sm.statusMasterId 
+		WHERE
+			rs.reportId = %v;
+	`, reportId)
+	err := conn.Raw(sql).Scan(&status).Error
+	if err != nil {
+		return nil, err
+	}
+	return &status, nil
+}

@@ -224,3 +224,15 @@ func (h *FuncHandler) FetchProfile(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (h *FuncHandler) FetchReportStatusApplication(ctx echo.Context) error {
+	reportId := ctx.Param("reportId")
+	statuslist, err := controller.ReportStatusByReportId(ctx, h.DB, reportId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]interface{}{
+		"Profile": statuslist,
+	}
+	return ctx.JSON(http.StatusOK, response)
+}
