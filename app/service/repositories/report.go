@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
-	var report []entity.Report
+func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportJoinEngage, error) {
+	var report []entity.ReportJoinEngage
 	sql :=
 		`
 	SELECT 
@@ -22,17 +22,26 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 		sm.status as status,
 		r2.roomNum  as roomNum,
 		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
 	FROM 
 		reports r
-	JOIN
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
-	JOIN
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
 		room r2 
-	ON r.roomId  = r2.roomNum
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
+	ORDER BY 
+		r.updateAt DESC
 	`
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
