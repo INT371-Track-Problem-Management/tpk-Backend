@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
+func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportJoinEngage, error) {
 	report, err := repositories.Report(ctx, conn)
 	if err != nil {
 		return nil, err
