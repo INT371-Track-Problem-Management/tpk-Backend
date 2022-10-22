@@ -249,7 +249,9 @@ func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*
 		ON
 			rs.status = sm.statusMasterId 
 		WHERE
-			rs.reportId = %v;
+			rs.reportId = %v
+		ORDER BY
+			rs.createAt DESC;
 	`, reportId)
 	err := conn.Raw(sql).Scan(&status).Error
 	if err != nil {
