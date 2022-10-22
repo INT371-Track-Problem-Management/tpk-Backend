@@ -162,3 +162,11 @@ func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*
 	}
 	return &list, nil
 }
+
+func ReportListForCustomer(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.ReportJoinEngage, error) {
+	reports, err := repositories.ReportListForCustomer(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	return reports, nil
+}

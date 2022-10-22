@@ -236,3 +236,43 @@ func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*
 	}
 	return &status, nil
 }
+
+func ReportListForCustomer(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.ReportJoinEngage, error) {
+	var reports []entity.ReportJoinEngage
+	sql := fmt.Sprintf(`
+		SELECT 
+			r.reportId as reportId,
+			r.title as title,
+			r.categoriesReport as categoriesReport,
+			r.reportDes as reportDes,
+			sm.status as status,
+			r2.roomNum as roomNum,
+			r2.buildingId as buildingId,
+			re.selectedDate as selectedDate,
+			r.updateAt as updateAt,
+			r.updateBy as updateBy,
+			r.createAt as createAt,
+			r.createBy as createBy
+		FROM
+			reports r
+		LEFT JOIN
+			statusMaster sm 
+		ON
+			r.status = sm.statusMasterId 
+		LEFT JOIN
+			reportEngage re
+		ON
+			r.reportId  = re.reportId 
+		LEFT JOIN
+			room r2
+		ON
+			r.roomId = r2.roomId 
+		WHERE
+			r.createBy = %v;
+	`, customerId)
+	err := conn.Raw(sql).Scan(&reports).Error
+	if err != nil {
+		return nil, err
+	}
+	return &reports, nil
+}

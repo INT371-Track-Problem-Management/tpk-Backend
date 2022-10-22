@@ -170,3 +170,14 @@ func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
+func (h *FuncHandler) ReportListForCustomer(ctx echo.Context) error {
+	customerId := ctx.Param("customerId")
+	reports, err := controller.ReportListForCustomer(ctx, h.DB, customerId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]interface{}{
+		"reports": reports,
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

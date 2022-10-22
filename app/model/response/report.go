@@ -6,11 +6,11 @@ type Report struct {
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
+	RoomId           int    `json:"roomId" gorm:"column:roomId"`
 	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
-	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
-	RoomId         	 int    `json:"roomId" gorm:"column:roomId"`
+	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
 	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
 	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
 }

@@ -70,6 +70,7 @@ func StartServer() {
 	cus.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.CustomerValidation)                    // search reports by roomId
 	cus.GET("FetchProfile/:email", h.FetchProfile, validator.CustomerValidation)                               // Search maintainer by Id
 	cus.GET("reportStatusApplication/:reportId", h.FetchReportStatusApplication, validator.CustomerValidation) // Find all status report by report Id
+	cus.GET("listReports/:customerId", h.ReportListForCustomer, validator.EmployeeValidation)                  // list report by customer id
 
 	// Owner Service
 	emp := api.Group("employee/")
