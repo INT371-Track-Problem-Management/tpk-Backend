@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
@@ -58,7 +59,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		CreateBy:         req.CreateBy,
 		UpdateAt:         timenow,
 		UpdateBy:         req.CreateBy,
-		RoomId:			  req.RoomId,
+		RoomId:           req.RoomId,
 	}
 
 	session := conn.Begin()
@@ -136,4 +137,25 @@ func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.R
 		return nil, err
 	}
 	return reports, nil
+}
+
+func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*[]response.ReportStatus, error) {
+	var list []response.ReportStatus
+	status, err := repositories.ReportStatusByReportId(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	if len(*status) == 0 {
+		return nil, errors.New("status not found")
+	}
+	for _, v := range *status {
+		report := response.ReportStatus{
+			StatusId:  v.StatusId,
+			ReportId:  v.ReportId,
+			Status:    v.Status,
+			CreatedAt: v.CreatedAt,
+		}
+		list = append(list, report)
+	}
+	return &list, nil
 }

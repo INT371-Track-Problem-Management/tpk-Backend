@@ -73,3 +73,11 @@ func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.R
 	}
 	return reports, nil
 }
+
+func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*[]response.ReportStatus, error) {
+	status, err := service.ReportStatusByReportId(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	return status, nil
+}
