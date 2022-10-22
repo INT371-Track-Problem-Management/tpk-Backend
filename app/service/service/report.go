@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"tpk-backend/app/constants"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
@@ -85,6 +86,15 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 	}
 
 	session.Commit()
+
+	customer, err := repositories.GetCustomerById(ctx, conn, req.CreateBy)
+	if err != nil {
+		return nil, err
+	}
+	err = pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, "ส่งการรายงาน")
+	if err != nil {
+		return nil, err
+	}
 
 	return reportid, nil
 }
