@@ -66,3 +66,21 @@ func GetProfileCustomerByEmail(ctx echo.Context, conn *gorm.DB, email string) (*
 	}
 	return &cus, nil
 }
+
+func GetProfileEmpById(ctx echo.Context, conn *gorm.DB, customerId string) (*entity.Employee, error) {
+	var emp entity.Employee
+	err := conn.Table("employee").Where("customerId = ?", customerId).Scan(&emp).Error
+	if err != nil {
+		return nil, err
+	}
+	return &emp, nil
+}
+
+func GetProfileCustomerId(ctx echo.Context, conn *gorm.DB, employeeId string) (*entity.Customer, error) {
+	var cus entity.Customer
+	err := conn.Table("customer").Where("employeeId = ?", employeeId).Scan(&cus).Error
+	if err != nil {
+		return nil, err
+	}
+	return &cus, nil
+}

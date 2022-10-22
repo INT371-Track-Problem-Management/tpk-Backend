@@ -394,3 +394,14 @@ func (h *FuncHandler) Maintainerlist(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (h *FuncHandler) ListEmployee(ctx echo.Context) error {
+	employees, err := controller.ListEmployee(ctx, h.DB)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]interface{}{
+		"Employees": employees,
+	}
+	return ctx.JSON(http.StatusOK, response)
+}
