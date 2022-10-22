@@ -36,15 +36,15 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		UpdateBy:         data.UpdateBy,
 		CreateAt:         data.CreateAt,
 		CreateBy:         data.CreateBy,
-		RoomId:			  data.RoomId,
-		RoomNum:		  data.RoomNum,
-		BuildingId:		  data.BuildingId,
+		RoomId:           data.RoomId,
+		RoomNum:          data.RoomNum,
+		BuildingId:       data.BuildingId,
 	}
 	return res, nil
 }
 
-func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
-	res, err := repositories.ReportByCreatedBy(ctx, conn, req)
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.Report, error) {
+	res, err := repositories.ReportByCreatedBy(ctx, conn, customerId)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
 	return year, nil
 }
 
-func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.Report, error) {
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.ReportJoinEngage, error) {
 	reports, err := repositories.ReportByRoomId(ctx, conn, roomId)
 	if err != nil {
 		return nil, err
@@ -161,4 +161,12 @@ func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*
 		list = append(list, report)
 	}
 	return &list, nil
+}
+
+func ReportListForCustomer(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.ReportJoinEngage, error) {
+	reports, err := repositories.ReportListForCustomer(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	return reports, nil
 }

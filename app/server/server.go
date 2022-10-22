@@ -57,7 +57,7 @@ func StartServer() {
 	cus.Use(middleware.JWTWithConfig(authentication.ValidateTokenJWTConfig()))
 	cus.GET("checkHealthy", h.CheckHealthyJWT, validator.CustomerValidation)                                   //Check Heatkhy with Token
 	cus.GET("activateCus", h.ActivateCustomer, validator.CustomerValidation)                                   // Activate user change status 'I' => 'A'
-	cus.POST("reportByCreatedBy", h.GetReportByCreatedBy, validator.CustomerValidation)                        // Search report by createdBy
+	cus.GET("reportByCreatedBy/:customerId", h.GetReportByCreatedBy, validator.CustomerValidation)             // Search report by createdBy
 	cus.POST("report", h.ReportInsert, validator.CustomerValidation)                                           // Insert report
 	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile, validator.CustomerValidation)                      // View profile customer by email
 	cus.PUT("editProfile/*", h.CustomerEditProfile, validator.CustomerValidation)                              // Edit customer profile
@@ -70,6 +70,8 @@ func StartServer() {
 	cus.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.CustomerValidation)                    // search reports by roomId
 	cus.GET("FetchProfile/:email", h.FetchProfile, validator.CustomerValidation)                               // Search maintainer by Id
 	cus.GET("reportStatusApplication/:reportId", h.FetchReportStatusApplication, validator.CustomerValidation) // Find all status report by report Id
+	cus.GET("listReports/:customerId", h.ReportListForCustomer, validator.CustomerValidation)                  // list report by customer id
+	cus.GET("getAllReportByRoomId/:roomId", h.ReportByRoomId, validator.CustomerValidation)                    // search reports by roomId
 
 	// Owner Service
 	emp := api.Group("employee/")

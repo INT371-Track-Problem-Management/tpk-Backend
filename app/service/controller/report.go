@@ -18,8 +18,8 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	return res, nil
 }
 
-func GetReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
-	res, err := service.ReportByCreatedBy(ctx, conn, req)
+func GetReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.Report, error) {
+	res, err := service.ReportByCreatedBy(ctx, conn, customerId)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
 	return year, nil
 }
 
-func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.Report, error) {
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.ReportJoinEngage, error) {
 	reports, err := service.ReportByRoomId(ctx, conn, roomId)
 	if err != nil {
 		return nil, err
@@ -80,4 +80,12 @@ func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*
 		return nil, err
 	}
 	return status, nil
+}
+
+func ReportListForCustomer(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.ReportJoinEngage, error) {
+	reports, err := service.ReportListForCustomer(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	return reports, nil
 }
