@@ -43,8 +43,8 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 	return res, nil
 }
 
-func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
-	res, err := repositories.ReportByCreatedBy(ctx, conn, req)
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.Report, error) {
+	res, err := repositories.ReportByCreatedBy(ctx, conn, customerId)
 	if err != nil {
 		return nil, err
 	}

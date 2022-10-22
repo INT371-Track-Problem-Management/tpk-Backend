@@ -41,7 +41,7 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	return &report, nil
 }
 
-func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.Report, error) {
 	var report []entity.Report
 	sql := fmt.Sprintf(`
 	SELECT 
@@ -51,6 +51,8 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 		r.reportDes as reportDes ,
 		sm.status as status,
 		r.roomId as roomId,
+		ro.roomNum as roomNum,
+		ro.BuildingId as buildingId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
@@ -59,8 +61,11 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 	JOIN
 		statusMaster sm 
 	ON r.status = sm.statusMasterId
+	JOIN
+		room ro
+	ON r.roomId = ro.roomId
 	WHERE 
-		r.createBy = %v`, req.CreateBy)
+		r.createBy = %v`, customerId)
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err

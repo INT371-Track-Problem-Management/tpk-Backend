@@ -41,13 +41,8 @@ func (h *FuncHandler) ActivateCustomer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportByCreatedBy(ctx echo.Context) error {
-	req := new(request.ReportByCreatedBy)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, err)
-	}
-	res, err := controller.GetReportByCreatedBy(ctx, h.DB, *req)
+	customerId := ctx.Param("customerId")
+	res, err := controller.GetReportByCreatedBy(ctx, h.DB, customerId)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ctx.JSON(http.StatusInternalServerError, err)
