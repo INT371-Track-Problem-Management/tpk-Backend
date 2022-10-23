@@ -261,7 +261,7 @@ func (h *FuncHandler) RoomAddCustomer(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	return ctx.JSON(http.StatusOK, "sucess")
+	return ctx.JSON(http.StatusOK, "success")
 }
 
 func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
@@ -273,11 +273,11 @@ func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	return ctx.JSON(http.StatusOK, "sucess")
+	return ctx.JSON(http.StatusOK, "success")
 }
 
 func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {
-	param := ctx.QueryParam("buildingind")
+	param := ctx.QueryParam("buildingId")
 	id, _ := strconv.ParseInt(param, 10, 64)
 	res, err := controller.GetAllRoomWithCustomer(ctx, h.DB, id)
 	if err != nil {
