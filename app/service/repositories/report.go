@@ -97,21 +97,26 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.roomId as roomId,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy,
-		r.updateBy as updateBy,
-		ro.roomNum as roomNum,
-        ro.buildingId as buildingId
+		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
-	JOIN
-		room ro
-	ON r.roomId = ro.roomId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
 	WHERE 
 		r.reportId = %v`, req.ReportId)
 	err := conn.Raw(sql).Scan(&report).Error

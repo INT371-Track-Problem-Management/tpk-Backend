@@ -40,6 +40,7 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		RoomId:           data.RoomId,
 		RoomNum:          data.RoomNum,
 		BuildingId:       data.BuildingId,
+		SelectedDate:	  data.SelectedDate,
 	}
 	return res, nil
 }
