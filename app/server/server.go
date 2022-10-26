@@ -62,6 +62,7 @@ func StartServer() {
 	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile, validator.CustomerValidation)                      // View profile customer by email
 	cus.PUT("editProfile/*", h.CustomerEditProfile, validator.CustomerValidation)                              // Edit customer profile
 	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport, validator.CustomerValidation)        // Seach reportEngage join with reports whare by customerId
+	cus.PUT("statusReport", h.ReportChangeStatus, validator.CustomerValidation)        						// Update status Report
 	cus.PUT("selectedPlanFixDate", h.SelectedPlanFixDate, validator.CustomerValidation)                        // customer selecting plan fix date
 	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                                     // end job report and review
 	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)                    // Search all history by customerId

@@ -142,20 +142,20 @@ func (h *FuncHandler) BuildingDelete(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
-	req := new(request.ReportChangeStatus)
-	err := ctx.Bind(&req)
-	if err != nil {
+// func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
+// 	req := new(request.ReportChangeStatus)
+// 	err := ctx.Bind(&req)
+// 	if err != nil {
 
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
-	res, err := controller.ReportChangeStatus(ctx, h.DB, *req)
-	if err != nil {
+// 		return ctx.JSON(http.StatusInternalServerError, err)
+// 	}
+// 	res, err := controller.ReportChangeStatus(ctx, h.DB, *req)
+// 	if err != nil {
 
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
+// 		return ctx.JSON(http.StatusInternalServerError, err)
+// 	}
+// 	return ctx.JSON(http.StatusOK, res)
+// }
 
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
 	param := ctx.QueryParam("buildingId")
