@@ -59,21 +59,22 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]e
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.roomId as roomId,
-		ro.roomNum as roomNum,
-		ro.BuildingId as buildingId,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy,
-		re.selectedDate as selectedDate,
+		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
-	JOIN
-		room ro
-	ON r.roomId = ro.roomId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
 	LEFT JOIN
 		reportEngage re
 	ON
