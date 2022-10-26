@@ -64,7 +64,8 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]e
 		ro.BuildingId as buildingId,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy
+		r.createBy as createBy,
+		re.selectedDate as selectedDate,
 	FROM 
 		reports r 
 	JOIN
@@ -73,6 +74,10 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]e
 	JOIN
 		room ro
 	ON r.roomId = ro.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
 	WHERE 
 		r.createBy = %v`, customerId)
 	err := conn.Raw(sql).Scan(&report).Error
