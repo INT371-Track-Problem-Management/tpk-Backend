@@ -114,7 +114,7 @@ func (h *FuncHandler) SelectedPlanFixDate(ctx echo.Context) error {
 	}
 
 	res := map[string]string{
-		"massage": "success",
+		"message": "success",
 	}
 
 	return ctx.JSON(http.StatusOK, res)
@@ -133,7 +133,7 @@ func (h *FuncHandler) EndJobReport(ctx echo.Context) error {
 	}
 
 	res := map[string]string{
-		"massage": "success",
+		"message": "success",
 	}
 
 	return ctx.JSON(http.StatusOK, res)
