@@ -40,6 +40,7 @@ func GetReportEngageById(ctx echo.Context, conn *gorm.DB, req request.ReportEnga
 		CreateAt:     data.CreateAt,
 		UpdateAt:     data.UpdateAt,
 		UpdateBy:     data.UpdateBy,
+		MaintainerId: data.MainainerId,
 	}
 	return &res, nil
 }
@@ -62,6 +63,7 @@ func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, reportId int) (*
 		CreateAt:     data.CreateAt,
 		UpdateAt:     data.UpdateAt,
 		UpdateBy:     data.UpdateBy,
+		MaintainerId: data.MainainerId,
 	}
 	return &res, nil
 }
