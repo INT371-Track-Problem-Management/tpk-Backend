@@ -105,14 +105,14 @@ func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChang
 		ReportId:  req.ReportId,
 		Status:    req.Status,
 		UpdateAt:  timenow,
-		UpdateBy:  req.EmployeeId,
+		UpdateBy:  req.UpdateBy,
 		CreatedAt: timenow,
 	}
 	insert := entity.ReportChangeStatus{
 		ReportId:   req.ReportId,
 		Status:     req.Status,
 		UpdateAt:   timenow,
-		EmployeeId: req.EmployeeId,
+		UpdateBy: 	req.UpdateBy,
 	}
 	session := conn.Begin()
 	err := repositories.ReportChangeStatus(ctx, session, insert)

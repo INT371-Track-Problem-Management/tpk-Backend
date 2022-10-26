@@ -138,7 +138,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*in
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req entity.ReportChangeStatus) error {
-	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.EmployeeId, req.UpdateAt, req.ReportId).Error
+	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.UpdateBy, req.UpdateAt, req.ReportId).Error
 	if err != nil {
 		return err
 	}

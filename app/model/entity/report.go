@@ -40,7 +40,7 @@ type ReportChangeStatus struct {
 	ReportId   int    `json:"reportId" gorm:"column:reportId"`
 	Status     string `json:"status" gorm:"column:status"`
 	UpdateAt   string `json:"updateAt" gorm:"column:updateAt"`
-	EmployeeId int    `json:"employeeId" gorm:"column:employeeId"`
+	UpdateBy   int    `json:"updateBy" gorm:"column:updateBy"`
 }
 
 type ReportByRoomId struct {
