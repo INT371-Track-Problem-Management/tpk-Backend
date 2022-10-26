@@ -13,7 +13,7 @@ type ReportEngage struct {
 	CreateAt     string `json:"createdAt" gorm:"column:createAt"`
 	UpdateAt     string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy     int    `json:"updateBy" gorm:"column:updateBy"`
-	MaintainerId	 int 	`json:"maintainerId" gorm:"column:maintainerId"`
+	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
 }
 
 type InsertReportEngage struct {
