@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"net/http"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/service"
@@ -24,7 +23,7 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int64) error {
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusCreated, "success")
+	return nil
 }
 
 func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int64) ([]*entity.RoomJoinBulding, error) {

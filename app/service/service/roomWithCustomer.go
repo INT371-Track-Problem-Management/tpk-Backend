@@ -29,7 +29,8 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustome
 }
 
 func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
-	err := repositories.RoomRemoveCustomer(ctx, conn, id)
+	now := pkg.GetDatetime()
+	err := repositories.RoomRemoveCustomer(ctx, conn, id, now)
 	if err != nil {
 		return err
 	}

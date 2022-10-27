@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"fmt"
-	"tpk-backend/app/constants"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
@@ -23,7 +22,7 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportJoinEngage, error)
 }
 
 func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.Report, error) {
-	data, err := repositories.ReportById(ctx, conn, req)
+	data, err := repositories.ReportById(ctx, conn, req.ReportId)
 	if err != nil {
 		return nil, err
 	}
@@ -88,19 +87,19 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 
 	session.Commit()
 
-	customer, err := repositories.GetCustomerById(ctx, conn, req.CreateBy)
-	if err != nil {
-		return nil, err
-	}
-	err = pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, "ส่งการรายงาน")
-	if err != nil {
-		return nil, err
-	}
+	// customer, err := repositories.GetCustomerById(ctx, conn, req.CreateBy)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// err = pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, "ส่งการรายงาน")
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	return reportid, nil
 }
 
-func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) (string, error) {
+func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {
 	timenow := pkg.GetDatetime()
 	status := request.ReportStatus{
 		ReportId:  req.ReportId,
@@ -118,14 +117,26 @@ func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChang
 	session := conn.Begin()
 	err := repositories.ReportChangeStatus(ctx, session, insert)
 	if err != nil {
-		return "Can not update", err
+		return err
 	}
 	err = repositories.ReportStatus(ctx, session, status)
 	if err != nil {
-		return "Can not update", err
+		return err
 	}
 	session.Commit()
-	return "Update success", nil
+
+	report, err := repositories.ReportById(ctx, conn, req.ReportId)
+	if err != nil {
+		return err
+	}
+
+	email := repositories.GetemailByCustomerId(ctx, conn, report.CreateBy)
+	err = pkg.UpdateStatus(*email, report.ReportId, report.Title, report.Status)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error {

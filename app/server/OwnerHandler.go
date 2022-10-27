@@ -142,21 +142,6 @@ func (h *FuncHandler) BuildingDelete(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-// func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
-// 	req := new(request.ReportChangeStatus)
-// 	err := ctx.Bind(&req)
-// 	if err != nil {
-
-// 		return ctx.JSON(http.StatusInternalServerError, err)
-// 	}
-// 	res, err := controller.ReportChangeStatus(ctx, h.DB, *req)
-// 	if err != nil {
-
-// 		return ctx.JSON(http.StatusInternalServerError, err)
-// 	}
-// 	return ctx.JSON(http.StatusOK, res)
-// }
-
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
 	param := ctx.QueryParam("buildingId")
 	id, _ := strconv.ParseInt(param, 10, 64)
@@ -273,7 +258,10 @@ func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	return ctx.JSON(http.StatusOK, "success")
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
 }
 
 func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {

@@ -58,6 +58,50 @@ func GetProfileEmpByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entit
 	return &emp, nil
 }
 
+func GetemailByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) *string {
+	var email string
+	sql := fmt.Sprintf(
+		`
+		SELECT 
+			userApp.email
+		FROM 
+			userApp
+		left join
+			customer
+		on
+			customer.email = userApp.email
+		WHERE 
+		customer.customerId = %v
+		`, customerId)
+	err := conn.Raw(sql).Scan(&email).Error
+	if err != nil {
+		return nil
+	}
+	return &email
+}
+
+func GetemailByEmployeeId(ctx echo.Context, conn *gorm.DB, employeeId int) *string {
+	var email string
+	sql := fmt.Sprintf(
+		`
+		SELECT 
+			userApp.email
+		FROM 
+			userApp
+		left join
+			employee
+		on
+			employee.email = userApp.email
+		WHERE 
+			employee.employeeId = %v
+		`, employeeId)
+	err := conn.Raw(sql).Scan(&email).Error
+	if err != nil {
+		return nil
+	}
+	return &email
+}
+
 func GetProfileCustomerByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Customer, error) {
 	var cus entity.Customer
 	err := conn.Table("customer").Where("email = ?", email).Scan(&cus).Error
