@@ -110,6 +110,7 @@ func StartServer() {
 	emp.GET("FetchProfile/:email", h.FetchProfile, validator.EmployeeValidation)                               // Search maintainer by Id
 	emp.GET("reportStatusApplication/:reportId", h.FetchReportStatusApplication, validator.CustomerValidation) // Find all status report by report Id
 	emp.GET("listEmployee", h.ListEmployee, validator.EmployeeValidation)                                      // List all employees
+	emp.GET("roomRemoveCustomer/*", h.RoomRemoveCustomer, validator.EmployeeValidation)                        // remove customer from room
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

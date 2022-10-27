@@ -149,10 +149,12 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.ReportChangeStatus(ctx, h.DB, *req)
+	err = controller.ReportChangeStatus(ctx, h.DB, *req)
 	if err != nil {
-
 		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]string{
+		"message": "success",
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
@@ -273,7 +275,10 @@ func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	return ctx.JSON(http.StatusOK, "sucess")
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
 }
 
 func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {

@@ -35,7 +35,7 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, model entity.RoomAddCustom
 	return nil
 }
 
-func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
+func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int, now string) error {
 	var err error
 	var rwc entity.RoomWithCustomer
 	stmt := conn.Begin()
@@ -45,13 +45,13 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 		return err
 	}
 
-	err = stmt.Exec("UPDATE roomWithCustomer SET status = ? WHERE id = ?", "I", rwc.Id).Error
+	err = stmt.Exec("UPDATE roomWithCustomer SET status = ?, updateAt = ? WHERE id = ?", "I", now, rwc.Id).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
 	}
 
-	err = stmt.Exec("UPDATE room SET status = ? WHERE roomId = ?", "A", rwc.RoomId).Error
+	err = stmt.Exec("UPDATE room SET status = ?, updateAt = ? WHERE roomId = ?", "I", now, rwc.RoomId).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
