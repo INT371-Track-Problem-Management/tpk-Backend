@@ -59,20 +59,26 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]e
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.roomId as roomId,
-		ro.roomNum as roomNum,
-		ro.BuildingId as buildingId,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
-	JOIN
-		room ro
-	ON r.roomId = ro.roomId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
 	WHERE 
 		r.createBy = %v`, customerId)
 	err := conn.Raw(sql).Scan(&report).Error
@@ -91,21 +97,26 @@ func ReportById(ctx echo.Context, conn *gorm.DB, reportId int) (*entity.Report, 
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
-		r.roomId as roomId,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
-		r.createBy as createBy,
-		r.updateBy as updateBy,
-		ro.roomNum as roomNum,
-        ro.buildingId as buildingId
+		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
-	JOIN
-		room ro
-	ON r.roomId = ro.roomId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
 	WHERE 
 		r.reportId = %v`, reportId)
 	err := conn.Raw(sql).Scan(&report).Error
@@ -132,7 +143,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*in
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req entity.ReportChangeStatus) error {
-	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.EmployeeId, req.UpdateAt, req.ReportId).Error
+	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.UpdateBy, req.UpdateAt, req.ReportId).Error
 	if err != nil {
 		return err
 	}

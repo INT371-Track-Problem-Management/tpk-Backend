@@ -20,6 +20,8 @@ type RoomJoinBulding struct {
 	Floors      int    `json:"floors" gorm:"column:floors"`
 	Description string `json:"description" gorm:"column:description"`
 	BuildingId  int    `json:"buildingId" gorm:"column:buildingId"`
+	Fname		string `json:"fname" gorm:"column:fname"`
+	Lname		string `json:"lname" gorm:"column:lname"`
 }
 
 type RoomAddCustomer struct {

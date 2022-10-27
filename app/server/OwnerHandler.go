@@ -142,23 +142,6 @@ func (h *FuncHandler) BuildingDelete(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
-	req := new(request.ReportChangeStatus)
-	err := ctx.Bind(&req)
-	if err != nil {
-
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
-	err = controller.ReportChangeStatus(ctx, h.DB, *req)
-	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
-	res := map[string]string{
-		"message": "success",
-	}
-	return ctx.JSON(http.StatusOK, res)
-}
-
 func (h *FuncHandler) GetReportEngageAll(ctx echo.Context) error {
 	param := ctx.QueryParam("buildingId")
 	id, _ := strconv.ParseInt(param, 10, 64)
@@ -263,7 +246,7 @@ func (h *FuncHandler) RoomAddCustomer(ctx echo.Context) error {
 
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	return ctx.JSON(http.StatusOK, "sucess")
+	return ctx.JSON(http.StatusOK, "success")
 }
 
 func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
@@ -282,7 +265,7 @@ func (h *FuncHandler) RoomRemoveCustomer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetAllRoomWithCustomer(ctx echo.Context) error {
-	param := ctx.QueryParam("buildingind")
+	param := ctx.QueryParam("buildingId")
 	id, _ := strconv.ParseInt(param, 10, 64)
 	res, err := controller.GetAllRoomWithCustomer(ctx, h.DB, id)
 	if err != nil {

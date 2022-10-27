@@ -236,3 +236,20 @@ func (h *FuncHandler) FetchReportStatusApplication(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
+	req := new(request.ReportChangeStatus)
+	err := ctx.Bind(&req)
+	if err != nil {
+
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	err = controller.ReportChangeStatus(ctx, h.DB, *req)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
+}

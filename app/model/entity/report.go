@@ -13,6 +13,7 @@ type Report struct {
 	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
 	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
 	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
+	SelectedDate     string `json:"selectedDate" gorm:"column:selectedDate"`
 }
 
 type ReportInsert struct {
@@ -39,7 +40,7 @@ type ReportChangeStatus struct {
 	ReportId   int    `json:"reportId" gorm:"column:reportId"`
 	Status     string `json:"status" gorm:"column:status"`
 	UpdateAt   string `json:"updateAt" gorm:"column:updateAt"`
-	EmployeeId int    `json:"employeeId" gorm:"column:employeeId"`
+	UpdateBy   int    `json:"updateBy" gorm:"column:updateBy"`
 }
 
 type ReportByRoomId struct {
@@ -53,6 +54,7 @@ type ReportByRoomId struct {
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
 	RoomId           int    `json:"roomId" gorm:"column:roomId"`
+	SelectedDate     string `json:"selectedDate" gorm:"column:selectedDate"`
 }
 
 type ReportJoinEngage struct {

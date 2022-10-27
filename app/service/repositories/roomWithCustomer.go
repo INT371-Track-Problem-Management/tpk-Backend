@@ -76,12 +76,17 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]
 		r.roomNum as roomNum,
 		r.floors as floors,
 		r.description as description,
-		r.buildingId as buildingId
+		r.buildingId as buildingId,
+		c.fname as fname,
+        c.lname as lname
 	FROM
 		roomWithCustomer rwc
 	JOIN room r
 	ON
 		r.roomId = rwc.roomId
+	JOIN customer c
+    ON
+		rwc.customerId = c.customerId
 	WHERE
 		r.buildingId = %v
 		`, buildingId)
