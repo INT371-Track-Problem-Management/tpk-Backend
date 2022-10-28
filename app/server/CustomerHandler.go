@@ -162,6 +162,12 @@ func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
+	if len(*res) == 0 {
+		msg := map[string]int{
+			"room": 0,
+		}
+		return ctx.JSON(http.StatusNoContent, msg)
+	}
 	return ctx.JSON(http.StatusOK, res)
 }
 
