@@ -23,4 +23,5 @@ type EmployeeRegis struct {
 	Age         int    `json:"age" gorm:"column:age"`
 	DateOfBirth string `json:"dateOfBirth" gorm:"column:dateOfBirth"`
 	Position    string `json:"position" gorm:"column:position"`
+	CreateAt    string `json:"createAt" gorm:"column:createAt"`
 }

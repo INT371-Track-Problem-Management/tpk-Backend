@@ -20,7 +20,6 @@ func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
-	log.Println(req)
 	res, err := controller.ReportInsert(ctx, h.DB, *req)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
@@ -42,13 +41,8 @@ func (h *FuncHandler) ActivateCustomer(ctx echo.Context) error {
 }
 
 func (h *FuncHandler) GetReportByCreatedBy(ctx echo.Context) error {
-	req := new(request.ReportByCreatedBy)
-	err := ctx.Bind(&req)
-	if err != nil {
-		fmt.Println(err.Error())
-		return ctx.JSON(http.StatusBadRequest, err)
-	}
-	res, err := controller.GetReportByCreatedBy(ctx, h.DB, *req)
+	customerId := ctx.Param("customerId")
+	res, err := controller.GetReportByCreatedBy(ctx, h.DB, customerId)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ctx.JSON(http.StatusInternalServerError, err)
@@ -120,7 +114,7 @@ func (h *FuncHandler) SelectedPlanFixDate(ctx echo.Context) error {
 	}
 
 	res := map[string]string{
-		"massage": "success",
+		"message": "success",
 	}
 
 	return ctx.JSON(http.StatusOK, res)
@@ -139,7 +133,7 @@ func (h *FuncHandler) EndJobReport(ctx echo.Context) error {
 	}
 
 	res := map[string]string{
-		"massage": "success",
+		"message": "success",
 	}
 
 	return ctx.JSON(http.StatusOK, res)
@@ -154,4 +148,31 @@ func (h *FuncHandler) GetHistoryByCustomerId(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) GetRoomsByCustomerId(ctx echo.Context) error {
+	customerId := ctx.Param("customerId")
+	if customerId == "" {
+		msg := map[string]string{
+			"message": "Require param customerId",
+		}
+		return ctx.JSON(http.StatusBadRequest, msg)
+	}
+	res, err := controller.GetRoomWithCustomerId(ctx, h.DB, customerId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) ReportListForCustomer(ctx echo.Context) error {
+	customerId := ctx.Param("customerId")
+	reports, err := controller.ReportListForCustomer(ctx, h.DB, customerId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]interface{}{
+		"reports": reports,
+	}
+	return ctx.JSON(http.StatusOK, response)
 }

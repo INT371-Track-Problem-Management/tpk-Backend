@@ -13,6 +13,9 @@ func CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		jwt := authentication.DecodeJWT(c)
 		app := new(authentication.CheckCustomerApplication)
+		// token := authentication.GetTokenFromHeadler(c)
+		// statusToken := CheckStatusToken(token)
+
 		if jwt.Expire < float64(time.Now().Unix()) {
 			app.Id = jwt.Id
 			app.Token = "Token is expired"

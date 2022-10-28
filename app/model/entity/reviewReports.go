@@ -11,4 +11,5 @@ type EndJobReport struct {
 	ReportId    int    `json:"reportId" gorm:"column:reportId"`
 	Score       int    `json:"score" gorm:"column:score"`
 	DateOfIssue string `json:"dateOfIssue" gorm:"column:dateOfIssue"`
+	UpdateBy    int    `json:"updateBy" gorm:"column:updateBy"`
 }

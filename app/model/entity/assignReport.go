@@ -1,9 +1,9 @@
 package entity
 
 type AssignReport struct {
-	AssignId     int    `json:"assignId" gorm:"column:assignId"`
-	AssignDate   string `json:"assignDate" gorm:"column:assignDate"`
-	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
-	EmployeeId   int    `json:"employeeId" gorm:"column:employeeId"`
+	EngageId     int    `json:"engageId" gorm:"column:engageId"`
 	ReportId     int    `json:"reportId" gorm:"column:reportId"`
+	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
+	UpdateBy     int    `json:"updateBy" gorm:"column:updateBy"`
+	UpdateAt     string `json:"updateAt" gorm:"column:updateAt"`
 }

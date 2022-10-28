@@ -9,8 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func AddEmployeeInDorm(ctx echo.Context, conn *gorm.DB, req request.AddEmpInDorm) error {
-
+func AddEmployeeInBuilding(ctx echo.Context, conn *gorm.DB, req request.AddEmpInBuilding) error {
 	employee, err := repositories.EmployeeById(ctx, conn, req.EmployeeId)
 	if err != nil {
 		return err
@@ -20,5 +19,5 @@ func AddEmployeeInDorm(ctx echo.Context, conn *gorm.DB, req request.AddEmpInDorm
 		return errors.New("employee_is_not_owner_position")
 	}
 
-	return repositories.AddEmployeeInDorm(ctx, conn, req)
+	return repositories.AddEmployeeInBuilding(ctx, conn, req)
 }

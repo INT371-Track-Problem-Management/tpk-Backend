@@ -47,16 +47,18 @@ func RegisterOwnerService(ctx echo.Context, conn *gorm.DB, req RegisterOwner) (*
 	}
 	fmt.Println("Register email: " + regisUser.Email + " as a Employee")
 
+	timenow := getDatetime()
 	regis := entity.EmployeeRegis{
-		Email:       req.Email,
 		Fname:       req.Fname,
 		Lname:       req.Lname,
-		Sex:         req.Sex,
-		DateOfBirth: req.DateOfBirth,
-		Age:         req.Age,
 		Phone:       req.Phone,
 		Address:     req.Address,
+		Sex:         req.Sex,
+		Email:       req.Email,
+		Age:         req.Age,
+		DateOfBirth: req.DateOfBirth,
 		Position:    req.Position,
+		CreateAt:    timenow,
 	}
 
 	empId, err := RegisterOwnerRepo(ctx, conn, regis)

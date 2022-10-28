@@ -8,6 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func AddEmployeeInDorm(ctx echo.Context, conn *gorm.DB, req request.AddEmpInDorm) error {
-	return service.AddEmployeeInDorm(ctx, conn, req)
+func AddEmployeeInBuilding(ctx echo.Context, conn *gorm.DB, req request.AddEmpInBuilding) error {
+	return service.AddEmployeeInBuilding(ctx, conn, req)
 }

@@ -37,19 +37,16 @@ func GetReportEngageByReportId(ctx echo.Context, conn *gorm.DB, reportId int) (*
 	return &data, nil
 }
 
-func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, req request.ReportEngage) (*int, error) {
+func ReportEngageInsert(ctx echo.Context, conn *gorm.DB, model entity.InsertReportEngage) (*int, error) {
 	stmt := conn.Begin()
 	var err error
-	err = stmt.Exec(`
-	INSERT INTO reportEngage (date1, date2, date3, date4, reportId, dormId, updatedBy)
-	VALUES (?, ?, ?, ?, ?, ?, ?)
-	`, req.Date1, req.Date2, req.Date3, req.Date4, req.ReportId, req.DormId, req.UpdatedBy).Error
+	err = stmt.Table("reportEngage").Create(model).Error
 	if err != nil {
 		stmt.Rollback()
 		return nil, err
 	}
 	var id int
-	err = stmt.Table("reportEngage").Select("engageId").Where("reportId = ?", req.ReportId).Scan(&id).Error
+	err = stmt.Table("reportEngage").Select("engageId").Where("reportId = ?", model.ReportId).Scan(&id).Error
 	if err != nil {
 		stmt.Rollback()
 		return nil, err
@@ -63,23 +60,29 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*res
 	sql := fmt.Sprintf(
 		`
 		SELECT 
-			re.engageId,
-			re.date1,
-			re.date2,
-			re.date3,
-			re.date4,
-			re.selectedDate,
-			re.reportId,
-			r.title,
-			r.categoriesReport,
-			r.reportDes,
-			r.status,
-			r.successDate,
-			r.reportDate,
-			r.createdBy
+			re.engageId as engageId,
+			re.date1 as date1,
+			re.date2 as date2,
+			re.date3 as date3,
+			re.date4 as date4,
+			re.selectedDate as selectedDate,
+			re.reportId as reportId,
+			re.maintainerId as maintainerId,
+			r.title as title,
+			r.categoriesReport as categoriesReport,
+			r.reportDes as reportDes,
+			r.status as status,
+			ro.roomNum as roomNum,
+			ro.buildingId as buildingId,
+			r.createAt as createAt,
+			r.updateAt as updateAt,
+			r.updateBy as updateBy,
+			r.createBy as createBy
 		FROM reportEngage re 
 		JOIN reports r 
 		ON re.reportId = r.reportId 
+		JOIN room ro
+		ON r.roomId = ro.roomId
 		WHERE re.reportId = %v
 		`, reportId)
 
@@ -91,14 +94,14 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*res
 	return result, nil
 }
 
-func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req request.SelectedPlanFixDate) error {
+func SelectedDatePlanFix(ctx echo.Context, conn *gorm.DB, req entity.SelectedPlanFixDate) error {
 	stmt := conn.Begin()
 	err := stmt.Exec(
 		`
 		UPDATE reportEngage
-		SET selectedDate = ?
+		SET selectedDate = ?, updateBy = ?, updateAt = ?
 		WHERE engageId  = ?
-		`, req.SelectedDate, req.EngageId).Error
+		`, req.SelectedDate, req.UpdateBy, req.UpdateAt, req.EngageId).Error
 	if err != nil {
 		return err
 	}

@@ -13,9 +13,9 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req entity.EndJobReport) erro
 	sql1 := fmt.Sprintf(
 		`
 		UPDATE reports
-		SET status = 'S7'
+		SET status = 'S7', updateAt = '%v', updateBy = '%v'
 		WHERE reportId = %v
-		`, req.ReportId)
+		`, req.DateOfIssue, req.UpdateBy, req.ReportId)
 	err = conn.Exec(sql1).Error
 	if err != nil {
 		return err
@@ -28,18 +28,6 @@ func EndJobReport(ctx echo.Context, conn *gorm.DB, req entity.EndJobReport) erro
 	`, req.Des, req.ReportId, req.Score)
 
 	err = conn.Exec(sql2).Error
-	if err != nil {
-		return err
-	}
-
-	// err = stmt.Table("historyReport").Where("reportId = ?", req.ReportId).Update("dateOfIssue = ?", req.DateOfIssue).Error
-	sql3 := fmt.Sprintf(
-		`
-		UPDATE historyReport 
-		SET dateOfIssue = DATE('%v')
-		WHERE reportId = %v;
-	`, req.DateOfIssue, req.ReportId)
-	err = conn.Exec(sql3).Error
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,9 @@
 package service
 
 import (
+	"errors"
 	"fmt"
+	"tpk-backend/app/constants"
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
@@ -12,7 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
+func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportJoinEngage, error) {
 	report, err := repositories.Report(ctx, conn)
 	if err != nil {
 		return nil, err
@@ -21,7 +23,7 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 }
 
 func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.Report, error) {
-	data, err := repositories.ReportById(ctx, conn, req)
+	data, err := repositories.ReportById(ctx, conn, req.ReportId)
 	if err != nil {
 		return nil, err
 	}
@@ -30,16 +32,21 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 		Title:            data.Title,
 		CategoriesReport: data.CategoriesReport,
 		ReportDes:        data.ReportDes,
-		ReportDate:       data.ReportDate,
-		SuccessDate:      data.SuccessDate,
 		Status:           data.Status,
-		CreatedBy:        data.CreatedBy,
+		UpdateAt:         data.UpdateAt,
+		UpdateBy:         data.UpdateBy,
+		CreateAt:         data.CreateAt,
+		CreateBy:         data.CreateBy,
+		RoomId:           data.RoomId,
+		RoomNum:          data.RoomNum,
+		BuildingId:       data.BuildingId,
+		SelectedDate:     data.SelectedDate,
 	}
 	return res, nil
 }
 
-func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
-	res, err := repositories.ReportByCreatedBy(ctx, conn, req)
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.Report, error) {
+	res, err := repositories.ReportByCreatedBy(ctx, conn, customerId)
 	if err != nil {
 		return nil, err
 	}
@@ -53,53 +60,84 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		CategoriesReport: req.CategoriesReport,
 		ReportDes:        req.ReportDes,
 		Status:           req.Status,
-		ReportDate:       timenow,
-		CreatedBy:        req.CreatedBy,
+		CreateAt:         timenow,
+		CreateBy:         req.CreateBy,
+		UpdateAt:         timenow,
+		UpdateBy:         req.CreateBy,
+		RoomId:           req.RoomId,
 	}
 
-	reportid, err := repositories.ReportInsert(ctx, conn, data)
+	session := conn.Begin()
+	reportid, err := repositories.ReportInsert(ctx, session, data)
 	if err != nil {
 		return nil, err
 	}
 
-	roomProfile, err := repositories.GetRoomWithCustomerByCustomerId(ctx, conn, req.CreatedBy)
+	status := request.ReportStatus{
+		ReportId:  *reportid,
+		Status:    req.Status,
+		UpdateAt:  timenow,
+		UpdateBy:  req.CreateBy,
+		CreatedAt: timenow,
+	}
+
+	err = repositories.ReportStatus(ctx, session, status)
 	if err != nil {
 		return nil, err
 	}
 
-	history := entity.CreateHistoryReport{
-		ReportId:   *reportid,
-		ReportDate: timenow,
-		RoomId:     roomProfile.RoomId,
-		CustomerId: req.CreatedBy,
-		DormId:     roomProfile.DormId,
-	}
+	session.Commit()
 
-	err = repositories.CreatedHistoryReport(ctx, conn, history)
+	customer, err := repositories.GetCustomerById(ctx, conn, req.CreateBy)
 	if err != nil {
 		return nil, err
 	}
-
-	// cus, err := repositories.GetCustomerById(ctx, conn, req.CreatedBy)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// if cus.Email != "" {
-	// 	rps := config.LoadReportSend()
-	// 	pkg.SSLemail(&cus.Email, rps.Subject, rps.Body)
-	// }
-	// fmt.Printf("customerId %v is not have email", req.CreatedBy)
+	err = pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, "ส่งการรายงาน")
+	if err != nil {
+		return nil, err
+	}
 
 	return reportid, nil
 }
 
-func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) (string, error) {
-	err := repositories.ReportChangeStatus(ctx, conn, req)
-	if err != nil {
-		return "Can not update", err
+func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req request.ReportChangeStatus) error {
+	timenow := pkg.GetDatetime()
+	status := request.ReportStatus{
+		ReportId:  req.ReportId,
+		Status:    req.Status,
+		UpdateAt:  timenow,
+		UpdateBy:  req.UpdateBy,
+		CreatedAt: timenow,
 	}
-	return "Update success", nil
+	insert := entity.ReportChangeStatus{
+		ReportId: req.ReportId,
+		Status:   req.Status,
+		UpdateAt: timenow,
+		UpdateBy: req.UpdateBy,
+	}
+	session := conn.Begin()
+	err := repositories.ReportChangeStatus(ctx, session, insert)
+	if err != nil {
+		return err
+	}
+	err = repositories.ReportStatus(ctx, session, status)
+	if err != nil {
+		return err
+	}
+	session.Commit()
+
+	report, err := repositories.ReportById(ctx, conn, req.ReportId)
+	if err != nil {
+		return err
+	}
+
+	email := repositories.GetemailByCustomerId(ctx, conn, report.CreateBy)
+	err = pkg.UpdateStatus(*email, report.ReportId, report.Title, report.Status)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error {
@@ -111,10 +149,47 @@ func DeleteReportById(ctx echo.Context, conn *gorm.DB, req request.Report) error
 	return nil
 }
 
-func ReportByDormId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Report, error) {
-	res, err := repositories.ReportByDormId(ctx, conn, dormId)
+func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
+	year, err := repositories.YearConfig(ctx, conn)
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	return year, nil
+}
+
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.ReportJoinEngage, error) {
+	reports, err := repositories.ReportByRoomId(ctx, conn, roomId)
+	if err != nil {
+		return nil, err
+	}
+	return reports, nil
+}
+
+func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*[]response.ReportStatus, error) {
+	var list []response.ReportStatus
+	status, err := repositories.ReportStatusByReportId(ctx, conn, reportId)
+	if err != nil {
+		return nil, err
+	}
+	if len(*status) == 0 {
+		return nil, errors.New("status not found")
+	}
+	for _, v := range *status {
+		report := response.ReportStatus{
+			StatusId:  v.StatusId,
+			ReportId:  v.ReportId,
+			Status:    v.Status,
+			CreatedAt: v.CreatedAt,
+		}
+		list = append(list, report)
+	}
+	return &list, nil
+}
+
+func ReportListForCustomer(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.ReportJoinEngage, error) {
+	reports, err := repositories.ReportListForCustomer(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	return reports, nil
 }

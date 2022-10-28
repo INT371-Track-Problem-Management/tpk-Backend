@@ -4,6 +4,7 @@ import (
 	entity "tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
+	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
@@ -37,7 +38,19 @@ func CustomerViewProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerPr
 }
 
 func CustomerEditProfile(ctx echo.Context, conn *gorm.DB, req request.CustomerEditProfile, email string) error {
-	err := repositories.CustomerEditProfile(ctx, conn, req, email)
+	timenow := pkg.GetDatetime()
+	model := entity.CustomerEditProfile{
+		Fname:       req.Fname,
+		Lname:       req.Lname,
+		Sex:         req.Sex,
+		DateOfBirth: req.DateOfBirth,
+		Age:         req.Age,
+		Phone:       req.Phone,
+		Address:     req.Address,
+		UpdateAt:    timenow,
+		UpdateBy:    req.UpdateBy,
+	}
+	err := repositories.CustomerEditProfile(ctx, conn, model, email)
 	if err != nil {
 		return err
 	}

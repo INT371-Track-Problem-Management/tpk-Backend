@@ -7,6 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
+func ListEmployee(ctx echo.Context, conn *gorm.DB) (*[]entity.Employee, error) {
+	var emp []entity.Employee
+	err := conn.Table("employee").Find(&emp).Error
+	if err != nil {
+		return nil, err
+	}
+	return &emp, nil
+}
+
 func EmployeeByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Employee, error) {
 	var emp entity.Employee
 	err := conn.Table("employee").Where("email = ?", email).Find(&emp).Error
