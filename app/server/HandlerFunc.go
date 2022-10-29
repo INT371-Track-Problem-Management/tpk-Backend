@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"tpk-backend/app/authentication"
+	fileApp "tpk-backend/app/fileApp"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/pkg"
 	"tpk-backend/app/service/controller"
@@ -245,6 +246,21 @@ func (h *FuncHandler) ReportChangeStatus(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	err = controller.ReportChangeStatus(ctx, h.DB, *req)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) PictureTest(ctx echo.Context) error {
+	file, handler, err := ctx.Request().FormFile("image")
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	err = fileApp.UploadFile(h.ctx, h.storage, file, handler, h.client)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

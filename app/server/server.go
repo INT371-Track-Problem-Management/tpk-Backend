@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,8 @@ import (
 	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/validator"
 
+	firestore "cloud.google.com/go/firestore"
+	cloud "cloud.google.com/go/storage"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
@@ -22,7 +25,9 @@ func StartServer() {
 	fmt.Println("PROJECT RUN ON PORT: " + port)
 	e := echo.New()
 	h := FuncHandler{}
-	h.Initialize()
+	h.InitContext()
+	h.InitDatabase()
+	h.InitFile()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*", "localhost"},
@@ -42,6 +47,7 @@ func StartServer() {
 	api.POST("registerOwner", h.RegisterOwner)       // Register owner
 	api.GET("yearConfig", h.YearConfig)              // Get all year between 1901 - 2022
 	api.GET("testemail", h.TestSMTP2)
+	api.POST("picturetest", h.PictureTest)
 
 	// Both but need TOKEN
 	service := api.Group("service/")
@@ -62,7 +68,7 @@ func StartServer() {
 	cus.GET("viewCustomerProfile/*", h.GetCustomerProgfile, validator.CustomerValidation)                      // View profile customer by email
 	cus.PUT("editProfile/*", h.CustomerEditProfile, validator.CustomerValidation)                              // Edit customer profile
 	cus.GET("getReportEngageWithReport/*", h.FetchReportEngageJoinReport, validator.CustomerValidation)        // Seach reportEngage join with reports whare by customerId
-	cus.PUT("statusReport", h.ReportChangeStatus, validator.CustomerValidation)        						// Update status Report
+	cus.PUT("statusReport", h.ReportChangeStatus, validator.CustomerValidation)                                // Update status Report
 	cus.PUT("selectedPlanFixDate", h.SelectedPlanFixDate, validator.CustomerValidation)                        // customer selecting plan fix date
 	cus.POST("endJobReview", h.EndJobReport, validator.CustomerValidation)                                     // end job report and review
 	cus.GET("historyReport/list/*", h.GetHistoryByCustomerId, validator.CustomerValidation)                    // Search all history by customerId
@@ -145,5 +151,8 @@ func SetEnv(key string) string {
 }
 
 type FuncHandler struct {
-	DB *gorm.DB
+	DB      *gorm.DB
+	ctx     context.Context
+	storage *cloud.Client
+	client  *firestore.Client
 }

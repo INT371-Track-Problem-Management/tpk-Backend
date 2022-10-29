@@ -30,6 +30,11 @@ type Jwt struct {
 	Secret string
 }
 
+type FileConfig struct {
+	Bucket string
+	URL    string
+}
+
 type API_KEY_MAILER struct {
 	API string
 }
@@ -44,11 +49,10 @@ func LoadDB() *Database {
 	return &Database{
 		Username: GetEnv("USER", "localhostDev"),
 		Password: GetEnv("PASSWORD", "P@ssw0rd2"),
-		Host:     GetEnv("HOST", "database-rungmod.sit.kmutt.ac.th"),
-		Port:     GetEnv("PORT", "55013"),
-		// Host: GetEnv("HOST", "10.4.56.39"),
-		// Port: GetEnv("PORT", "3306"),
-		// Database: GetEnv("DATABASE", "project"),
+		// Host:     GetEnv("HOST", "database-rungmod.sit.kmutt.ac.th"),
+		// Port:     GetEnv("PORT", "55013"),
+		Host:     GetEnv("HOST", "10.4.56.39"),
+		Port:     GetEnv("PORT", "3306"),
 		Database: GetEnv("DATABASE", "rungmodDev"),
 	}
 }
@@ -85,6 +89,13 @@ func LoadRegisCustomerSend() *ReportSend {
 func LoadJWTConfig() *Jwt {
 	return &Jwt{
 		Secret: GetEnv("SECRET", "abcdefghijkmn"),
+	}
+}
+
+func LoadFileConfig() *FileConfig {
+	return &FileConfig{
+		Bucket: GetEnv("BUCKET", "rungmod-senior-project.appspot.com"),
+		URL:    GetEnv("URL", "https://storage.cloud.google.com"),
 	}
 }
 
