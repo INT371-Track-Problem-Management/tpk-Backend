@@ -1,11 +1,13 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"tpk-backend/app/authentication"
+	fileApp "tpk-backend/app/fileApp"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/controller"
 
@@ -16,13 +18,35 @@ import (
 
 func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
 	req := new(request.ReportInsert)
-	err := ctx.Bind(&req)
-	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
+	// err := ctx.Bind(&req)
+	// if err != nil {
+	// 	return ctx.JSON(http.StatusBadRequest, err)
+	// }
+
+	data := ctx.FormValue("data")
+	if err := json.Unmarshal([]byte(data), &req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	res, err := controller.ReportInsert(ctx, h.DB, *req)
+
+	if err := ctx.Request().ParseForm(); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+
+	file, handler, err := ctx.Request().FormFile("image")
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	filename, err := fileApp.UploadFile(h.ctx, h.storage, file, handler, h.client)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+
+	reportid, err := controller.ReportInsert(ctx, h.DB, *req, *filename)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	res := map[string]int{
+		"reportId": *reportid,
 	}
 	return ctx.JSON(http.StatusOK, res)
 }

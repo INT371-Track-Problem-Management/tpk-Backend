@@ -8,11 +8,14 @@ import (
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/model/response"
 	"tpk-backend/app/pkg"
+	"tpk-backend/app/pkg/config"
 	"tpk-backend/app/service/repositories"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
+
+var fileConfig = config.LoadFileConfig()
 
 func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportJoinEngage, error) {
 	report, err := repositories.Report(ctx, conn)
@@ -53,7 +56,7 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]e
 	return res, nil
 }
 
-func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*int, error) {
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert, filename string) (*int, error) {
 	timenow := pkg.GetDatetime()
 	data := entity.ReportInsert{
 		Title:            req.Title,
@@ -86,12 +89,26 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*i
 		return nil, err
 	}
 
+	media := entity.ReportMediaInsert{
+		ReportId: *reportid,
+		Name:     filename,
+		Url:      fileConfig.URL + "/" + fileConfig.Bucket + "/" + filename,
+		CreateAt: timenow,
+		UpdateAt: timenow,
+	}
+
+	err = repositories.UploadFile(ctx, session, media)
+	if err != nil {
+		return nil, err
+	}
+
 	session.Commit()
 
 	customer, err := repositories.GetCustomerById(ctx, conn, req.CreateBy)
 	if err != nil {
 		return nil, err
 	}
+
 	err = pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, "ส่งการรายงาน")
 	if err != nil {
 		return nil, err

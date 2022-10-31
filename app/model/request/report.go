@@ -17,13 +17,13 @@ type ReportInsert struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
-	RoomId         	 int    `json:"roomId" gorm:"column:roomId"`
+	RoomId           int    `json:"roomId" gorm:"column:roomId"`
 }
 
 type ReportChangeStatus struct {
-	ReportId   int    `json:"reportId" gorm:"column:reportId"`
-	Status     string `json:"status" gorm:"column:status"`
-	UpdateBy   int    `json:"updateBy" gorm:"column:updateBy"`
+	ReportId int    `json:"reportId" gorm:"column:reportId"`
+	Status   string `json:"status" gorm:"column:status"`
+	UpdateBy int    `json:"updateBy" gorm:"column:updateBy"`
 }
 
 type EndReport struct {

@@ -34,8 +34,8 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*response.
 	return res, nil
 }
 
-func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert) (*int, error) {
-	res, err := service.ReportInsert(ctx, conn, req)
+func ReportInsert(ctx echo.Context, conn *gorm.DB, req request.ReportInsert, filename string) (*int, error) {
+	res, err := service.ReportInsert(ctx, conn, req, filename)
 	if err != nil {
 		return nil, err
 	}

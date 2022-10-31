@@ -13,7 +13,7 @@ import (
 
 var fileConfig = config.LoadFileConfig()
 
-func UploadFile(context context.Context, storage *cloud.Client, file multipart.File, handler *multipart.FileHeader, client *firestore.Client) error {
+func UploadFile(context context.Context, storage *cloud.Client, file multipart.File, handler *multipart.FileHeader, client *firestore.Client) (*string, error) {
 	defer file.Close()
 
 	imagePath := handler.Filename
@@ -21,19 +21,19 @@ func UploadFile(context context.Context, storage *cloud.Client, file multipart.F
 	wc := storage.Bucket(fileConfig.Bucket).Object(imagePath).NewWriter(context)
 	_, err := io.Copy(wc, file)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := wc.Close(); err != nil {
-		return err
+		return nil, err
 	}
 
 	err = CreateImageUrl(imagePath, context, client)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &imagePath, nil
 }
 
 func CreateImageUrl(imagePath string, ctx context.Context, client *firestore.Client) error {
