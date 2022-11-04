@@ -1,7 +1,7 @@
 package service
 
-func (t serviceTPK) CheckHealthy() (*string, error) {
-	healthy, err := t.repo.CheckHealthy()
+func (s serviceTPK) CheckHealthy() (*string, error) {
+	healthy, err := s.repo.CheckHealthy()
 	if err != nil {
 		return nil, err
 	}
