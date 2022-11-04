@@ -34,6 +34,9 @@ func StartServer() {
 
 	api := e.Group("/api/")
 	api.GET("checkHealthy", controller.CheckHealthy)
+	api.POST("login", controller.Login)
+	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
+	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
 
 	// service := api.Group("service/")
 

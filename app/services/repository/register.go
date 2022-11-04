@@ -29,7 +29,7 @@ func (r mysqlRepository) RegisterCustomersRepo(req request.CustomerRegis) (*int,
 	return &cusid, nil
 }
 
-func (r mysqlRepository) RegisterEmployeeRepo(req re.EmployeeRegis) (*int, error) {
+func (r mysqlRepository) RegisterEmployeeRepo(req model.EmployeeRegis) (*int, error) {
 	stmt := r.conn.Begin()
 	err := stmt.Table("employee").Create(&req).Error
 	if err != nil {
