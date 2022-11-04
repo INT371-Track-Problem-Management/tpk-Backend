@@ -2,16 +2,16 @@ package repositories
 
 import (
 	"fmt"
-	"log"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/model/response"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
-	var report []entity.Report
+func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.ReportJoinEngage, error) {
+	var report []entity.ReportJoinEngage
 	sql :=
 		`
 	SELECT 
@@ -20,14 +20,28 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
+	ORDER BY 
+		r.updateAt DESC
 	`
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
@@ -36,25 +50,37 @@ func Report(ctx echo.Context, conn *gorm.DB) (*[]entity.Report, error) {
 	return &report, nil
 }
 
-func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCreatedBy) (*[]entity.Report, error) {
+func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.Report, error) {
 	var report []entity.Report
-	sql := fmt.Sprintf(`	
+	sql := fmt.Sprintf(`
 	SELECT 
 		r.reportId as reportId,
 		r.title as title,
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
 	WHERE 
-		r.createBy = %v`, req.CreatedBy)
+		r.createBy = %v`, customerId)
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
@@ -62,7 +88,7 @@ func ReportByCreatedBy(ctx echo.Context, conn *gorm.DB, req request.ReportByCrea
 	return &report, nil
 }
 
-func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Report, error) {
+func ReportById(ctx echo.Context, conn *gorm.DB, reportId int) (*entity.Report, error) {
 	var report entity.Report
 	sql := fmt.Sprintf(`	
 	SELECT 
@@ -71,16 +97,28 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 		r.categoriesReport as categoriesReport ,
 		r.reportDes as reportDes ,
 		sm.status as status,
+		r2.roomNum  as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
 		r.updateAt as updateAt ,
 		r.createAt as createAt ,
 		r.createBy as createBy
 	FROM 
-		reports r 
-	JOIN
+		reports r
+	LEFT JOIN
 		statusMaster sm 
-	ON r.status = sm.statusMasterId
+	ON 
+		r.status = sm.statusMasterId
+	LEFT JOIN
+		room r2 
+	ON 
+		r.roomId  = r2.roomId
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
 	WHERE 
-		r.reportId = %v`, req.ReportId)
+		r.reportId = %v`, reportId)
 	err := conn.Raw(sql).Scan(&report).Error
 	if err != nil {
 		return nil, err
@@ -89,7 +127,6 @@ func ReportById(ctx echo.Context, conn *gorm.DB, req request.Report) (*entity.Re
 }
 
 func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*int, error) {
-	log.Println(req)
 	var err error
 	err = conn.Table("reports").Create(&req).Error
 	if err != nil {
@@ -106,7 +143,7 @@ func ReportInsert(ctx echo.Context, conn *gorm.DB, req entity.ReportInsert) (*in
 }
 
 func ReportChangeStatus(ctx echo.Context, conn *gorm.DB, req entity.ReportChangeStatus) error {
-	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.EmployeeId, req.UpdateAt, req.ReportId).Error
+	err := conn.Exec("UPDATE reports SET status = ?, updateBy = ?, updateAt = ? WHERE reportId = ?", req.Status, req.UpdateBy, req.UpdateAt, req.ReportId).Error
 	if err != nil {
 		return err
 	}
@@ -165,4 +202,120 @@ func ReportStatus(ctx echo.Context, conn *gorm.DB, status request.ReportStatus) 
 		return err
 	}
 	return nil
+}
+
+func YearConfig(ctx echo.Context, conn *gorm.DB) (*response.Year, error) {
+	var year response.Year
+	err := conn.Table("yearConfig").Order("year desc").Select("year").Scan(&year.Year).Error
+	if err != nil {
+		return nil, err
+	}
+	return &year, nil
+}
+
+func ReportByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*[]entity.ReportJoinEngage, error) {
+	var report []entity.ReportJoinEngage
+	sql := fmt.Sprintf(
+		`
+	SELECT 
+		r.reportId as reportId,
+		r.title as title,
+		r.categoriesReport as categoriesReport,
+		r.reportDes as reportDes,
+		sm.status as status,
+		r2.roomNum as roomNum,
+		r2.buildingId as buildingId,
+		re.selectedDate as selectedDate,
+		r.updateAt as updateAt,
+		r.updateBy as updateBy,
+		r.createAt as createAt,
+		r.createBy as createBy
+	FROM
+		reports r
+	LEFT JOIN
+		statusMaster sm 
+	ON
+		r.status = sm.statusMasterId 
+	LEFT JOIN
+		reportEngage re
+	ON
+		r.reportId  = re.reportId 
+	LEFT JOIN
+		room r2
+	ON
+		r.roomId = r2.roomId 
+	WHERE 
+		r.roomId = %v
+	`, roomId)
+	err := conn.Raw(sql).Scan(&report).Error
+	if err != nil {
+		return nil, err
+	}
+	return &report, nil
+}
+
+func ReportStatusByReportId(ctx echo.Context, conn *gorm.DB, reportId string) (*[]entity.ReportStatus, error) {
+	var status []entity.ReportStatus
+	sql := fmt.Sprintf(`
+		SELECT 
+			rs.statusId,
+			rs.reportId,
+			sm.status,
+			rs.createAt
+		FROM
+			reportStatus rs
+		LEFT JOIN
+			statusMaster sm 
+		ON
+			rs.status = sm.statusMasterId 
+		WHERE
+			rs.reportId = %v
+		ORDER BY
+			rs.createAt DESC;
+	`, reportId)
+	err := conn.Raw(sql).Scan(&status).Error
+	if err != nil {
+		return nil, err
+	}
+	return &status, nil
+}
+
+func ReportListForCustomer(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.ReportJoinEngage, error) {
+	var reports []entity.ReportJoinEngage
+	sql := fmt.Sprintf(`
+		SELECT 
+			r.reportId as reportId,
+			r.title as title,
+			r.categoriesReport as categoriesReport,
+			r.reportDes as reportDes,
+			sm.status as status,
+			r2.roomNum as roomNum,
+			r2.buildingId as buildingId,
+			re.selectedDate as selectedDate,
+			r.updateAt as updateAt,
+			r.updateBy as updateBy,
+			r.createAt as createAt,
+			r.createBy as createBy
+		FROM
+			reports r
+		LEFT JOIN
+			statusMaster sm 
+		ON
+			r.status = sm.statusMasterId 
+		LEFT JOIN
+			reportEngage re
+		ON
+			r.reportId  = re.reportId 
+		LEFT JOIN
+			room r2
+		ON
+			r.roomId = r2.roomId 
+		WHERE
+			r.createBy = %v;
+	`, customerId)
+	err := conn.Raw(sql).Scan(&reports).Error
+	if err != nil {
+		return nil, err
+	}
+	return &reports, nil
 }

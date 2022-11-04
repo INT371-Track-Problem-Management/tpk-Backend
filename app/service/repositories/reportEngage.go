@@ -60,24 +60,29 @@ func ReportEngageJoinReport(ctx echo.Context, conn *gorm.DB, reportId int) (*res
 	sql := fmt.Sprintf(
 		`
 		SELECT 
-			re.engageId,
-			re.date1,
-			re.date2,
-			re.date3,
-			re.date4,
-			re.selectedDate,
-			re.reportId,
-			r.title,
-			r.categoriesReport,
-			r.reportDes,
-			r.status,
-			r.createAt,
-			r.updateAt,
-			r.updateBy,
-			r.createBy
+			re.engageId as engageId,
+			re.date1 as date1,
+			re.date2 as date2,
+			re.date3 as date3,
+			re.date4 as date4,
+			re.selectedDate as selectedDate,
+			re.reportId as reportId,
+			re.maintainerId as maintainerId,
+			r.title as title,
+			r.categoriesReport as categoriesReport,
+			r.reportDes as reportDes,
+			r.status as status,
+			ro.roomNum as roomNum,
+			ro.buildingId as buildingId,
+			r.createAt as createAt,
+			r.updateAt as updateAt,
+			r.updateBy as updateBy,
+			r.createBy as createBy
 		FROM reportEngage re 
 		JOIN reports r 
 		ON re.reportId = r.reportId 
+		JOIN room ro
+		ON r.roomId = ro.roomId
 		WHERE re.reportId = %v
 		`, reportId)
 

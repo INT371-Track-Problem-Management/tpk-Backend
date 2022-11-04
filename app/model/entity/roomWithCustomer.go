@@ -5,10 +5,10 @@ type RoomWithCustomer struct {
 	RoomId     int    `json:"roomId" gorm:"column:roomId"`
 	CustomerId int    `json:"customerId" gorm:"column:customerId"`
 	Status     string `json:"status" gorm:"column:status"`
-	DormId     int    `json:"dormId" gorm:"column:dormId"`
+	BuildingId int    `json:"buildingId" gorm:"column:buildingId"`
 }
 
-type RoomJoinDorm struct {
+type RoomJoinBulding struct {
 	Id          int    `json:"id" gorm:"column:id"`
 	RoomId      int    `json:"roomId" gorm:"column:roomId"`
 	CustomerId  int    `json:"customerId" gorm:"column:customerId"`
@@ -20,6 +20,8 @@ type RoomJoinDorm struct {
 	Floors      int    `json:"floors" gorm:"column:floors"`
 	Description string `json:"description" gorm:"column:description"`
 	BuildingId  int    `json:"buildingId" gorm:"column:buildingId"`
+	Fname		string `json:"fname" gorm:"column:fname"`
+	Lname		string `json:"lname" gorm:"column:lname"`
 }
 
 type RoomAddCustomer struct {
@@ -37,4 +39,12 @@ type RoomRemoveCustomer struct {
 	Status   string `json:"status" gorm:"column:status"`
 	UpdateAt string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy int    `json:"updateBy" gorm:"column:updateBy"`
+}
+
+type RoomWithCustomerId struct {
+	RoomId     int    `json:"roomId" gorm:"column:roomId"`
+	RoomNum    string `json:"roomNum" gorm:"column:roomNum"`
+	BuildingId int    `json:"buildingId" gorm:"column:buildingId"`
+	Floors     int    `json:"floors" gorm:"column:floors"`
+	Status     string `json:"status" gorm:"column:status"`
 }

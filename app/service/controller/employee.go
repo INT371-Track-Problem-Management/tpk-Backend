@@ -16,3 +16,11 @@ func EmployeeById(ctx echo.Context, conn *gorm.DB, id int64) (*entity.Employee, 
 	}
 	return emp, nil
 }
+
+func ListEmployee(ctx echo.Context, conn *gorm.DB) (*[]entity.Employee, error) {
+	employees, err := service.ListEmployee(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+	return employees, nil
+}

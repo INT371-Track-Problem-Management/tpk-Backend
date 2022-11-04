@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"errors"
+	"tpk-backend/app/authentication"
+	"tpk-backend/app/constants"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/service"
 
@@ -14,4 +17,38 @@ func ChangeEmail(ctx echo.Context, conn *gorm.DB, req request.ChangeEmail, oldEm
 		return err
 	}
 	return nil
+}
+
+func ChangePassword(ctx echo.Context, conn *gorm.DB, req request.ChangePassword) error {
+	var err error
+	user := request.User{
+		Email:    req.Email,
+		Password: req.OldPassword,
+	}
+	getUser, err := authentication.GetUser(conn, user.Email)
+	if err != nil {
+		return err
+	}
+	check := authentication.ComparePassword(req.OldPassword, getUser.Password)
+	if check == constants.CHECK_FALSE {
+		return errors.New("password is not correct")
+	}
+	encryp, err := authentication.GenerateTokenFromPassword(req.NewPassword)
+	if err != nil {
+		return err
+	}
+	req.NewPassword = *encryp
+	err = service.ChangePassword(ctx, conn, req)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetProfileByEmail(ctx echo.Context, conn *gorm.DB, email string) (interface{}, error) {
+	profile, err := service.GetProfileByEmail(ctx, conn, email)
+	if err != nil {
+		return nil, err
+	}
+	return profile, nil
 }

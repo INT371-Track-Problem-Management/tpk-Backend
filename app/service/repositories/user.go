@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 
@@ -26,4 +27,104 @@ func ChangeEmail(ctx echo.Context, conn *gorm.DB, req request.ChangeEmail, oldEm
 	}
 	stmt.Commit()
 	return nil
+}
+
+func ChangePassword(ctx echo.Context, conn *gorm.DB, model entity.ChangePassword) error {
+	var err error
+	sql := fmt.Sprintf(`
+		UPDATE userApp
+		SET password = '%v'
+		WHERE email = '%v'
+	`,
+		model.NewPassword,
+		model.Email)
+	fmt.Println(sql)
+	stmt := conn.Begin()
+	err = stmt.Exec(sql).Error
+	if err != nil {
+		stmt.Rollback()
+		return err
+	}
+	stmt.Commit()
+	return nil
+}
+
+func GetProfileEmpByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Employee, error) {
+	var emp entity.Employee
+	err := conn.Table("employee").Where("email = ?", email).Scan(&emp).Error
+	if err != nil {
+		return nil, err
+	}
+	return &emp, nil
+}
+
+func GetemailByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) *string {
+	var email string
+	sql := fmt.Sprintf(
+		`
+		SELECT 
+			userApp.email
+		FROM 
+			userApp
+		left join
+			customer
+		on
+			customer.email = userApp.email
+		WHERE 
+		customer.customerId = %v
+		`, customerId)
+	err := conn.Raw(sql).Scan(&email).Error
+	if err != nil {
+		return nil
+	}
+	return &email
+}
+
+func GetemailByEmployeeId(ctx echo.Context, conn *gorm.DB, employeeId int) *string {
+	var email string
+	sql := fmt.Sprintf(
+		`
+		SELECT 
+			userApp.email
+		FROM 
+			userApp
+		left join
+			employee
+		on
+			employee.email = userApp.email
+		WHERE 
+			employee.employeeId = %v
+		`, employeeId)
+	err := conn.Raw(sql).Scan(&email).Error
+	if err != nil {
+		return nil
+	}
+	return &email
+}
+
+func GetProfileCustomerByEmail(ctx echo.Context, conn *gorm.DB, email string) (*entity.Customer, error) {
+	var cus entity.Customer
+	err := conn.Table("customer").Where("email = ?", email).Scan(&cus).Error
+	if err != nil {
+		return nil, err
+	}
+	return &cus, nil
+}
+
+func GetProfileEmpById(ctx echo.Context, conn *gorm.DB, customerId string) (*entity.Employee, error) {
+	var emp entity.Employee
+	err := conn.Table("employee").Where("customerId = ?", customerId).Scan(&emp).Error
+	if err != nil {
+		return nil, err
+	}
+	return &emp, nil
+}
+
+func GetProfileCustomerId(ctx echo.Context, conn *gorm.DB, employeeId string) (*entity.Customer, error) {
+	var cus entity.Customer
+	err := conn.Table("customer").Where("employeeId = ?", employeeId).Scan(&cus).Error
+	if err != nil {
+		return nil, err
+	}
+	return &cus, nil
 }

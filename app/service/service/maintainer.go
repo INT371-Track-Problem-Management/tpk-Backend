@@ -26,3 +26,19 @@ func AddMaintainer(ctx echo.Context, conn *gorm.DB, req request.Maintainer) (*in
 	}
 	return id, nil
 }
+
+func Maintainerlist(ctx echo.Context, conn *gorm.DB) ([]*entity.Maintainer, error) {
+	maintainers, err := repositories.Maintainerlist(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+	return maintainers, nil
+}
+
+func MaintainerById(ctx echo.Context, conn *gorm.DB, maintainerId string) (*entity.Maintainer, error) {
+	maintainer, err := repositories.MaintainerById(ctx, conn, maintainerId)
+	if err != nil {
+		return nil, err
+	}
+	return maintainer, nil
+}

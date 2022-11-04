@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
 	"tpk-backend/app/service/service"
 
@@ -14,4 +15,20 @@ func AddMaintainer(ctx echo.Context, conn *gorm.DB, req request.Maintainer) (*in
 		return nil, err
 	}
 	return id, nil
+}
+
+func Maintainerlist(ctx echo.Context, conn *gorm.DB) ([]*entity.Maintainer, error) {
+	maintainers, err := service.Maintainerlist(ctx, conn)
+	if err != nil {
+		return nil, err
+	}
+	return maintainers, nil
+}
+
+func MaintainerById(ctx echo.Context, conn *gorm.DB, maintainerId string) (*entity.Maintainer, error) {
+	maintainer, err := service.MaintainerById(ctx, conn, maintainerId)
+	if err != nil {
+		return nil, err
+	}
+	return maintainer, nil
 }

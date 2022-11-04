@@ -3,6 +3,7 @@ package controller
 import (
 	"tpk-backend/app/model/entity"
 	"tpk-backend/app/model/request"
+	"tpk-backend/app/model/response"
 	"tpk-backend/app/service/service"
 
 	"github.com/labstack/echo/v4"
@@ -25,15 +26,15 @@ func RoomsStatus(ctx echo.Context, conn *gorm.DB, req request.RoomsStatus) (stri
 	return res, nil
 }
 
-func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) (*string, error) {
-	res, err := service.RoomInsert(ctx, conn, req)
+func RoomInsert(ctx echo.Context, conn *gorm.DB, req request.RoomInsert) error {
+	err := service.RoomInsert(ctx, conn, req)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &res, nil
+	return nil
 }
 
-func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, dormId string) (*[]entity.Room, error) {
+func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, dormId string) (*response.RoomByBuildingId, error) {
 	res, err := service.RoomByBuildingId(ctx, conn, dormId)
 	if err != nil {
 		return nil, err

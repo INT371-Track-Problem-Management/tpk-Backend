@@ -29,16 +29,25 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, req request.RoomAddCustome
 }
 
 func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
-	err := repositories.RoomRemoveCustomer(ctx, conn, id)
+	now := pkg.GetDatetime()
+	err := repositories.RoomRemoveCustomer(ctx, conn, id, now)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomJoinDorm, error) {
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, dormId int) ([]*entity.RoomJoinBulding, error) {
 	res, err := repositories.GetAllRoomWithCustomer(ctx, conn, dormId)
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetRoomWithCustomerId(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.RoomWithCustomerId, error) {
+	rooms, err := repositories.GetRoomWithCustomerId(ctx, conn, customerId)
+	if err != nil {
+		return nil, err
+	}
+	return rooms, nil
 }

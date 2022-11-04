@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	entity "tpk-backend/app/model/entity"
 
 	"github.com/labstack/echo/v4"
@@ -39,6 +40,35 @@ func RoomByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string) (*[]en
 		return nil, err
 	}
 	return &room, nil
+}
+
+func TotalFlooorsByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string) (*int, error) {
+	var floors int
+	sql := fmt.Sprintf(`
+		SELECT MAX(r.floors)
+		FROM room r 
+		WHERE r.buildingId = %v;
+	`, buildingId)
+	err := conn.Raw(sql).Scan(&floors).Error
+	if err != nil {
+		return nil, err
+	}
+	return &floors, nil
+}
+
+func RoomInFloorByBuildingId(ctx echo.Context, conn *gorm.DB, buildingId string, floor int) (*[]entity.RoomByFloors, error) {
+	var rooms []entity.RoomByFloors
+	sql := fmt.Sprintf(`
+		SELECT r.*
+		FROM room r 
+		WHERE r.buildingId = %v
+		AND r.floors = %v;
+	`, buildingId, floor)
+	err := conn.Raw(sql).Scan(&rooms).Error
+	if err != nil {
+		return nil, err
+	}
+	return &rooms, nil
 }
 
 func RoomByRoomId(ctx echo.Context, conn *gorm.DB, roomId string) (*entity.Room, error) {

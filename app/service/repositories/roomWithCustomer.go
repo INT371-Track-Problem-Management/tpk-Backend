@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
 	entity "tpk-backend/app/model/entity"
 
@@ -10,13 +11,20 @@ import (
 
 func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, model entity.RoomAddCustomer) error {
 	var err error
+	roomId := fmt.Sprintf(`%v`, model.RoomId)
+	checkStatus, err := RoomByRoomId(ctx, conn, roomId)
+	if err != nil {
+		return err
+	}
+	if checkStatus.Status == "A" {
+		return errors.New("room taken")
+	}
 	stmt := conn.Begin()
 	err = stmt.Table("roomWithCustomer").Create(&model).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
 	}
-
 	err = stmt.Exec("UPDATE room SET status = ?, updateAt = ?, updateBy = ? WHERE roomId = ?", "A", model.UpdateAt, model.UpdateBy, model.RoomId).Error
 	if err != nil {
 		stmt.Rollback()
@@ -27,7 +35,7 @@ func RoomAddCustomer(ctx echo.Context, conn *gorm.DB, model entity.RoomAddCustom
 	return nil
 }
 
-func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
+func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int, now string) error {
 	var err error
 	var rwc entity.RoomWithCustomer
 	stmt := conn.Begin()
@@ -37,13 +45,13 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 		return err
 	}
 
-	err = stmt.Exec("UPDATE roomWithCustomer SET status = ? WHERE id = ?", "I", rwc.Id).Error
+	err = stmt.Exec("UPDATE roomWithCustomer SET status = ?, updateAt = ? WHERE id = ?", "I", now, rwc.Id).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
 	}
 
-	err = stmt.Exec("UPDATE room SET status = ? WHERE roomId = ?", "A", rwc.RoomId).Error
+	err = stmt.Exec("UPDATE room SET status = ?, updateAt = ? WHERE roomId = ?", "I", now, rwc.RoomId).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
@@ -53,8 +61,8 @@ func RoomRemoveCustomer(ctx echo.Context, conn *gorm.DB, id int) error {
 	return nil
 }
 
-func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]*entity.RoomJoinDorm, error) {
-	var result []*entity.RoomJoinDorm
+func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]*entity.RoomJoinBulding, error) {
+	var result []*entity.RoomJoinBulding
 
 	sql := fmt.Sprintf(`
 	SELECT
@@ -68,12 +76,17 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]
 		r.roomNum as roomNum,
 		r.floors as floors,
 		r.description as description,
-		r.buildingId as buildingId	
+		r.buildingId as buildingId,
+		c.fname as fname,
+        c.lname as lname
 	FROM
 		roomWithCustomer rwc
 	JOIN room r
 	ON
 		r.roomId = rwc.roomId
+	JOIN customer c
+    ON
+		rwc.customerId = c.customerId
 	WHERE
 		r.buildingId = %v
 		`, buildingId)
@@ -85,12 +98,23 @@ func GetAllRoomWithCustomer(ctx echo.Context, conn *gorm.DB, buildingId int) ([]
 	return result, nil
 }
 
-func GetRoomWithCustomerByCustomerId(ctx echo.Context, conn *gorm.DB, customerId int) (*entity.RoomWithCustomer, error) {
-	roomProfile := new(entity.RoomWithCustomer)
-
-	err := conn.Table("roomWithCustomer").Where("customerId = ?", customerId).Find(roomProfile).Error
+func GetRoomWithCustomerId(ctx echo.Context, conn *gorm.DB, customerId string) (*[]entity.RoomWithCustomerId, error) {
+	rooms := new([]entity.RoomWithCustomerId)
+	sql := fmt.Sprintf(`
+		SELECT 
+			rwc.roomId,
+			r.roomNum,
+			rwc.buildingId,
+			r.floors,
+			r.status 
+		FROM room r 
+		LEFT JOIN roomWithCustomer rwc
+		ON r.roomId = rwc.roomId
+		WHERE rwc.customerId = %v;
+	`, customerId)
+	err := conn.Raw(sql).Scan(rooms).Error
 	if err != nil {
 		return nil, err
 	}
-	return roomProfile, nil
+	return rooms, nil
 }

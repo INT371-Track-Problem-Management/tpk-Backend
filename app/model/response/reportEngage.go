@@ -15,6 +15,7 @@ type ReportEngage struct {
 	CreateAt     string `json:"createdAt" gorm:"column:createAt"`
 	UpdateAt     string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy     int    `json:"updateBy" gorm:"column:updateBy"`
+	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
 }
 
 type ReportEngageAll struct {
@@ -37,4 +38,7 @@ type ReportEngageJoinReport struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
+	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
+	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
+	MaintainerId 	 int    `json:"maintainerId" gorm:"column:maintainerId"`
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
+func AdminValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 		jwt := authentication.DecodeJWT(c)
@@ -27,22 +27,21 @@ func EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusBadRequest, res)
 		}
-		if jwt.Role == "E" || jwt.Role == "A" || jwt.Status == false {
+		if jwt.Role != "A" || jwt.Status == false {
 			app.Id = jwt.Id
-			app.Id = jwt.Id
-			app.Token = "Token can use"
-			app.Status = true
-			return ctx(c)
+			app.Token = "Token can't use"
+			app.Status = false
+			res := map[string]interface{}{
+				"id":      app.Id,
+				"messgae": app.Token,
+				"status":  app.Status,
+			}
+			return c.JSON(http.StatusBadRequest, res)
 		}
-		
-		app.Token = "Token can't use"
-		app.Status = false
-		res := map[string]interface{}{
-			"id":      app.Id,
-			"messgae": app.Token,
-			"status":  app.Status,
-		}
+		app.Id = jwt.Id
+		app.Token = "Token can use"
+		app.Status = true
 
-		return c.JSON(http.StatusBadRequest, res)
+		return ctx(c)
 	}
 }
