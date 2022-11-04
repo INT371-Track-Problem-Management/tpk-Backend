@@ -36,7 +36,7 @@ func (h *FuncHandler) ReportInsert(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	filename, err := fileApp.UploadFile(h.ctx, h.storage, file, handler, h.client)
+	filename, err := fileApp.UploadFile(h.ctx, h.storage, file, handler, h.client, "report")
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

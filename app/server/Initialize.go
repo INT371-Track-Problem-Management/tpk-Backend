@@ -14,8 +14,6 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-
-
 func (h *FuncHandler) InitContext() {
 	h.ctx = context.Background()
 }

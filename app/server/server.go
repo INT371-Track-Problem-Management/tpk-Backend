@@ -48,6 +48,7 @@ func StartServer() {
 	api.GET("yearConfig", h.YearConfig)              // Get all year between 1901 - 2022
 	api.GET("testemail", h.TestSMTP2)
 	api.POST("picturetest", h.PictureTest)
+	api.GET("downloadtest/:image", h.DownloadPictureTest)
 
 	// Both but need TOKEN
 	service := api.Group("service/")

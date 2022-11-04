@@ -260,12 +260,38 @@ func (h *FuncHandler) PictureTest(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	filename, err := fileApp.UploadFile(h.ctx, h.storage, file, handler, h.client)
+	filename, err := fileApp.UploadFile(h.ctx, h.storage, file, handler, h.client, "test")
 	if err != nil {
+		err := map[string]interface{}{
+			"code":  http.StatusInternalServerError,
+			"error": err.Error(),
+		}
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	res := map[string]string{
 		"message": *filename,
 	}
+	return ctx.JSON(http.StatusOK, res)
+}
+
+func (h *FuncHandler) DownloadPictureTest(ctx echo.Context) error {
+	imagename := ctx.Param("image")
+	file, err := fileApp.DownloadFile("test", imagename)
+	if err != nil {
+		err := map[string]interface{}{
+			"code":  http.StatusInternalServerError,
+			"error": err.Error(),
+		}
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, file)
+}
+
+func (h *FuncHandler) PictureTestStorage(ctx echo.Context) error {
+	file, err := ctx.FormFile("image")
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+
 	return ctx.JSON(http.StatusOK, res)
 }
