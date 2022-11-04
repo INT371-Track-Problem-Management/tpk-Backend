@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"tpk-backend/app/config"
+	"tpk-backend/app/jwt"
 	"tpk-backend/app/services/controller"
 	"tpk-backend/app/services/repository"
 	"tpk-backend/app/services/service"
@@ -38,11 +39,14 @@ func StartServer() {
 	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
 	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
 
-	// service := api.Group("service/")
+	service := api.Group("service/")
+	service.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
 
-	// cus := api.Group("customer/")
+	cus := api.Group("customer/")
+	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
 
-	// emp := api.Group("employee/")
+	emp := api.Group("employee/")
+	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
