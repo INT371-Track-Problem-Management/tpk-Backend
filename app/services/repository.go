@@ -22,4 +22,17 @@ type RepositoryInterface interface {
 	EmployeeById(id int) (*model.Employee, error)
 	EmployeeByEmail(email string) (*model.Employee, error)
 	RegisterEmployeeRepo(req model.EmployeeRegis) (*int, error)
+
+	//report
+	Report() (*[]model.ReportJoinEngage, error)
+	ReportByCreatedBy(customerId string) (*[]model.Report, error)
+	ReportById(reportId int) (*model.Report, error)
+	ReportInsert(req model.ReportInsert) (*int, *model.Customer, error)
+	ReportChangeStatus(req model.ReportChangeStatus) error
+	DeleteReportById(req request.Report) error
+	ReportByRoomId(roomId string) (*[]model.ReportJoinEngage, error)
+	ReportListForCustomer(customerId string) (*[]model.ReportJoinEngage, error)
+
+	//reportStatus
+	ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error)
 }
