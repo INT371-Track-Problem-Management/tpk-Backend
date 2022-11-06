@@ -12,7 +12,7 @@ type RepositoryInterface interface {
 
 	//userApp
 	GetUser(email string) (*model.User, error)
-	SaveToken(token *string) error
+	SaveToken(token *string, role string) error
 	RegisUser(req model.User) error
 
 	//customer

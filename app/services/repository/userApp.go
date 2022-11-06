@@ -11,10 +11,11 @@ func (r mysqlRepository) GetUser(email string) (*model.User, error) {
 	return user, nil
 }
 
-func (r mysqlRepository) SaveToken(token *string) error {
+func (r mysqlRepository) SaveToken(token *string, role string) error {
 	save := model.SaveToken{
 		Token:  *token,
 		Status: `A`,
+		Role:   role,
 	}
 	err := r.conn.Table("tokenApp").Create(save).Error
 	if err != nil {

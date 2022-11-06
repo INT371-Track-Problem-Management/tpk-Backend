@@ -34,8 +34,7 @@ func (s serviceTPK) Login(req request.User) (*response.Token, error) {
 			log.Println(err)
 			return nil, err
 		}
-		err = s.repo.SaveToken(token)
-		if err != nil {
+		if err := s.repo.SaveToken(token, user.Role); err != nil {
 			return nil, err
 		}
 		res := response.Token{
@@ -55,8 +54,7 @@ func (s serviceTPK) Login(req request.User) (*response.Token, error) {
 			log.Println(err)
 			return nil, err
 		}
-		err = s.repo.SaveToken(token)
-		if err != nil {
+		if err := s.repo.SaveToken(token, user.Role); err != nil {
 			return nil, err
 		}
 
@@ -77,8 +75,7 @@ func (s serviceTPK) Login(req request.User) (*response.Token, error) {
 			log.Println(err)
 			return nil, err
 		}
-		err = s.repo.SaveToken(token)
-		if err != nil {
+		if err := s.repo.SaveToken(token, user.Role); err != nil {
 			return nil, err
 		}
 
