@@ -13,4 +13,5 @@ type ControllerInterface interface {
 	ListReport(ctx echo.Context) error
 	ReportDetailById(ctx echo.Context) error
 	ReportStatusByReportId(ctx echo.Context) error
+	ReportEnagegeFixDateDetail(ctx echo.Context) error
 }

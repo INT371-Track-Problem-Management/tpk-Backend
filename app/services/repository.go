@@ -37,7 +37,9 @@ type RepositoryInterface interface {
 
 	//reportEngage
 	CreateReporEngage(model model.InsertReportEngage, session *gorm.DB) (*int, error)
+	ReportEnagegeByReportId(reportId string) (*model.ReportEngage, error)
 
 	//fixdate
 	CreateFixdate(model model.CreateFixdate, session *gorm.DB) error
+	FixdateByEngageId(engageId int) (*[]model.Fixdate, error)
 }
