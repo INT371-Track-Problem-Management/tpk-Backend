@@ -19,7 +19,8 @@ type ReportList struct {
 	SelectedDate int                `json:"-" gorm:"column:selectedDate"`
 	Engage       model.ReportEngage `json:"-" gorm:"foreignKey:ReportId;references:EngageId"`
 	Id           int                `json:"-" gorm:"column:id"`
-	Date         model.Fixdate      `json:"date" gorm:"foreignKey:Id;references:SelectedDate"`
+	Step         string             `json:"step" gorm:"column:step","foreignKey:Id;references:SelectedDate"`
+	FixDate      string             `json:"fixDate" gorm:"column:date","foreignKey:Id;references:SelectedDate"`
 }
 
 type Year struct {
