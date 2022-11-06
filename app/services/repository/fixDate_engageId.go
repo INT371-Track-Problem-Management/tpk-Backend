@@ -5,7 +5,7 @@ import (
 	"tpk-backend/app/models/model"
 )
 
-func (r mysqlRepository) FixdateByEngageId(engageId int) (*[]model.Fixdate, error) {
+func (r mysqlRepository) FixdateByEngageId(engage model.ReportEngage) (*[]model.Fixdate, error) {
 	var fixdate []model.Fixdate
 	sql := fmt.Sprintf(`
 	SELECT
@@ -14,7 +14,11 @@ func (r mysqlRepository) FixdateByEngageId(engageId int) (*[]model.Fixdate, erro
 		fixDate
 	WHERE
 		engageId = %v
-	`, engageId)
+	AND
+		step = %v
+	`,
+		engage.EngageId,
+		engage.Step)
 	if err := r.conn.Raw(sql).Scan(&fixdate).Error; err != nil {
 		return nil, err
 	}

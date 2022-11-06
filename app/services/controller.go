@@ -16,4 +16,5 @@ type ControllerInterface interface {
 	ReportEnagegeFixDateDetail(ctx echo.Context) error
 	SelectedPlanFixDate(ctx echo.Context) error
 	ChangeCategory(ctx echo.Context) error
+	NewFixDate(ctx echo.Context) error
 }

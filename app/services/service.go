@@ -18,4 +18,5 @@ type ServiceInterface interface {
 	ReportEnagegeFixDateDetail(reportId string) (*response.ReportEngageFixDate, error)
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error
 	ChangeCategory(req request.ReportChangeCategory) error
+	NewFixDate(req request.ReportEngage) error
 }

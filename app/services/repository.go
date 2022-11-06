@@ -40,8 +40,9 @@ type RepositoryInterface interface {
 	CreateReporEngage(model model.InsertReportEngage, session *gorm.DB) (*int, error)
 	ReportEnagegeByReportId(reportId string) (*model.ReportEngage, error)
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error
+	EditEngage(req request.ReportEngage, session *gorm.DB) error
 
 	//fixdate
 	CreateFixdate(model model.CreateFixdate, session *gorm.DB) error
-	FixdateByEngageId(engageId int) (*[]model.Fixdate, error)
+	FixdateByEngageId(engage model.ReportEngage) (*[]model.Fixdate, error)
 }
