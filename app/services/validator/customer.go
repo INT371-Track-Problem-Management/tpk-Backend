@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
+func (v validator) CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 		authentication := jwt.DecodeJWT(c)

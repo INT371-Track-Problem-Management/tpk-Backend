@@ -10,6 +10,7 @@ import (
 	"tpk-backend/app/services/controller"
 	"tpk-backend/app/services/repository"
 	"tpk-backend/app/services/service"
+	"tpk-backend/app/services/validator"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -30,8 +31,9 @@ func StartServer() {
 	}))
 
 	repo := repository.NewRepository(db)
-	serviceTPK := service.NewService(repo)
+	serviceTPK := service.NewService(repo, db)
 	controller := controller.NewController(serviceTPK)
+	validator := validator.Newvalidator(db)
 
 	api := e.Group("/api/")
 	api.GET("checkHealthy", controller.CheckHealthy)
@@ -44,6 +46,7 @@ func StartServer() {
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
+	cus.POST("report", controller.CreateReport, validator.CustomerValidation) // Insert report
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

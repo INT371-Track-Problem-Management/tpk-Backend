@@ -1,13 +1,19 @@
 package service
 
-import "tpk-backend/app/services"
+import (
+	"tpk-backend/app/services"
+
+	"gorm.io/gorm"
+)
 
 type serviceTPK struct {
-	repo services.RepositoryInterface
+	repo     services.RepositoryInterface
+	database *gorm.DB
 }
 
-func NewService(conn services.RepositoryInterface) services.ServiceInterface {
+func NewService(conn services.RepositoryInterface, db *gorm.DB) services.ServiceInterface {
 	return &serviceTPK{
-		repo: conn,
+		repo:     conn,
+		database: db,
 	}
 }

@@ -3,6 +3,8 @@ package services
 import (
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
+
+	"gorm.io/gorm"
 )
 
 type RepositoryInterface interface {
@@ -24,15 +26,14 @@ type RepositoryInterface interface {
 	RegisterEmployeeRepo(req model.EmployeeRegis) (*int, error)
 
 	//report
-	Report() (*[]model.ReportJoinEngage, error)
-	ReportByCreatedBy(customerId string) (*[]model.Report, error)
-	ReportById(reportId int) (*model.Report, error)
-	ReportInsert(req model.ReportInsert) (*int, *model.Customer, error)
-	ReportChangeStatus(req model.ReportChangeStatus) error
-	DeleteReportById(req request.Report) error
-	ReportByRoomId(roomId string) (*[]model.ReportJoinEngage, error)
-	ReportListForCustomer(customerId string) (*[]model.ReportJoinEngage, error)
+	CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error)
 
 	//reportStatus
-	ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error)
+	CreateReportStatus(model request.ReportStatus, session *gorm.DB) error
+
+	//reportEngage
+	CreateReporEngage(model model.InsertReportEngage, session *gorm.DB) (*int, error)
+
+	//fixdate
+	CreateFixdate(model model.CreateFixdate, session *gorm.DB) error
 }
