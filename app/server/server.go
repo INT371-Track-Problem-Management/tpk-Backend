@@ -58,7 +58,9 @@ func StartServer() {
 	emp.GET("report/detail/:reportId", controller.ReportDetailById, validator.EmployeeValidation)                        // Search report detail by id
 	emp.GET("reportStatus/detail/:reportId", controller.ReportStatusByReportId, validator.EmployeeValidation)            // Search reportStatus detail by reportId
 	emp.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.EmployeeValidation) // Search reportEngage join Fixdate detail by reportId
-	emp.PUT("selectedPlanFixDate", controller.SelectedPlanFixDate, validator.EmployeeValidation)                         // customer selecting plan fix date
+	emp.PUT("selectedPlanFixDate", controller.SelectedPlanFixDate, validator.EmployeeValidation)                         // Selecting plan fix date
+	emp.PUT("changeCategory", controller.ChangeCategory, validator.EmployeeValidation)                                   // Change category
+
 	e.Logger.Fatal(e.Start(":" + port))
 }
 

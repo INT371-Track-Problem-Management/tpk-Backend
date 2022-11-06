@@ -17,4 +17,5 @@ type ServiceInterface interface {
 	ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error)
 	ReportEnagegeFixDateDetail(reportId string) (*response.ReportEngageFixDate, error)
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error
+	ChangeCategory(req request.ReportChangeCategory) error
 }

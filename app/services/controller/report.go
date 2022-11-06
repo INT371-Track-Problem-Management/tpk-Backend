@@ -55,3 +55,18 @@ func (c controllerTPK) ReportEnagegeFixDateDetail(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, report)
 }
+
+func (c controllerTPK) ChangeCategory(ctx echo.Context) error {
+	req := new(request.ReportChangeCategory)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+
+	if err := c.service.ChangeCategory(*req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

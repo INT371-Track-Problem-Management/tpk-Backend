@@ -39,3 +39,9 @@ type EndReport struct {
 	Score       int    `json:"score" gorm:"column:score"`
 	CreatedBy   int    `json:"createdBy" gorm:"column:createdBy"`
 }
+
+type ReportChangeCategory struct {
+	ReportId         int    `json:"reportId" gorm:"column:reportId"`
+	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
+	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
+}
