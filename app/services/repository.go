@@ -29,9 +29,11 @@ type RepositoryInterface interface {
 	//report
 	CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error)
 	ListReport(fillter *request.FillterReport) (*[]response.ReportList, error)
+	ReportDetailById(reportId string) (*model.Report, error)
 
 	//reportStatus
 	CreateReportStatus(model request.ReportStatus, session *gorm.DB) error
+	ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error)
 
 	//reportEngage
 	CreateReporEngage(model model.InsertReportEngage, session *gorm.DB) (*int, error)

@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
 
@@ -18,25 +17,28 @@ func (r mysqlRepository) reportStatus(status request.ReportStatus, conn *gorm.DB
 
 func (r mysqlRepository) ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error) {
 	var status []model.ReportStatus
-	sql := fmt.Sprintf(`
-		SELECT 
-			rs.statusId,
-			rs.reportId,
-			sm.status,
-			rs.createAt
-		FROM
-			reportStatus rs
-		LEFT JOIN
-			statusMaster sm 
-		ON
-			rs.status = sm.statusMasterId 
-		WHERE
-			rs.reportId = %v
-		ORDER BY
-			rs.createAt DESC;
-	`, reportId)
-	err := r.conn.Raw(sql).Scan(&status).Error
-	if err != nil {
+	// sql := fmt.Sprintf(`
+	// 	SELECT
+	// 		rs.statusId,
+	// 		rs.reportId,
+	// 		sm.status,,
+	// 		rs.detail,
+	// 		rs.createAt
+	// 	FROM
+	// 		reportStatus rs
+	// 	LEFT JOIN
+	// 		statusMaster sm
+	// 	ON
+	// 		rs.status = sm.statusMasterId
+	// 	WHERE
+	// 		rs.reportId = %v
+	// 	ORDER BY
+	// 		rs.createAt DESC;
+	// `, reportId)
+	// if err := r.conn.Raw(sql).Scan(&status).Error; err != nil {
+	// 	return nil, err
+	// }
+	if err := r.conn.Table("reportStatus").Order("createAt DESC").Where("reportId = ?", reportId).Scan(&status).Error; err != nil {
 		return nil, err
 	}
 	return &status, nil

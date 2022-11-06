@@ -1,6 +1,7 @@
 package services
 
 import (
+	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
 	"tpk-backend/app/models/response"
 )
@@ -12,4 +13,6 @@ type ServiceInterface interface {
 	RegisterOwnerService(req request.RegisterOwner) (*int, error)
 	CreateReport(req request.ReportInsert) (*int, error)
 	ListReport(fillter *request.FillterReport) (*[]response.ReportList, error)
+	ReportDetailById(reportId string) (*model.Report, error)
+	ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error)
 }

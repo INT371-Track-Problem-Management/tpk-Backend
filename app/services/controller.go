@@ -11,4 +11,6 @@ type ControllerInterface interface {
 	RegisterOwner(ctx echo.Context) error
 	CreateReport(ctx echo.Context) error
 	ListReport(ctx echo.Context) error
+	ReportDetailById(ctx echo.Context) error
+	ReportStatusByReportId(ctx echo.Context) error
 }

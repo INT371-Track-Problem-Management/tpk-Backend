@@ -37,3 +37,12 @@ func (c controllerTPK) ListReport(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, reports)
 }
+
+func (c controllerTPK) ReportDetailById(ctx echo.Context) error {
+	reportId := ctx.Param("reportId")
+	report, err := c.service.ReportDetailById(reportId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, report)
+}

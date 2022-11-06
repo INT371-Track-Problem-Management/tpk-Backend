@@ -11,9 +11,6 @@ type Report struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
-	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
-	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
-	SelectedDate     string `json:"selectedDate" gorm:"column:selectedDate"`
 }
 
 type ReportInsert struct {
