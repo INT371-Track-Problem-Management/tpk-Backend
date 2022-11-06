@@ -3,6 +3,7 @@ package services
 import (
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
+	"tpk-backend/app/models/response"
 
 	"gorm.io/gorm"
 )
@@ -27,6 +28,7 @@ type RepositoryInterface interface {
 
 	//report
 	CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error)
+	ListReport() (*[]response.ReportList, error)
 
 	//reportStatus
 	CreateReportStatus(model request.ReportStatus, session *gorm.DB) error

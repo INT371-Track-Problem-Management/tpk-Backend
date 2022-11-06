@@ -47,9 +47,11 @@ func StartServer() {
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
 	cus.POST("report", controller.CreateReport, validator.CustomerValidation) // Insert report
+	cus.GET("reports", controller.ListReport, validator.CustomerValidation)   // Search all report
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
+	emp.GET("reports", controller.ListReport, validator.EmployeeValidation) // Search all report
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

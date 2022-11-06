@@ -11,14 +11,22 @@ func (c controllerTPK) CreateReport(ctx echo.Context) error {
 	req := new(request.ReportInsert)
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	reportId, err := c.service.CreateReport(*req)
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
+		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	response := map[string]interface{}{
 		"reportId": reportId,
 	}
-	return ctx.JSON(http.StatusBadRequest, response)
+	return ctx.JSON(http.StatusOK, response)
+}
+
+func (c controllerTPK) ListReport(ctx echo.Context) error {
+	reports, err := c.service.ListReport()
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, reports)
 }

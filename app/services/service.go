@@ -11,4 +11,5 @@ type ServiceInterface interface {
 	RegisterCustomersService(req request.RegisterCustomer) (*int, error)
 	RegisterOwnerService(req request.RegisterOwner) (*int, error)
 	CreateReport(req request.ReportInsert) (*int, error)
+	ListReport() (*[]response.ReportList, error)
 }

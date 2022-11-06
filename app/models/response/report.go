@@ -1,19 +1,25 @@
 package response
 
-type Report struct {
+import "tpk-backend/app/models/model"
+
+type ReportList struct {
 	ReportId         int    `json:"reportId" gorm:"column:reportId"`
 	Title            string `json:"title" gorm:"column:title"`
 	CategoriesReport string `json:"categoriesReport" gorm:"column:categoriesReport"`
 	ReportDes        string `json:"reportDes" gorm:"column:reportDes"`
 	Status           string `json:"status" gorm:"column:status"`
 	RoomId           int    `json:"roomId" gorm:"column:roomId"`
+	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
 	UpdateAt         string `json:"updateAt" gorm:"column:updateAt"`
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
-	RoomNum          string `json:"roomNum" gorm:"column:roomNum"`
-	BuildingId       int    `json:"buildingId" gorm:"column:buildingId"`
-	SelectedDate     string `json:"selectedDate" gorm:"column:selectedDate"`
+
+	EngageId     int                `json:"-" gorm:"column:engageId"`
+	SelectedDate int                `json:"-" gorm:"column:selectedDate"`
+	Engage       model.ReportEngage `json:"-" gorm:"foreignKey:ReportId;references:EngageId"`
+	Id           int                `json:"-" gorm:"column:id"`
+	Date         model.Fixdate      `json:"date" gorm:"foreignKey:Id;references:SelectedDate"`
 }
 
 type Year struct {

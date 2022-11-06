@@ -10,4 +10,5 @@ type ControllerInterface interface {
 	RegisterCustomers(ctx echo.Context) error
 	RegisterOwner(ctx echo.Context) error
 	CreateReport(ctx echo.Context) error
+	ListReport(ctx echo.Context) error
 }
