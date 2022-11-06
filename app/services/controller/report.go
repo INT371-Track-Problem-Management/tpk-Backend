@@ -24,7 +24,14 @@ func (c controllerTPK) CreateReport(ctx echo.Context) error {
 }
 
 func (c controllerTPK) ListReport(ctx echo.Context) error {
-	reports, err := c.service.ListReport()
+	var fillter = new(request.FillterReport)
+	if roomId := ctx.QueryParam("roomId"); roomId != "" {
+		fillter.RoomId = roomId
+	}
+	if customerId := ctx.QueryParam("customerId"); customerId != "" {
+		fillter.CustomerId = customerId
+	}
+	reports, err := c.service.ListReport(fillter)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

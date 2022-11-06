@@ -4,6 +4,11 @@ type Report struct {
 	ReportId int `json:"reportId" gorm:"column:reportId"`
 }
 
+type FillterReport struct {
+	RoomId     string
+	CustomerId string
+}
+
 type ReportByCreatedBy struct {
 	CreateBy int `json:"createBy" gorm:"column:createBy"`
 }

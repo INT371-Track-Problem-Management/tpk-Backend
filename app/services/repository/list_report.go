@@ -2,10 +2,11 @@ package repository
 
 import (
 	"fmt"
+	"tpk-backend/app/models/request"
 	"tpk-backend/app/models/response"
 )
 
-func (r mysqlRepository) ListReport() (*[]response.ReportList, error) {
+func (r mysqlRepository) ListReport(fillter *request.FillterReport) (*[]response.ReportList, error) {
 	var reports []response.ReportList
 	sql :=
 		`
@@ -27,11 +28,18 @@ func (r mysqlRepository) ListReport() (*[]response.ReportList, error) {
 	LEFT JOIN
 		room r2
 	ON 
-		r2.roomId = r.roomId;
+		r2.roomId = r.roomId
+	WHERE
+		1=1
 	`
+	if fillter.RoomId != "" {
+		sql += fmt.Sprintf(` AND r.roomId = %v`, fillter.RoomId)
+	}
+	if fillter.CustomerId != "" {
+		sql += fmt.Sprintf(` AND r.createBy = %v`, fillter.CustomerId)
+	}
 	if err := r.conn.Raw(sql).Scan(&reports).Error; err != nil {
 		return nil, err
 	}
-	fmt.Println(reports)
 	return &reports, nil
 }
