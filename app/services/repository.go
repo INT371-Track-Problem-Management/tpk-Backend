@@ -51,8 +51,10 @@ type RepositoryInterface interface {
 	//room
 	GetRoomWithCustomerId(customerId int) (*[]model.RoomWithCustomerId, error)
 	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
+	CreateRoom(model model.RoomInsert, session *gorm.DB) error
 
 	//bulding
 	AllBuilding() (*[]response.AllBuilding, error)
 	CreateBuilding(model model.BuildingInsert) (*int64, error)
+	BuildingDelete(buildingId int) error
 }

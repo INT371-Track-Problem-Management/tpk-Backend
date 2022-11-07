@@ -66,6 +66,8 @@ func StartServer() {
 	emp.PUT("newFixDate", controller.NewFixDate, validator.EmployeeValidation)                                           // insert new fixdate
 	emp.GET("allBuilding", controller.AllBuilding, validator.EmployeeValidation)                                         // Search all building
 	emp.POST("building", controller.CreateBuilding, validator.EmployeeValidation)                                        // Insert Building
+	emp.POST("rooms", controller.CreateRoom, validator.EmployeeValidation)                                               // Insert Room
+	emp.DELETE("building", controller.BuildingDelete, validator.EmployeeValidation)                                      // Delete building
 	e.Logger.Fatal(e.Start(":" + port))
 }
 

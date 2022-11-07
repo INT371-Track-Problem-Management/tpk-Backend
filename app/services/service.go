@@ -24,4 +24,6 @@ type ServiceInterface interface {
 	AllBuilding() (*[]response.AllBuilding, error)
 	CreateBuilding(req request.BuildingInsert) (*int64, error)
 	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
+	CreateRoom(req request.RoomInsert) error
+	BuildingDelete(buildingId int) error
 }

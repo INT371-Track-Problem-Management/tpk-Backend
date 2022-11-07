@@ -21,4 +21,6 @@ type ControllerInterface interface {
 	GetRoomWithCustomerId(ctx echo.Context) error
 	AllBuilding(ctx echo.Context) error
 	CreateBuilding(ctx echo.Context) error
+	CreateRoom(ctx echo.Context) error
+	BuildingDelete(ctx echo.Context) error
 }
