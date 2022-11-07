@@ -20,4 +20,8 @@ type ServiceInterface interface {
 	ChangeCategory(req request.ReportChangeCategory) error
 	NewFixDate(req request.ReportEngage) error
 	ChangeStatusReport(req request.ReportChangeStatus) error
+	GetRoomWithCustomerId(customerId int) (*[]model.RoomWithCustomerId, error)
+	AllBuilding() (*[]response.AllBuilding, error)
+	CreateBuilding(req request.BuildingInsert) (*int64, error)
+	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
 }

@@ -52,6 +52,7 @@ func StartServer() {
 	cus.GET("reportStatus/detail/:reportId", controller.ReportStatusByReportId, validator.CustomerValidation)            // Search reportStatus detail by reportId
 	cus.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.CustomerValidation) // Search reportEngage join Fixdate detail by reportId
 	cus.PUT("newFixDate", controller.NewFixDate, validator.CustomerValidation)                                           // insert new fixdate
+	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
@@ -63,7 +64,8 @@ func StartServer() {
 	emp.PUT("changeCategory", controller.ChangeCategory, validator.EmployeeValidation)                                   // Change category
 	emp.PUT("statusReport", controller.ChangeStatusReport, validator.EmployeeValidation)                                 // Update status Report
 	emp.PUT("newFixDate", controller.NewFixDate, validator.EmployeeValidation)                                           // insert new fixdate
-
+	emp.GET("allBuilding", controller.AllBuilding, validator.EmployeeValidation)                                         // Search all building
+	emp.POST("building", controller.CreateBuilding, validator.EmployeeValidation)                                        // Insert Building
 	e.Logger.Fatal(e.Start(":" + port))
 }
 

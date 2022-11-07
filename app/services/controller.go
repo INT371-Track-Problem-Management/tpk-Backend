@@ -18,4 +18,7 @@ type ControllerInterface interface {
 	ChangeCategory(ctx echo.Context) error
 	NewFixDate(ctx echo.Context) error
 	ChangeStatusReport(ctx echo.Context) error
+	GetRoomWithCustomerId(ctx echo.Context) error
+	AllBuilding(ctx echo.Context) error
+	CreateBuilding(ctx echo.Context) error
 }

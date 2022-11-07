@@ -47,4 +47,12 @@ type RepositoryInterface interface {
 	//fixdate
 	CreateFixdate(model model.CreateFixdate, session *gorm.DB) error
 	FixdateByEngageId(engage model.ReportEngage) (*[]model.Fixdate, error)
+
+	//room
+	GetRoomWithCustomerId(customerId int) (*[]model.RoomWithCustomerId, error)
+	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
+
+	//bulding
+	AllBuilding() (*[]response.AllBuilding, error)
+	CreateBuilding(model model.BuildingInsert) (*int64, error)
 }

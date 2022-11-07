@@ -18,10 +18,7 @@ func (c controllerTPK) CreateReport(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	response := map[string]interface{}{
-		"reportId": reportId,
-	}
-	return ctx.JSON(http.StatusOK, response)
+	return ctx.JSON(http.StatusOK, reportId)
 }
 
 func (c controllerTPK) ListReport(ctx echo.Context) error {
