@@ -13,7 +13,7 @@ type ServiceInterface interface {
 	RegisterOwnerService(req request.RegisterOwner) (*int, error)
 	CreateReport(req request.ReportInsert) (*int, error)
 	ListReport(fillter *request.FillterReport) (*[]response.ReportList, error)
-	ReportDetailById(reportId string) (*model.Report, error)
+	ReportDetailById(reportId int) (*model.Report, error)
 	ReportStatusByReportId(reportId string) (*[]model.ReportStatus, error)
 	ReportEnagegeFixDateDetail(reportId string) (*response.ReportEngageFixDate, error)
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error

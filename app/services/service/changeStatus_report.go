@@ -25,5 +25,20 @@ func (s serviceTPK) ChangeStatusReport(req request.ReportChangeStatus) error {
 		return err
 	}
 	session.Commit()
+
+	report, err := s.repo.ReportDetailById(req.ReportId)
+	if err != nil {
+		return err
+	}
+
+	email, err := s.repo.GetEmailCreateByReportId(req.ReportId)
+	if err != nil {
+		return err
+	}
+
+	if err := pkg.UpdateStatus(*email, req.ReportId, report.Title, report.Status); err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -20,6 +20,7 @@ type RepositoryInterface interface {
 	CustomerByEmail(email string) (*model.Customer, error)
 	GetCustomerById(customerId int) (*model.Customer, error)
 	RegisterCustomersRepo(req request.CustomerRegis) (*int, error)
+	GetEmailCreateByReportId(reportId int) (*string, error)
 
 	//employee
 	EmployeeById(id int) (*model.Employee, error)
@@ -29,7 +30,7 @@ type RepositoryInterface interface {
 	//report
 	CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error)
 	ListReport(fillter *request.FillterReport) (*[]response.ReportList, error)
-	ReportDetailById(reportId string) (*model.Report, error)
+	ReportDetailById(reportId int) (*model.Report, error)
 	ChangeCategory(req request.ReportChangeCategory) error
 	ChangeStatusReport(req request.ReportStatus, session *gorm.DB) error
 

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 	"tpk-backend/app/models/request"
 
 	"github.com/labstack/echo/v4"
@@ -39,7 +40,11 @@ func (c controllerTPK) ListReport(ctx echo.Context) error {
 }
 
 func (c controllerTPK) ReportDetailById(ctx echo.Context) error {
-	reportId := ctx.Param("reportId")
+	param := ctx.Param("reportId")
+	reportId, err := strconv.Atoi(param)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
 	report, err := c.service.ReportDetailById(reportId)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+	"tpk-backend/app/constants"
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
 	"tpk-backend/app/pkg"
@@ -61,7 +63,17 @@ func (s serviceTPK) CreateReport(req request.ReportInsert) (*int, error) {
 			return nil, err
 		}
 	}
-
 	session.Commit()
+
+	customer, err := s.repo.GetCustomerById(req.UpdateBy)
+	if err != nil {
+		return nil, err
+	}
+
+	body := fmt.Sprintf("แจ้งเตือนการรายงานปัญหา รหัส: %v กรุณารอเจ้าหน้าที่ตรวจสอบ", reportId)
+	if err := pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, body); err != nil {
+		return nil, err
+	}
+
 	return reportId, nil
 }
