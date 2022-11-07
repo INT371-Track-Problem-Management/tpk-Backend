@@ -47,6 +47,7 @@ func (s serviceTPK) NewFixDate(req request.ReportEngage) error {
 			Date:     v.Date,
 			Step:     req.Step,
 			CreateAt: now,
+			Period:   v.Period,
 			EngageId: req.EngageId,
 		}
 		if err := s.repo.CreateFixdate(date, session); err != nil {

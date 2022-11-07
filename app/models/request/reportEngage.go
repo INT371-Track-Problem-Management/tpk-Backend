@@ -4,7 +4,8 @@ type ReportEngage struct {
 	EngageId int `json:"engageId" gorm:"column:engageId"`
 	Step     int `json:"step" gorm:"column:step"`
 	Dates    []struct {
-		Date string `json:"date" gorm:"column:date"`
+		Date   string `json:"date" gorm:"column:date"`
+		Period string `json:"period" gorm:"column:period"`
 	} `json:"dates" gorm:"column:dates"`
 	UpdatedBy int `json:"updateBy" gorm:"column:updateBy"`
 }

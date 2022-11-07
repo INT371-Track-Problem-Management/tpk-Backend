@@ -62,6 +62,7 @@ func StartServer() {
 	emp.PUT("selectedPlanFixDate", controller.SelectedPlanFixDate, validator.EmployeeValidation)                         // Selecting plan fix date
 	emp.PUT("changeCategory", controller.ChangeCategory, validator.EmployeeValidation)                                   // Change category
 	emp.PUT("statusReport", controller.ChangeStatusReport, validator.EmployeeValidation)                                 // Update status Report
+	emp.PUT("newFixDate", controller.NewFixDate, validator.EmployeeValidation)                                           // insert new fixdate
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
