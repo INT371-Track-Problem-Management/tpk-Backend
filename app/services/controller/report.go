@@ -70,3 +70,17 @@ func (c controllerTPK) ChangeCategory(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (c controllerTPK) ChangeStatusReport(ctx echo.Context) error {
+	req := new(request.ReportChangeStatus)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	if err := c.service.ChangeStatusReport(*req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

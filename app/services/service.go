@@ -19,4 +19,5 @@ type ServiceInterface interface {
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error
 	ChangeCategory(req request.ReportChangeCategory) error
 	NewFixDate(req request.ReportEngage) error
+	ChangeStatusReport(req request.ReportChangeStatus) error
 }

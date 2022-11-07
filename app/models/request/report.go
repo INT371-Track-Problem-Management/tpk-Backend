@@ -30,6 +30,7 @@ type ReportInsert struct {
 type ReportChangeStatus struct {
 	ReportId int    `json:"reportId" gorm:"column:reportId"`
 	Status   string `json:"status" gorm:"column:status"`
+	Detail   string `json:"detail" gorm:"column:detail"`
 	UpdateBy int    `json:"updateBy" gorm:"column:updateBy"`
 }
 

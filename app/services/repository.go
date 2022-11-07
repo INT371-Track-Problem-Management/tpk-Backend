@@ -31,6 +31,7 @@ type RepositoryInterface interface {
 	ListReport(fillter *request.FillterReport) (*[]response.ReportList, error)
 	ReportDetailById(reportId string) (*model.Report, error)
 	ChangeCategory(req request.ReportChangeCategory) error
+	ChangeStatusReport(req request.ReportStatus, session *gorm.DB) error
 
 	//reportStatus
 	CreateReportStatus(model request.ReportStatus, session *gorm.DB) error

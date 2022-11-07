@@ -61,6 +61,7 @@ func StartServer() {
 	emp.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.EmployeeValidation) // Search reportEngage join Fixdate detail by reportId
 	emp.PUT("selectedPlanFixDate", controller.SelectedPlanFixDate, validator.EmployeeValidation)                         // Selecting plan fix date
 	emp.PUT("changeCategory", controller.ChangeCategory, validator.EmployeeValidation)                                   // Change category
+	emp.PUT("statusReport", controller.ChangeStatusReport, validator.EmployeeValidation)                                 // Update status Report
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
