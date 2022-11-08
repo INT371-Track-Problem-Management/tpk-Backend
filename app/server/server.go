@@ -43,7 +43,8 @@ func StartServer() {
 
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
-	service.POST("changeEmail", controller.ChangeEmail) // Change email customer or employee
+	service.POST("changeEmail", controller.ChangeEmail)       // Change email customer or employee
+	service.POST("changePassword", controller.ChangePassword) // Change password
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

@@ -16,6 +16,7 @@ type RepositoryInterface interface {
 	SaveToken(token *string, role string) error
 	RegisUser(req model.User) error
 	ChangeEmail(req request.ChangeEmail, oldEmail string) error
+	ChangePassword(model model.ChangePassword) error
 
 	//customer
 	CustomerByEmail(email string) (*model.Customer, error)

@@ -24,4 +24,5 @@ type ControllerInterface interface {
 	CreateRoom(ctx echo.Context) error
 	BuildingDelete(ctx echo.Context) error
 	ChangeEmail(ctx echo.Context) error
+	ChangePassword(ctx echo.Context) error
 }

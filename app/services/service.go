@@ -27,4 +27,5 @@ type ServiceInterface interface {
 	CreateRoom(req request.RoomInsert) error
 	BuildingDelete(buildingId int) error
 	ChangeEmail(req request.ChangeEmail, oldEmail string) error
+	ChangePassword(req request.ChangePassword) error
 }

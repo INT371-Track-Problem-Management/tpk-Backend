@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
 )
@@ -31,6 +32,25 @@ func (r mysqlRepository) ChangeEmail(req request.ChangeEmail, oldEmail string) e
 	var err error
 	stmt := r.conn.Begin()
 	err = stmt.Table("userApp").Where("email = ?", oldEmail).Update("email = ?", req.NewEmail).Error
+	if err != nil {
+		stmt.Rollback()
+		return err
+	}
+	stmt.Commit()
+	return nil
+}
+
+func (r mysqlRepository) ChangePassword(model model.ChangePassword) error {
+	var err error
+	sql := fmt.Sprintf(`
+		UPDATE userApp
+		SET password = '%v'
+		WHERE email = '%v'
+	`,
+		model.NewPassword,
+		model.Email)
+	stmt := r.conn.Begin()
+	err = stmt.Exec(sql).Error
 	if err != nil {
 		stmt.Rollback()
 		return err
