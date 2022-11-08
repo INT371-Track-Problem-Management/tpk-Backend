@@ -4,8 +4,8 @@ WORKDIR ../app
 
 COPY .. ./
 
-RUN GOOS=linux go build app/cmd/tpkBackend.go
+RUN GOOS=linux go build app/cmd/server.go
 
 EXPOSE 3000
 
-CMD KEY="DEV" ./tpkBackend
+CMD KEY="DEV" ./server

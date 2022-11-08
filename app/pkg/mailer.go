@@ -3,10 +3,10 @@ package pkg
 import (
 	"crypto/tls"
 	"fmt"
+	"tpk-backend/app/config"
 	"tpk-backend/app/constants"
-	"tpk-backend/app/pkg/config"
 
-	gomail "gopkg.in/gomail.v2"
+	"gopkg.in/gomail.v2"
 )
 
 func Smtp2(sub string, to string, body string) error {
@@ -14,9 +14,6 @@ func Smtp2(sub string, to string, body string) error {
 	host := mail.Host
 	from := mail.Username
 	password := mail.Password
-	fmt.Println(sub)
-	fmt.Println(to)
-	fmt.Println(body)
 	m := gomail.NewMessage()
 	m.SetHeader("From", "rungmod.kmutt.sit@rungmod.com")
 
