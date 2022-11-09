@@ -32,4 +32,5 @@ type ServiceInterface interface {
 	CreateMaintainer(req request.Maintainer) error
 	AddCustomerIntoRoom(req request.RoomAddCustomer) error
 	RemoveCustomerFromRoom(id int) error
+	FetchCustomerByEmail(email string) (*model.Customer, error)
 }

@@ -55,6 +55,7 @@ func StartServer() {
 	cus.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.CustomerValidation) // Search reportEngage join Fixdate detail by reportId
 	cus.PUT("newFixDate", controller.NewFixDate, validator.CustomerValidation)                                           // insert new fixdate
 	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
+	cus.GET("viewCustomerProfile", controller.FetchCustomerByEmail, validator.CustomerValidation)                        // View profile customer by email
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

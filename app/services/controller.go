@@ -29,4 +29,5 @@ type ControllerInterface interface {
 	CreateMaintainer(ctx echo.Context) error
 	AddCustomerIntoRoom(ctx echo.Context) error
 	RemoveCustomerFromRoom(ctx echo.Context) error
+	FetchCustomerByEmail(ctx echo.Context) error
 }
