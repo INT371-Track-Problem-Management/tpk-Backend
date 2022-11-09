@@ -45,6 +45,7 @@ type RepositoryInterface interface {
 	ReportEnagegeByReportId(reportId string) (*model.ReportEngage, error)
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error
 	EditEngage(req request.ReportEngage, session *gorm.DB) error
+	AssignJobMaintainer(req request.AssignReport) error
 
 	//fixdate
 	CreateFixdate(model model.CreateFixdate, session *gorm.DB) error
@@ -59,4 +60,7 @@ type RepositoryInterface interface {
 	AllBuilding() (*[]response.AllBuilding, error)
 	CreateBuilding(model model.BuildingInsert) (*int64, error)
 	BuildingDelete(buildingId int) error
+
+	//maintainer
+	CreateMaintainer(req model.AddMaintainer) error
 }

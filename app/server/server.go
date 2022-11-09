@@ -70,6 +70,8 @@ func StartServer() {
 	emp.POST("building", controller.CreateBuilding, validator.EmployeeValidation)                                        // Insert Building
 	emp.POST("rooms", controller.CreateRoom, validator.EmployeeValidation)                                               // Insert Room
 	emp.DELETE("building", controller.BuildingDelete, validator.EmployeeValidation)                                      // Delete building
+	emp.POST("assignFixReport", controller.AssignJobMaintainer, validator.EmployeeValidation)                            // add maintainer to fix report
+	emp.POST("maintainer", controller.CreateMaintainer, validator.EmployeeValidation)                                    // Created maintainer and return Id
 	e.Logger.Fatal(e.Start(":" + port))
 }
 

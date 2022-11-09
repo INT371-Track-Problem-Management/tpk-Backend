@@ -25,4 +25,6 @@ type ControllerInterface interface {
 	BuildingDelete(ctx echo.Context) error
 	ChangeEmail(ctx echo.Context) error
 	ChangePassword(ctx echo.Context) error
+	AssignJobMaintainer(ctx echo.Context) error
+	CreateMaintainer(ctx echo.Context) error
 }

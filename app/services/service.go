@@ -28,4 +28,6 @@ type ServiceInterface interface {
 	BuildingDelete(buildingId int) error
 	ChangeEmail(req request.ChangeEmail, oldEmail string) error
 	ChangePassword(req request.ChangePassword) error
+	AssignJobMaintainer(req request.AssignReport) error
+	CreateMaintainer(req request.Maintainer) error
 }
