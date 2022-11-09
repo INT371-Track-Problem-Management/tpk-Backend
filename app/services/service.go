@@ -34,4 +34,5 @@ type ServiceInterface interface {
 	RemoveCustomerFromRoom(id int) error
 	FetchCustomerByEmail(email string) (*model.Customer, error)
 	FetchEmployeeByEmail(email string) (*model.Employee, error)
+	RoomByBuildingId(buildingId int) (*response.RoomByBuildingId, error)
 }

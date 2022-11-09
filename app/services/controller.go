@@ -30,4 +30,5 @@ type ControllerInterface interface {
 	AddCustomerIntoRoom(ctx echo.Context) error
 	RemoveCustomerFromRoom(ctx echo.Context) error
 	FetchProfile(ctx echo.Context) error
+	RoomByBuildingId(ctx echo.Context) error
 }

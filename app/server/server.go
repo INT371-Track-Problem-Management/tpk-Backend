@@ -76,6 +76,8 @@ func StartServer() {
 	emp.POST("addEmployeeInBuilding", controller.AddCustomerIntoRoom, validator.EmployeeValidation)                      // Add employee in building and change position to staff
 	emp.PUT("roomRemoveCustomer/*", controller.RemoveCustomerFromRoom, validator.EmployeeValidation)                     // remove customer from room
 	emp.GET("viewProfile", controller.FetchProfile, validator.EmployeeValidation)                                        // View profile employee by email
+	emp.GET("roomByBuildingId/:buildingId", controller.RoomByBuildingId, validator.EmployeeValidation)                   // Search room by buildingId
+
 	e.Logger.Fatal(e.Start(":" + port))
 }
 
