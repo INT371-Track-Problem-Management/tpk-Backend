@@ -23,6 +23,7 @@ type RepositoryInterface interface {
 	GetCustomerById(customerId int) (*model.Customer, error)
 	RegisterCustomersRepo(req request.CustomerRegis) (*int, error)
 	GetEmailCreateByReportId(reportId int) (*string, error)
+	CustomerEditProfile(model model.CustomerEditProfile, email string) error
 
 	//employee
 	EmployeeById(id int) (*model.Employee, error)

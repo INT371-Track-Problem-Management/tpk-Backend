@@ -57,6 +57,7 @@ func StartServer() {
 	cus.PUT("newFixDate", controller.NewFixDate, validator.CustomerValidation)                                           // insert new fixdate
 	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
 	cus.GET("viewProfile", controller.FetchProfile, validator.CustomerValidation)                                        // View profile customer by email
+	cus.PUT("editProfile/*", controller.CustomerEditProfile, validator.CustomerValidation)                               // Edit customer profile
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

@@ -38,5 +38,5 @@ type ServiceInterface interface {
 	GetAllRoomAndCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
 	Maintainerlist() ([]*model.Maintainer, error)
 	MaintainerById(maintainerId int) (*model.Maintainer, error)
-	
+	CustomerEditProfile(req request.CustomerEditProfile, email string) error
 }

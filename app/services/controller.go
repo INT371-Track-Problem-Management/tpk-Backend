@@ -34,4 +34,5 @@ type ControllerInterface interface {
 	GetAllRoomAndCustomerByBuildingId(ctx echo.Context) error
 	Maintainerlist(ctx echo.Context) error
 	MaintainerById(ctx echo.Context) error
+	CustomerEditProfile(ctx echo.Context) error
 }
