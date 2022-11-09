@@ -59,24 +59,25 @@ func StartServer() {
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
-	emp.GET("reports", controller.ListReport, validator.EmployeeValidation)                                              // Search all report
-	emp.GET("report/detail/:reportId", controller.ReportDetailById, validator.EmployeeValidation)                        // Search report detail by id
-	emp.GET("reportStatus/detail/:reportId", controller.ReportStatusByReportId, validator.EmployeeValidation)            // Search reportStatus detail by reportId
-	emp.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.EmployeeValidation) // Search reportEngage join Fixdate detail by reportId
-	emp.PUT("selectedPlanFixDate", controller.SelectedPlanFixDate, validator.EmployeeValidation)                         // Selecting plan fix date
-	emp.PUT("changeCategory", controller.ChangeCategory, validator.EmployeeValidation)                                   // Change category
-	emp.PUT("statusReport", controller.ChangeStatusReport, validator.EmployeeValidation)                                 // Update status Report
-	emp.PUT("newFixDate", controller.NewFixDate, validator.EmployeeValidation)                                           // insert new fixdate
-	emp.GET("allBuilding", controller.AllBuilding, validator.EmployeeValidation)                                         // Search all building
-	emp.POST("building", controller.CreateBuilding, validator.EmployeeValidation)                                        // Insert Building
-	emp.POST("rooms", controller.CreateRoom, validator.EmployeeValidation)                                               // Insert Room
-	emp.DELETE("building", controller.BuildingDelete, validator.EmployeeValidation)                                      // Delete building
-	emp.POST("assignFixReport", controller.AssignJobMaintainer, validator.EmployeeValidation)                            // add maintainer to fix report
-	emp.POST("maintainer", controller.CreateMaintainer, validator.EmployeeValidation)                                    // Created maintainer and return Id
-	emp.POST("addEmployeeInBuilding", controller.AddCustomerIntoRoom, validator.EmployeeValidation)                      // Add employee in building and change position to staff
-	emp.PUT("roomRemoveCustomer/*", controller.RemoveCustomerFromRoom, validator.EmployeeValidation)                     // remove customer from room
-	emp.GET("viewProfile", controller.FetchProfile, validator.EmployeeValidation)                                        // View profile employee by email
-	emp.GET("roomByBuildingId/:buildingId", controller.RoomByBuildingId, validator.EmployeeValidation)                   // Search room by buildingId
+	emp.GET("reports", controller.ListReport, validator.EmployeeValidation)                                                   // Search all report
+	emp.GET("report/detail/:reportId", controller.ReportDetailById, validator.EmployeeValidation)                             // Search report detail by id
+	emp.GET("reportStatus/detail/:reportId", controller.ReportStatusByReportId, validator.EmployeeValidation)                 // Search reportStatus detail by reportId
+	emp.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.EmployeeValidation)      // Search reportEngage join Fixdate detail by reportId
+	emp.PUT("selectedPlanFixDate", controller.SelectedPlanFixDate, validator.EmployeeValidation)                              // Selecting plan fix date
+	emp.PUT("changeCategory", controller.ChangeCategory, validator.EmployeeValidation)                                        // Change category
+	emp.PUT("statusReport", controller.ChangeStatusReport, validator.EmployeeValidation)                                      // Update status Report
+	emp.PUT("newFixDate", controller.NewFixDate, validator.EmployeeValidation)                                                // insert new fixdate
+	emp.GET("allBuilding", controller.AllBuilding, validator.EmployeeValidation)                                              // Search all building
+	emp.POST("building", controller.CreateBuilding, validator.EmployeeValidation)                                             // Insert Building
+	emp.POST("rooms", controller.CreateRoom, validator.EmployeeValidation)                                                    // Insert Room
+	emp.DELETE("building", controller.BuildingDelete, validator.EmployeeValidation)                                           // Delete building
+	emp.POST("assignFixReport", controller.AssignJobMaintainer, validator.EmployeeValidation)                                 // add maintainer to fix report
+	emp.POST("maintainer", controller.CreateMaintainer, validator.EmployeeValidation)                                         // Created maintainer and return Id
+	emp.POST("addEmployeeInBuilding", controller.AddCustomerIntoRoom, validator.EmployeeValidation)                           // Add employee in building and change position to staff
+	emp.PUT("roomRemoveCustomer/*", controller.RemoveCustomerFromRoom, validator.EmployeeValidation)                          // remove customer from room
+	emp.GET("viewProfile", controller.FetchProfile, validator.EmployeeValidation)                                             // View profile employee by email
+	emp.GET("roomByBuildingId/:buildingId", controller.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by buildingId
+	emp.GET("GetAllRoomWithCustomer/:buildingId", controller.GetAllRoomAndCustomerByBuildingId, validator.EmployeeValidation) // Search all customer in their buildingId
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
