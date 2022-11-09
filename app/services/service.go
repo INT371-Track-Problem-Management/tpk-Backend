@@ -31,4 +31,5 @@ type ServiceInterface interface {
 	AssignJobMaintainer(req request.AssignReport) error
 	CreateMaintainer(req request.Maintainer) error
 	AddCustomerIntoRoom(req request.RoomAddCustomer) error
+	RemoveCustomerFromRoom(id int) error
 }

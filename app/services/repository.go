@@ -67,4 +67,5 @@ type RepositoryInterface interface {
 
 	//RoomWithCustomer
 	AddCustomerIntoRoom(model model.RoomAddCustomer) error
+	RemoveCustomerFromRoom(id int, now string) error
 }
