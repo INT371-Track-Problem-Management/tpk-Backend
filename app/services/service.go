@@ -36,4 +36,7 @@ type ServiceInterface interface {
 	FetchEmployeeByEmail(email string) (*model.Employee, error)
 	RoomByBuildingId(buildingId int) (*response.RoomByBuildingId, error)
 	GetAllRoomAndCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
+	Maintainerlist() ([]*model.Maintainer, error)
+	MaintainerById(maintainerId int) (*model.Maintainer, error)
+	
 }

@@ -43,8 +43,9 @@ func StartServer() {
 
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
-	service.POST("changeEmail", controller.ChangeEmail)       // Change email customer or employee
-	service.POST("changePassword", controller.ChangePassword) // Change password
+	service.POST("changeEmail", controller.ChangeEmail)                    // Change email customer or employee
+	service.POST("changePassword", controller.ChangePassword)              // Change password
+	service.GET("maintainerById/:maintainerId", controller.MaintainerById) // Search maintainer by Id
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
@@ -73,6 +74,7 @@ func StartServer() {
 	emp.DELETE("building", controller.BuildingDelete, validator.EmployeeValidation)                                           // Delete building
 	emp.POST("assignFixReport", controller.AssignJobMaintainer, validator.EmployeeValidation)                                 // add maintainer to fix report
 	emp.POST("maintainer", controller.CreateMaintainer, validator.EmployeeValidation)                                         // Created maintainer and return Id
+	emp.GET("maintainerList", controller.Maintainerlist, validator.EmployeeValidation)                                        // Search all maintainer
 	emp.POST("addEmployeeInBuilding", controller.AddCustomerIntoRoom, validator.EmployeeValidation)                           // Add employee in building and change position to staff
 	emp.PUT("roomRemoveCustomer/*", controller.RemoveCustomerFromRoom, validator.EmployeeValidation)                          // remove customer from room
 	emp.GET("viewProfile", controller.FetchProfile, validator.EmployeeValidation)                                             // View profile employee by email

@@ -67,6 +67,8 @@ type RepositoryInterface interface {
 
 	//maintainer
 	CreateMaintainer(req model.AddMaintainer) error
+	Maintainerlist() ([]*model.Maintainer, error)
+	MaintainerById(maintainerId int) (*model.Maintainer, error)
 
 	//RoomWithCustomer
 	AddCustomerIntoRoom(model model.RoomAddCustomer) error
