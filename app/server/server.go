@@ -55,7 +55,7 @@ func StartServer() {
 	cus.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail, validator.CustomerValidation) // Search reportEngage join Fixdate detail by reportId
 	cus.PUT("newFixDate", controller.NewFixDate, validator.CustomerValidation)                                           // insert new fixdate
 	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
-	cus.GET("viewCustomerProfile", controller.FetchCustomerByEmail, validator.CustomerValidation)                        // View profile customer by email
+	cus.GET("viewProfile", controller.FetchProfile, validator.CustomerValidation)                                        // View profile customer by email
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
@@ -75,6 +75,7 @@ func StartServer() {
 	emp.POST("maintainer", controller.CreateMaintainer, validator.EmployeeValidation)                                    // Created maintainer and return Id
 	emp.POST("addEmployeeInBuilding", controller.AddCustomerIntoRoom, validator.EmployeeValidation)                      // Add employee in building and change position to staff
 	emp.PUT("roomRemoveCustomer/*", controller.RemoveCustomerFromRoom, validator.EmployeeValidation)                     // remove customer from room
+	emp.GET("viewProfile", controller.FetchProfile, validator.EmployeeValidation)                                        // View profile employee by email
 	e.Logger.Fatal(e.Start(":" + port))
 }
 

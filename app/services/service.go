@@ -33,4 +33,5 @@ type ServiceInterface interface {
 	AddCustomerIntoRoom(req request.RoomAddCustomer) error
 	RemoveCustomerFromRoom(id int) error
 	FetchCustomerByEmail(email string) (*model.Customer, error)
+	FetchEmployeeByEmail(email string) (*model.Employee, error)
 }
