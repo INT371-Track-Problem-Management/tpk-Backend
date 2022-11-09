@@ -16,7 +16,7 @@ type Customer struct {
 	UpdateBy    int    `json:"updateBy" gorm:"column:updateBy"`
 }
 
-type CustomerEditProfile struct {
+type EditProfile struct {
 	Fname       string `json:"fname" gorm:"column:fname"`
 	Lname       string `json:"lname" gorm:"column:lname"`
 	Sex         string `json:"sex" gorm:"column:sex"`

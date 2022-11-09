@@ -6,9 +6,9 @@ import (
 	"tpk-backend/app/pkg"
 )
 
-func (s serviceTPK) CustomerEditProfile(req request.CustomerEditProfile, email string) error {
+func (s serviceTPK) EditProfile(req request.EditProfile, email string, role string) error {
 	timenow := pkg.GetDatetime()
-	model := model.CustomerEditProfile{
+	model := model.EditProfile{
 		Fname:       req.Fname,
 		Lname:       req.Lname,
 		Sex:         req.Sex,
@@ -19,7 +19,7 @@ func (s serviceTPK) CustomerEditProfile(req request.CustomerEditProfile, email s
 		UpdateAt:    timenow,
 		UpdateBy:    req.UpdateBy,
 	}
-	err := s.repo.CustomerEditProfile(model, email)
+	err := s.repo.EditProfile(model, email, role)
 	if err != nil {
 		return err
 	}

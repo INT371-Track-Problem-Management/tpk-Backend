@@ -57,7 +57,7 @@ func StartServer() {
 	cus.PUT("newFixDate", controller.NewFixDate, validator.CustomerValidation)                                           // insert new fixdate
 	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
 	cus.GET("viewProfile", controller.FetchProfile, validator.CustomerValidation)                                        // View profile customer by email
-	cus.PUT("editProfile/*", controller.CustomerEditProfile, validator.CustomerValidation)                               // Edit customer profile
+	cus.PUT("editProfile/*", controller.EditProfile, validator.CustomerValidation)                                       // Edit customer profile
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
@@ -81,6 +81,7 @@ func StartServer() {
 	emp.GET("viewProfile", controller.FetchProfile, validator.EmployeeValidation)                                             // View profile employee by email
 	emp.GET("roomByBuildingId/:buildingId", controller.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by buildingId
 	emp.GET("GetAllRoomWithCustomer/:buildingId", controller.GetAllRoomAndCustomerByBuildingId, validator.EmployeeValidation) // Search all customer in their buildingId
+	emp.PUT("editProfile/*", controller.EditProfile, validator.EmployeeValidation)                                            // Edit customer profile
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
