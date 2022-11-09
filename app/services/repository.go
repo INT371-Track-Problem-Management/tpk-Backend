@@ -55,6 +55,7 @@ type RepositoryInterface interface {
 	GetRoomWithCustomerId(customerId int) (*[]model.RoomWithCustomerId, error)
 	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
 	CreateRoom(model model.RoomInsert, session *gorm.DB) error
+	RoomByRoomId(roomId int) (*model.Room, error)
 
 	//bulding
 	AllBuilding() (*[]response.AllBuilding, error)
@@ -63,4 +64,7 @@ type RepositoryInterface interface {
 
 	//maintainer
 	CreateMaintainer(req model.AddMaintainer) error
+
+	//RoomWithCustomer
+	AddCustomerIntoRoom(model model.RoomAddCustomer) error
 }

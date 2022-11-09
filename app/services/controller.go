@@ -27,4 +27,5 @@ type ControllerInterface interface {
 	ChangePassword(ctx echo.Context) error
 	AssignJobMaintainer(ctx echo.Context) error
 	CreateMaintainer(ctx echo.Context) error
+	AddCustomerIntoRoom(ctx echo.Context) error
 }

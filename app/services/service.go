@@ -30,4 +30,5 @@ type ServiceInterface interface {
 	ChangePassword(req request.ChangePassword) error
 	AssignJobMaintainer(req request.AssignReport) error
 	CreateMaintainer(req request.Maintainer) error
+	AddCustomerIntoRoom(req request.RoomAddCustomer) error
 }
