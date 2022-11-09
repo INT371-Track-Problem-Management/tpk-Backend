@@ -23,4 +23,16 @@ type ControllerInterface interface {
 	CreateBuilding(ctx echo.Context) error
 	CreateRoom(ctx echo.Context) error
 	BuildingDelete(ctx echo.Context) error
+	ChangeEmail(ctx echo.Context) error
+	ChangePassword(ctx echo.Context) error
+	AssignJobMaintainer(ctx echo.Context) error
+	CreateMaintainer(ctx echo.Context) error
+	AddCustomerIntoRoom(ctx echo.Context) error
+	RemoveCustomerFromRoom(ctx echo.Context) error
+	FetchProfile(ctx echo.Context) error
+	RoomByBuildingId(ctx echo.Context) error
+	GetAllRoomAndCustomerByBuildingId(ctx echo.Context) error
+	Maintainerlist(ctx echo.Context) error
+	MaintainerById(ctx echo.Context) error
+	EditProfile(ctx echo.Context) error
 }

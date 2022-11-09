@@ -26,4 +26,17 @@ type ServiceInterface interface {
 	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
 	CreateRoom(req request.RoomInsert) error
 	BuildingDelete(buildingId int) error
+	ChangeEmail(req request.ChangeEmail, oldEmail string) error
+	ChangePassword(req request.ChangePassword) error
+	AssignJobMaintainer(req request.AssignReport) error
+	CreateMaintainer(req request.Maintainer) error
+	AddCustomerIntoRoom(req request.RoomAddCustomer) error
+	RemoveCustomerFromRoom(id int) error
+	FetchCustomerByEmail(email string) (*model.Customer, error)
+	FetchEmployeeByEmail(email string) (*model.Employee, error)
+	RoomByBuildingId(buildingId int) (*response.RoomByBuildingId, error)
+	GetAllRoomAndCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
+	Maintainerlist() ([]*model.Maintainer, error)
+	MaintainerById(maintainerId int) (*model.Maintainer, error)
+	EditProfile(req request.EditProfile, email string, role string) error
 }

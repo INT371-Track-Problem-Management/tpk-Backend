@@ -34,3 +34,17 @@ func (c controllerTPK) NewFixDate(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (c controllerTPK) AssignJobMaintainer(ctx echo.Context) error {
+	req := new(request.AssignReport)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	if err := c.service.AssignJobMaintainer(*req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

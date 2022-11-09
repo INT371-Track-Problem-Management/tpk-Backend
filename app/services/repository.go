@@ -15,6 +15,9 @@ type RepositoryInterface interface {
 	GetUser(email string) (*model.User, error)
 	SaveToken(token *string, role string) error
 	RegisUser(req model.User) error
+	ChangeEmail(req request.ChangeEmail, oldEmail string) error
+	ChangePassword(model model.ChangePassword) error
+	EditProfile(model model.EditProfile, email string, role string) error
 
 	//customer
 	CustomerByEmail(email string) (*model.Customer, error)
@@ -43,6 +46,7 @@ type RepositoryInterface interface {
 	ReportEnagegeByReportId(reportId string) (*model.ReportEngage, error)
 	SelectedPlanFixDate(req request.SelectedPlanFixDate) error
 	EditEngage(req request.ReportEngage, session *gorm.DB) error
+	AssignJobMaintainer(req request.AssignReport) error
 
 	//fixdate
 	CreateFixdate(model model.CreateFixdate, session *gorm.DB) error
@@ -52,9 +56,22 @@ type RepositoryInterface interface {
 	GetRoomWithCustomerId(customerId int) (*[]model.RoomWithCustomerId, error)
 	GetAllRoomWithCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
 	CreateRoom(model model.RoomInsert, session *gorm.DB) error
+	RoomByRoomId(roomId int) (*model.Room, error)
+	TotalFlooorsByBuildingId(buildingId int) (*int, error)
+	RoomInFloorByBuildingId(buildingId int, floor int) (*[]model.RoomByFloors, error)
+	GetAllRoomAndCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
 
 	//bulding
 	AllBuilding() (*[]response.AllBuilding, error)
 	CreateBuilding(model model.BuildingInsert) (*int64, error)
 	BuildingDelete(buildingId int) error
+
+	//maintainer
+	CreateMaintainer(req model.AddMaintainer) error
+	Maintainerlist() ([]*model.Maintainer, error)
+	MaintainerById(maintainerId int) (*model.Maintainer, error)
+
+	//RoomWithCustomer
+	AddCustomerIntoRoom(model model.RoomAddCustomer) error
+	RemoveCustomerFromRoom(id int, now string) error
 }

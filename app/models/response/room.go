@@ -10,6 +10,6 @@ type Room struct {
 }
 
 type RoomByBuildingId struct {
-	BuildingId string        `json:"buildingId" gorm:"column:buildingId"`
+	BuildingId int           `json:"buildingId" gorm:"column:buildingId"`
 	Floors     []interface{} `json:"floors" gorm:"column:floors"`
 }
