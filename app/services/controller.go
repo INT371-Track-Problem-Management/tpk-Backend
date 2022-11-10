@@ -7,6 +7,7 @@ import (
 type ControllerInterface interface {
 	CheckHealthy(ctx echo.Context) error
 	Login(ctx echo.Context) error
+	LogoutToken(ctx echo.Context) error
 	RegisterCustomers(ctx echo.Context) error
 	RegisterOwner(ctx echo.Context) error
 	CreateReport(ctx echo.Context) error
