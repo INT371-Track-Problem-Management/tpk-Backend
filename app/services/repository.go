@@ -25,11 +25,13 @@ type RepositoryInterface interface {
 	GetCustomerById(customerId int) (*model.Customer, error)
 	RegisterCustomersRepo(req request.CustomerRegis) (*int, error)
 	GetEmailCreateByReportId(reportId int) (*string, error)
+	GetListCustomer() ([]*model.Customer, error)
 
 	//employee
 	EmployeeById(id int) (*model.Employee, error)
 	EmployeeByEmail(email string) (*model.Employee, error)
 	RegisterEmployeeRepo(req model.EmployeeRegis) (*int, error)
+	GetListEmployee() ([]*model.Employee, error)
 
 	//report
 	CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error)

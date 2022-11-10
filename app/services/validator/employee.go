@@ -13,7 +13,7 @@ func (v validator) EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 		authentication := jwt.DecodeJWT(c)
 		status := v.StatusToken(jwt.GetTokenFromHeadler(c))
 		if !status {
-			c.JSON(http.StatusUnauthorized, "Token is inactive")
+			return c.JSON(http.StatusUnauthorized, "Token is inactive")
 		}
 
 		app := new(jwt.CheckOwnerApplication)

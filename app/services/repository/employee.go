@@ -19,3 +19,12 @@ func (r mysqlRepository) EmployeeByEmail(email string) (*model.Employee, error) 
 	}
 	return &emp, nil
 }
+
+func (r mysqlRepository) GetListEmployee() ([]*model.Employee, error) {
+	var employee []*model.Employee
+	err := r.conn.Table("employee").Find(&employee).Error
+	if err != nil {
+		return nil, err
+	}
+	return employee, nil
+}
