@@ -6,5 +6,5 @@ type ValidatorInterface interface {
 	AdminValidation(ctx echo.HandlerFunc) echo.HandlerFunc
 	CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc
 	EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc
-	StatusToken(token string) (bool, error)
+	StatusToken(token string) bool
 }

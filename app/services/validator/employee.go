@@ -11,11 +11,7 @@ import (
 func (v validator) EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		authentication := jwt.DecodeJWT(c)
-		status, err := v.StatusToken(jwt.GetTokenFromHeadler(c))
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
-		}
-
+		status := v.StatusToken(jwt.GetTokenFromHeadler(c))
 		if !status {
 			c.JSON(http.StatusUnauthorized, "Token is inactive")
 		}

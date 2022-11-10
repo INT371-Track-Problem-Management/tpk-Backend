@@ -16,13 +16,13 @@ func Newvalidator(db *gorm.DB) services.ValidatorInterface {
 	}
 }
 
-func (v validator) StatusToken(token string) (bool, error) {
+func (v validator) StatusToken(token string) bool {
 	var status string
 	if err := v.db.Table("tokenApp").Where("token = ?", token).Select("status").Scan(&status).Error; err != nil {
-		return false, err
+		return false
 	}
 	if status == "A" {
-		return true, nil
+		return true
 	}
-	return false, nil
+	return false
 }
