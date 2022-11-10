@@ -58,3 +58,10 @@ func (r mysqlRepository) ChangePassword(model model.ChangePassword) error {
 	stmt.Commit()
 	return nil
 }
+
+func (r mysqlRepository) LogoutToken(token string) error {
+	if err := r.conn.Exec("DELETE FROM tokenApp WHERE token = ?", token).Error; err != nil {
+		return err
+	}
+	return nil
+}

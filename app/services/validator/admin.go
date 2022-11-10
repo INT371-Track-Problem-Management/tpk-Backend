@@ -10,6 +10,10 @@ import (
 
 func (v validator) AdminValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		status := v.StatusToken(jwt.GetTokenFromHeadler(c))
+		if !status {
+			c.JSON(http.StatusUnauthorized, "Token is inactive")
+		}
 		authentication := jwt.DecodeJWT(c)
 		app := new(jwt.CheckOwnerApplication)
 
@@ -24,7 +28,7 @@ func (v validator) AdminValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusBadRequest, res)
 		}
-		if authentication.Role == "A" || authentication.Status == false {
+		if authentication.Role == "A" || !authentication.Status {
 			app.Id = authentication.Id
 			app.Id = authentication.Id
 			app.Token = "Only admin can call"
