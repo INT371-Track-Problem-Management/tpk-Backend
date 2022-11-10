@@ -11,6 +11,15 @@ import (
 func (v validator) EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		authentication := jwt.DecodeJWT(c)
+		status, err := v.StatusToken(jwt.GetTokenFromHeadler(c))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		if !status {
+			c.JSON(http.StatusUnauthorized, "Token is inactive")
+		}
+
 		app := new(jwt.CheckOwnerApplication)
 
 		if authentication.Expire < float64(time.Now().Unix()) {
@@ -22,7 +31,7 @@ func (v validator) EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 				"messgae": app.Token,
 				"status":  app.Status,
 			}
-			return c.JSON(http.StatusBadRequest, res)
+			return c.JSON(http.StatusUnauthorized, res)
 		}
 		if authentication.Role == "E" || authentication.Role == "A" || authentication.Status == false {
 			app.Id = authentication.Id
@@ -40,6 +49,6 @@ func (v validator) EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			"status":  app.Status,
 		}
 
-		return c.JSON(http.StatusBadRequest, res)
+		return c.JSON(http.StatusUnauthorized, res)
 	}
 }
