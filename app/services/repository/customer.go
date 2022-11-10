@@ -14,6 +14,14 @@ func (r mysqlRepository) CustomerByEmail(email string) (*model.Customer, error) 
 	return &Customer, nil
 }
 
+func (r mysqlRepository) GetListCustomer() ([]*model.Customer, error) {
+	var Customer []*model.Customer
+	if err := r.conn.Table("customer").Find(&Customer).Error; err != nil {
+		return nil, err
+	}
+	return Customer, nil
+}
+
 func (r mysqlRepository) GetCustomerById(customerId int) (*model.Customer, error) {
 	var Customer *model.Customer
 	err := r.conn.Table("customer").Where("customerId = ?", customerId).Find(&Customer).Error

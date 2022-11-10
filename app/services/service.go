@@ -40,4 +40,10 @@ type ServiceInterface interface {
 	Maintainerlist() ([]*model.Maintainer, error)
 	MaintainerById(maintainerId int) (*model.Maintainer, error)
 	EditProfile(req request.EditProfile, email string, role string) error
+	GetListCustomer() ([]*model.Customer, error)
+	GetListEmployee() ([]*model.Employee, error)
+	FetchEmployeeById(customerId int) (*model.Employee, error)
+	FetchCustomerById(customerId int) (*model.Customer, error)
+	DeleteCustomer(id int) error
+	DeleteEmployee(id int) error
 }
