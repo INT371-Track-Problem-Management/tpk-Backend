@@ -42,3 +42,21 @@ func (c controllerTPK) CreateRoom(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (c controllerTPK) RoomByBuildingId(ctx echo.Context) error {
+	buildingId, _ := strconv.Atoi(ctx.Param("buildingId"))
+	response, err := c.service.RoomByBuildingId(buildingId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, response)
+}
+
+func (c controllerTPK) GetAllRoomAndCustomerByBuildingId(ctx echo.Context) error {
+	buildingId, _ := strconv.Atoi(ctx.Param("buildingId"))
+	rooms, err := c.service.GetAllRoomAndCustomerByBuildingId(buildingId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, rooms)
+}
