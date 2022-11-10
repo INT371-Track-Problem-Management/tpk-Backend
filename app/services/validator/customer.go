@@ -29,7 +29,7 @@ func (v validator) CustomerValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusBadRequest, res)
 		}
-		if authentication.Role != "C" || authentication.Status == false {
+		if authentication.Role != "C" || !authentication.Status {
 			app.Id = authentication.Id
 			app.Token = "Token can't use"
 			app.Status = false

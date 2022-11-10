@@ -29,7 +29,7 @@ func (v validator) EmployeeValidation(ctx echo.HandlerFunc) echo.HandlerFunc {
 			}
 			return c.JSON(http.StatusUnauthorized, res)
 		}
-		if authentication.Role == "E" || authentication.Role == "A" || authentication.Status == false {
+		if authentication.Role == "E" || authentication.Role == "A" || !authentication.Status {
 			app.Id = authentication.Id
 			app.Id = authentication.Id
 			app.Token = "Token can use"

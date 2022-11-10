@@ -107,7 +107,7 @@ func ValidateCustomerService(ctx echo.Context) (*CheckCustomerApplication, bool)
 		app.Status = false
 		return app, false
 	}
-	if jwt.Role != "C" && jwt.Status == false {
+	if jwt.Role != "C" && !jwt.Status {
 		app.Id = jwt.Id
 		app.Token = "Token can't use"
 		app.Status = false
@@ -128,7 +128,7 @@ func ValidateOwnerService(ctx echo.Context) (*CheckOwnerApplication, bool) {
 		app.Status = false
 		return app, false
 	}
-	if jwt.Role != "E" || jwt.Status == false {
+	if jwt.Role != "E" || !jwt.Status {
 		app.Id = jwt.Id
 		app.Token = "Token can't use"
 		app.Status = false
