@@ -44,4 +44,6 @@ type ServiceInterface interface {
 	GetListEmployee() ([]*model.Employee, error)
 	FetchEmployeeById(customerId int) (*model.Employee, error)
 	FetchCustomerById(customerId int) (*model.Customer, error)
+	DeleteCustomer(id int) error
+	DeleteEmployee(id int) error
 }

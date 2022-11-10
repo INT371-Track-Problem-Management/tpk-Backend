@@ -48,3 +48,14 @@ func (c controllerTPK) FetchEmployeeById(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (c controllerTPK) DeleteEmployee(ctx echo.Context) error {
+	employeeId, _ := strconv.Atoi(ctx.Param("employeeId"))
+	if err := c.service.DeleteEmployee(employeeId); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	response := map[string]string{
+		"message": "success",
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

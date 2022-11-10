@@ -40,4 +40,6 @@ type ControllerInterface interface {
 	GetListCustomer(ctx echo.Context) error
 	FetchEmployeeById(ctx echo.Context) error
 	FetchCustomerById(ctx echo.Context) error
+	DeleteEmployee(ctx echo.Context) error
+	DeleteCustomer(ctx echo.Context) error
 }
