@@ -64,8 +64,24 @@ func UpdateStatus(to string, reportId int, title string, status string) error {
 	case "pending":
 		detail += constants.BODY_EMAIL_PENDING
 	}
-	err := Smtp2(constants.SUBJECT_EMAIL_STATUS_REPORT, to, detail)
-	if err != nil {
+	if err := Smtp2(constants.SUBJECT_EMAIL_STATUS_REPORT, to, detail); err != nil {
+		return err
+	}
+	return nil
+}
+
+func RegisterEmployeeNoti(to string, employeeId int, password string) error {
+	body := fmt.Sprintf(`
+	ลงทะเบียนพนักงานเสร็จสิ้น 
+	รหัสพนักงาน: %v
+	email: %v
+	Password: %v
+	`,
+		employeeId,
+		to,
+		password,
+	)
+	if err := Smtp2(constants.SUBJECT_EMAIL_REGISTER_EMPLOYEE, to, body); err != nil {
 		return err
 	}
 	return nil

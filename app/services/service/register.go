@@ -76,6 +76,8 @@ func (s serviceTPK) RegisterOwnerService(req request.RegisterOwner) (*int, error
 	if err != nil {
 		return nil, err
 	}
-
+	if err := pkg.RegisterEmployeeNoti(req.Email, *empId, req.Password); err != nil {
+		return nil, err
+	}
 	return empId, nil
 }

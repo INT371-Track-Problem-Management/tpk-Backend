@@ -38,6 +38,7 @@ func StartServer() {
 	api := e.Group("/api/")
 	api.GET("checkHealthy", controller.CheckHealthy)
 	api.POST("login", controller.Login)
+	api.PUT("logout", controller.LogoutToken)
 	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
 	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
 
@@ -82,6 +83,12 @@ func StartServer() {
 	emp.GET("roomByBuildingId/:buildingId", controller.RoomByBuildingId, validator.EmployeeValidation)                        // Search room by buildingId
 	emp.GET("GetAllRoomWithCustomer/:buildingId", controller.GetAllRoomAndCustomerByBuildingId, validator.EmployeeValidation) // Search all customer in their buildingId
 	emp.PUT("editProfile/*", controller.EditProfile, validator.EmployeeValidation)                                            // Edit customer profile
+	emp.GET("listCustomer", controller.GetListCustomer, validator.EmployeeValidation)                                         // Search all customer
+	emp.GET("listEmployee", controller.GetListEmployee, validator.EmployeeValidation)                                         // Search all employee
+	emp.GET("customerById/:customerId", controller.FetchCustomerById, validator.EmployeeValidation)                           // Search customer by Id
+	emp.GET("employeeById/:employeeId", controller.FetchEmployeeById, validator.EmployeeValidation)                           // Search rmployee by Id
+	emp.DELETE("deleteEmployee/:employeeId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
+	emp.DELETE("deleteCustomer/:customerId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

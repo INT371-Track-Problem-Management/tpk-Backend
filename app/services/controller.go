@@ -7,6 +7,7 @@ import (
 type ControllerInterface interface {
 	CheckHealthy(ctx echo.Context) error
 	Login(ctx echo.Context) error
+	LogoutToken(ctx echo.Context) error
 	RegisterCustomers(ctx echo.Context) error
 	RegisterOwner(ctx echo.Context) error
 	CreateReport(ctx echo.Context) error
@@ -35,4 +36,10 @@ type ControllerInterface interface {
 	Maintainerlist(ctx echo.Context) error
 	MaintainerById(ctx echo.Context) error
 	EditProfile(ctx echo.Context) error
+	GetListEmployee(ctx echo.Context) error
+	GetListCustomer(ctx echo.Context) error
+	FetchEmployeeById(ctx echo.Context) error
+	FetchCustomerById(ctx echo.Context) error
+	DeleteEmployee(ctx echo.Context) error
+	DeleteCustomer(ctx echo.Context) error
 }

@@ -18,17 +18,22 @@ type RepositoryInterface interface {
 	ChangeEmail(req request.ChangeEmail, oldEmail string) error
 	ChangePassword(model model.ChangePassword) error
 	EditProfile(model model.EditProfile, email string, role string) error
+	LogoutToken(token string) error
 
 	//customer
 	CustomerByEmail(email string) (*model.Customer, error)
 	GetCustomerById(customerId int) (*model.Customer, error)
 	RegisterCustomersRepo(req request.CustomerRegis) (*int, error)
 	GetEmailCreateByReportId(reportId int) (*string, error)
+	GetListCustomer() ([]*model.Customer, error)
+	DeleteCustomer(id int) error
 
 	//employee
 	EmployeeById(id int) (*model.Employee, error)
 	EmployeeByEmail(email string) (*model.Employee, error)
 	RegisterEmployeeRepo(req model.EmployeeRegis) (*int, error)
+	GetListEmployee() ([]*model.Employee, error)
+	DeleteEmployee(id int) error
 
 	//report
 	CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error)
