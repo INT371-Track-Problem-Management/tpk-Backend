@@ -13,13 +13,13 @@ func (c controllerTPK) TestUploadFile(ctx echo.Context) error {
 		return err
 	}
 
-	filename, err := pkg.UploadFile(file)
+	image, err := pkg.UploadFile(file)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 
-	response := map[string]string{
-		"image_name": *filename,
+	response := map[string]interface{}{
+		"image": *image,
 	}
 
 	return ctx.JSON(http.StatusOK, response)

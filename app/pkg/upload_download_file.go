@@ -4,9 +4,12 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"tpk-backend/app/models/model"
+
+	"github.com/gofrs/uuid"
 )
 
-func UploadFile(file *multipart.FileHeader) (*string, error) {
+func UploadFile(file *multipart.FileHeader) (*model.ReportMedia, error) {
 	src, err := file.Open()
 	if err != nil {
 		return nil, err
@@ -21,10 +24,18 @@ func UploadFile(file *multipart.FileHeader) (*string, error) {
 		return nil, err
 	}
 	defer dst.Close()
-
 	// Copy
 	if _, err = io.Copy(dst, src); err != nil {
 		return nil, err
 	}
-	return &fileName, nil
+	now := GetDatetime()
+	uid, _ := uuid.NewV4()
+	image := model.ReportMedia{
+		Id:          uid.String(),
+		FileName:    fileName,
+		Size:        file.Size,
+		ContentType: file.Header.Get("Content-Type"),
+		CreateAt:    now,
+	}
+	return &image, nil
 }
