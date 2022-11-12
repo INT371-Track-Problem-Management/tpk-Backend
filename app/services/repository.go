@@ -42,6 +42,7 @@ type RepositoryInterface interface {
 	ChangeCategory(req request.ReportChangeCategory) error
 	ChangeStatusReport(req request.ReportStatus, session *gorm.DB) error
 	EndJobReport(session *gorm.DB, req model.EndJobReport) error
+	FetcStatDashBoard(req request.Stat) (*model.Stat, error)
 
 	//reportStatus
 	CreateReportStatus(model request.ReportStatus, session *gorm.DB) error
