@@ -46,4 +46,7 @@ type ControllerInterface interface {
 	FetcStatDashBoard(ctx echo.Context) error
 	FetchStatMaintain(ctx echo.Context) error
 	FetchOverviewMaintain(ctx echo.Context) error
+
+	TestUploadFile(ctx echo.Context) error
+	TestDownloadFile(ctx echo.Context) error
 }
