@@ -8,6 +8,8 @@ services:
     ports:
       - "3000:3000"
     restart: on-failure
+    volumes:
+      - /home/rmadmin/dev-images/images:/app/images
 networks:
   default:
     external:
