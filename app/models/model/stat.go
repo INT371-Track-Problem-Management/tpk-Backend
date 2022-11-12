@@ -10,3 +10,10 @@ type Stat struct {
 	Building       int `json:"building" gorm:"column:building"`
 	Other          int `json:"other" gorm:"column:other"`
 }
+
+type StatMaintainer struct {
+	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
+	Fname        string `json:"fname" gorm:"column:fname"`
+	Lname        string `json:"lname" gorm:"column:lname"`
+	Average      int    `json:"average" gorm:"column:average"`
+}

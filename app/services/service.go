@@ -48,4 +48,5 @@ type ServiceInterface interface {
 	DeleteEmployee(id int) error
 	EndJobReport(req request.EndJobReport) error
 	FetcStatDashBoard(req request.Stat) (*model.Stat, error)
+	FetchStatMaintain() (*model.StatMaintainer, error)
 }

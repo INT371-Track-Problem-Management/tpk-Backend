@@ -91,6 +91,7 @@ func StartServer() {
 	emp.DELETE("deleteEmployee/:employeeId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
 	emp.DELETE("deleteCustomer/:customerId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
 	emp.POST("dashboard", controller.FetcStatDashBoard, validator.EmployeeValidation)                                         // Get stat for dashboard
+	emp.POST("dashboard/maintainer", controller.FetchStatMaintain, validator.EmployeeValidation)                              // Get stat for dashboard
 
 	e.Logger.Fatal(e.Start(":" + port))
 }

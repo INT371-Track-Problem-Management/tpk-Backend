@@ -19,3 +19,11 @@ func (c *controllerTPK) FetcStatDashBoard(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, res)
 }
+
+func (c *controllerTPK) FetchStatMaintain(ctx echo.Context) error {
+	res, err := c.service.FetchStatMaintain()
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, res)
+}
