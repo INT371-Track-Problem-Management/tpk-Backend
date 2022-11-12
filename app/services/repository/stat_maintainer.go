@@ -11,9 +11,9 @@ func (r mysqlRepository) FetchStatMaintain() (*model.StatMaintainer, error) {
 		m.lname,
 	AVG(rr.score) as average
 	from
-		reviewReports rr 
-	left join
 		maintainer m
+	left join
+		reviewReports rr 
 	on
 		m.maintainerId = rr.maintainertId 
 	group by
