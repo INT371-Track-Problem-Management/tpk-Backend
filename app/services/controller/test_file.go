@@ -27,7 +27,7 @@ func (c controllerTPK) TestUploadFile(ctx echo.Context) error {
 }
 
 func (c controllerTPK) TestDownloadFile(ctx echo.Context) error {
-	name := ctx.Param("image_name")
+	name := ctx.Param("image_id")
 	path := "../../images/report/" + name
 	return ctx.File(path)
 }
