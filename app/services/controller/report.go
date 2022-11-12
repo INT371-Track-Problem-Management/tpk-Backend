@@ -86,3 +86,22 @@ func (c controllerTPK) ChangeStatusReport(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, response)
 }
+
+func (c controllerTPK) EndJobReport(ctx echo.Context) error {
+
+	req := new(request.EndJobReport)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	if err := c.service.EndJobReport(*req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+
+	res := map[string]string{
+		"message": "success",
+	}
+
+	return ctx.JSON(http.StatusOK, res)
+
+}

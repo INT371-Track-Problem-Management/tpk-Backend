@@ -59,6 +59,7 @@ func StartServer() {
 	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
 	cus.GET("viewProfile", controller.FetchProfile, validator.CustomerValidation)                                        // View profile customer by email
 	cus.PUT("editProfile/*", controller.EditProfile, validator.CustomerValidation)                                       // Edit customer profile
+	cus.POST("endJobReview", controller.EndJobReport, validator.CustomerValidation)                                      // end job report and review
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

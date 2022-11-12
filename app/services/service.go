@@ -46,4 +46,5 @@ type ServiceInterface interface {
 	FetchCustomerById(customerId int) (*model.Customer, error)
 	DeleteCustomer(id int) error
 	DeleteEmployee(id int) error
+	EndJobReport(req request.EndJobReport) error
 }
