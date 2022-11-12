@@ -2,13 +2,18 @@ package service
 
 import (
 	"fmt"
+	"mime/multipart"
 	"tpk-backend/app/constants"
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
 	"tpk-backend/app/pkg"
 )
 
-func (s serviceTPK) CreateReport(req request.ReportInsert) (*int, error) {
+func (s serviceTPK) CreateReport(req request.ReportInsert, image *multipart.FileHeader) (*int, error) {
+	file, err := pkg.UploadFile(image, constants.IMAGE_DES_REPORT)
+	if err != nil {
+		return nil, err
+	}
 	now := pkg.GetDatetime()
 	report := model.ReportInsert{
 		Title:            req.Title,
@@ -20,8 +25,12 @@ func (s serviceTPK) CreateReport(req request.ReportInsert) (*int, error) {
 		UpdateBy:         req.UpdateBy,
 		CreateAt:         now,
 		CreateBy:         req.UpdateBy,
+		ImageId:          file.Id,
 	}
 	session := s.database.Begin()
+	if err := s.repo.CreateReportMedia(*file, session); err != nil {
+		return nil, err
+	}
 	reportId, err := s.repo.CreateReport(report, session)
 	if err != nil {
 		return nil, err

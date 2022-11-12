@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"tpk-backend/app/models/request"
@@ -9,12 +10,16 @@ import (
 )
 
 func (c controllerTPK) CreateReport(ctx echo.Context) error {
-	req := new(request.ReportInsert)
-	err := ctx.Bind(&req)
+	file, err := ctx.FormFile("image")
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	reportId, err := c.service.CreateReport(*req)
+	req := new(request.ReportInsert)
+	data := ctx.FormValue("data")
+	if err := json.Unmarshal([]byte(data), &req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	reportId, err := c.service.CreateReport(*req, file)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

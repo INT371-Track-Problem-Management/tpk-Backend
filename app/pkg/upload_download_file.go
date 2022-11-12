@@ -9,7 +9,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-func UploadFile(file *multipart.FileHeader) (*model.ReportMedia, error) {
+func UploadFile(file *multipart.FileHeader, dest string) (*model.ReportMedia, error) {
 	src, err := file.Open()
 	if err != nil {
 		return nil, err
@@ -19,7 +19,7 @@ func UploadFile(file *multipart.FileHeader) (*model.ReportMedia, error) {
 	fileName := file.Filename
 
 	// Destination
-	dst, err := os.Create("../../images/" + fileName)
+	dst, err := os.Create("../../images/" + dest + "/" + fileName)
 	if err != nil {
 		return nil, err
 	}

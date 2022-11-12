@@ -42,7 +42,7 @@ func StartServer() {
 	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
 	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
 	api.POST("test_upload_file", controller.TestUploadFile)
-	api.GET("test_download_file/:image_name", controller.TestDownloadFile)
+	api.GET("download_file/:image_id", controller.TestDownloadFile)
 
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
