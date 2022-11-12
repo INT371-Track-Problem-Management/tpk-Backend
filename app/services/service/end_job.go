@@ -9,11 +9,12 @@ import (
 func (s serviceTPK) EndJobReport(req request.EndJobReport) error {
 	now := pkg.GetDatetime()
 	entity := model.EndJobReport{
-		Des:         req.Des,
-		ReportId:    req.ReportId,
-		Score:       req.Score,
-		DateOfIssue: now,
-		UpdateBy:    req.UpdateBy,
+		Des:          req.Des,
+		ReportId:     req.ReportId,
+		Score:        req.Score,
+		DateOfIssue:  now,
+		MaintainerId: req.MaintainerId,
+		UpdateBy:     req.UpdateBy,
 	}
 	status := request.ReportStatus{
 		ReportId:  req.ReportId,

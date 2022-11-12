@@ -20,9 +20,9 @@ func (r mysqlRepository) EndJobReport(session *gorm.DB, req model.EndJobReport) 
 
 	sql2 := fmt.Sprintf(
 		`
-	INSERT INTO reviewReports (des, reportId, score)
-	VALUES ('%v', %v, %v);
-	`, req.Des, req.ReportId, req.Score)
+	INSERT INTO reviewReports (des, reportId, score, reviewReports)
+	VALUES ('%v', %v, %v, %v);
+	`, req.Des, req.ReportId, req.Score, req.MaintainerId)
 	if err := session.Exec(sql2).Error; err != nil {
 		return err
 	}
