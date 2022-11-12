@@ -42,4 +42,8 @@ type ControllerInterface interface {
 	FetchCustomerById(ctx echo.Context) error
 	DeleteEmployee(ctx echo.Context) error
 	DeleteCustomer(ctx echo.Context) error
+	EndJobReport(ctx echo.Context) error
+	FetcStatDashBoard(ctx echo.Context) error
+	FetchStatMaintain(ctx echo.Context) error
+	FetchOverviewMaintain(ctx echo.Context) error
 }

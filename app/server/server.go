@@ -59,6 +59,8 @@ func StartServer() {
 	cus.GET("getAllRoomByCustomerId/:customerId", controller.GetRoomWithCustomerId, validator.CustomerValidation)        // search all rooms by customerId
 	cus.GET("viewProfile", controller.FetchProfile, validator.CustomerValidation)                                        // View profile customer by email
 	cus.PUT("editProfile/*", controller.EditProfile, validator.CustomerValidation)                                       // Edit customer profile
+	cus.POST("endJobReview", controller.EndJobReport, validator.CustomerValidation)                                      // end job report and review
+	cus.PUT("statusReport", controller.ChangeStatusReport, validator.CustomerValidation)                                 // Update status Report
 
 	emp := api.Group("employee/")
 	emp.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
@@ -89,6 +91,9 @@ func StartServer() {
 	emp.GET("employeeById/:employeeId", controller.FetchEmployeeById, validator.EmployeeValidation)                           // Search rmployee by Id
 	emp.DELETE("deleteEmployee/:employeeId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
 	emp.DELETE("deleteCustomer/:customerId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
+	emp.POST("dashboard", controller.FetcStatDashBoard, validator.EmployeeValidation)                                         // Get stat for dashboard
+	emp.GET("dashboard/maintainer", controller.FetchStatMaintain, validator.EmployeeValidation)                               // Get stat of maintainer
+	emp.GET("dashboard/maintainer/:maintainerId", controller.FetchOverviewMaintain, validator.EmployeeValidation)             // Overview of maintainer
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
