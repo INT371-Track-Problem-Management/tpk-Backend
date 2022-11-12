@@ -86,4 +86,5 @@ type RepositoryInterface interface {
 
 	// ReportMedia
 	CreateReportMedia(req model.ReportMedia, session *gorm.DB) error
+	ReportMediaById(id string) (*model.ReportMedia, error)
 }
