@@ -17,3 +17,8 @@ type StatMaintainer struct {
 	Lname        string `json:"lname" gorm:"column:lname"`
 	Average      int    `json:"average" gorm:"column:average"`
 }
+
+type OverviewMaintainer struct {
+	Score int    `json:"score" gorm:"column:score"`
+	Des   string `json:"des" gorm:"column:des"`
+}

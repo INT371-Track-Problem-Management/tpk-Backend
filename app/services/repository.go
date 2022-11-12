@@ -78,6 +78,7 @@ type RepositoryInterface interface {
 	Maintainerlist() ([]*model.Maintainer, error)
 	MaintainerById(maintainerId int) (*model.Maintainer, error)
 	FetchStatMaintain() (*model.StatMaintainer, error)
+	FetchOverviewMaintain(id int) (*[]model.OverviewMaintainer, error)
 
 	//RoomWithCustomer
 	AddCustomerIntoRoom(model model.RoomAddCustomer) error

@@ -45,4 +45,5 @@ type ControllerInterface interface {
 	EndJobReport(ctx echo.Context) error
 	FetcStatDashBoard(ctx echo.Context) error
 	FetchStatMaintain(ctx echo.Context) error
+	FetchOverviewMaintain(ctx echo.Context) error
 }

@@ -49,4 +49,5 @@ type ServiceInterface interface {
 	EndJobReport(req request.EndJobReport) error
 	FetcStatDashBoard(req request.Stat) (*model.Stat, error)
 	FetchStatMaintain() (*model.StatMaintainer, error)
+	FetchOverviewMaintain(maintainerId int) (*response.OverviewMaintainer, error)
 }
