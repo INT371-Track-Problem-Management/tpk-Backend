@@ -41,6 +41,8 @@ type RepositoryInterface interface {
 	ReportDetailById(reportId int) (*model.Report, error)
 	ChangeCategory(req request.ReportChangeCategory) error
 	ChangeStatusReport(req request.ReportStatus, session *gorm.DB) error
+	EndJobReport(session *gorm.DB, req model.EndJobReport) error
+	FetcStatDashBoard(req request.Stat) (*model.Stat, error)
 
 	//reportStatus
 	CreateReportStatus(model request.ReportStatus, session *gorm.DB) error
@@ -75,6 +77,8 @@ type RepositoryInterface interface {
 	CreateMaintainer(req model.AddMaintainer) error
 	Maintainerlist() ([]*model.Maintainer, error)
 	MaintainerById(maintainerId int) (*model.Maintainer, error)
+	FetchStatMaintain() (*model.StatMaintainer, error)
+	FetchOverviewMaintain(id int) (*[]model.OverviewMaintainer, error)
 
 	//RoomWithCustomer
 	AddCustomerIntoRoom(model model.RoomAddCustomer) error
