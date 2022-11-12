@@ -4,12 +4,16 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"tpk-backend/app/config"
 	"tpk-backend/app/models/model"
 
 	"github.com/gofrs/uuid"
 )
 
 func UploadFile(file *multipart.FileHeader, dest string) (*model.ReportMedia, error) {
+
+	path := config.LoadPathMedia()
+
 	src, err := file.Open()
 	if err != nil {
 		return nil, err
@@ -19,7 +23,7 @@ func UploadFile(file *multipart.FileHeader, dest string) (*model.ReportMedia, er
 	fileName := file.Filename
 
 	// Destination
-	dst, err := os.Create("../../images/" + dest + "/" + fileName)
+	dst, err := os.Create(path.Path + dest + "/" + fileName)
 	if err != nil {
 		return nil, err
 	}

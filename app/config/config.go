@@ -34,6 +34,10 @@ type API_KEY_MAILER struct {
 	API string
 }
 
+type PART_MEDIA struct {
+	Path string
+}
+
 func LoadTest() *TestEnv {
 	return &TestEnv{
 		test: GetEnv("TEST", "Hello-World-Default"),
@@ -85,6 +89,12 @@ func LoadRegisCustomerSend() *ReportSend {
 func LoadJWTConfig() *Jwt {
 	return &Jwt{
 		Secret: GetEnv("SECRET", "abcdefghijkmn"),
+	}
+}
+
+func LoadPathMedia() *PART_MEDIA {
+	return &PART_MEDIA{
+		Path: GetEnv("PATH_MEDIA", "../../images/"),
 	}
 }
 
