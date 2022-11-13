@@ -12,7 +12,7 @@ import (
 func (c controllerTPK) CreateReport(ctx echo.Context) error {
 	file, err := ctx.FormFile("image")
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
+		return ctx.JSON(http.StatusBadRequest, "need file image")
 	}
 	if file == nil {
 		return ctx.JSON(http.StatusBadRequest, "need file image")
