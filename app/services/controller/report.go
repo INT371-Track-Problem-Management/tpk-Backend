@@ -10,11 +10,8 @@ import (
 )
 
 func (c controllerTPK) CreateReport(ctx echo.Context) error {
-	file, handler, err := ctx.Request().FormFile("image")
+	file, err := ctx.FormFile("image")
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, "need file image")
-	}
-	if file == nil {
 		return ctx.JSON(http.StatusBadRequest, "need file image")
 	}
 	req := new(request.ReportInsert)
@@ -22,7 +19,7 @@ func (c controllerTPK) CreateReport(ctx echo.Context) error {
 	if err := json.Unmarshal([]byte(data), &req); err != nil {
 		return ctx.JSON(http.StatusBadRequest, "invalid josin format data")
 	}
-	reportId, err := c.service.CreateReport(*req, handler)
+	reportId, err := c.service.CreateReport(*req, file)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
