@@ -10,9 +10,13 @@ import (
 )
 
 func (s serviceTPK) CreateReport(req request.ReportInsert, image *multipart.FileHeader) (*int, error) {
-	file, err := pkg.UploadFile(image, constants.IMAGE_DES_REPORT)
-	if err != nil {
-		return nil, err
+	var err error
+	var file *model.ReportMedia
+	if image != nil {
+		file, err = pkg.UploadFile(image, constants.IMAGE_DES_REPORT)
+		if err != nil {
+			return nil, err
+		}
 	}
 	now := pkg.GetDatetime()
 	report := model.ReportInsert{

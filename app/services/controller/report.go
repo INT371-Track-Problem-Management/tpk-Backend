@@ -14,6 +14,9 @@ func (c controllerTPK) CreateReport(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
+	if file == nil {
+		return ctx.JSON(http.StatusBadRequest, "need file image")
+	}
 	req := new(request.ReportInsert)
 	data := ctx.FormValue("data")
 	if err := json.Unmarshal([]byte(data), &req); err != nil {

@@ -13,7 +13,6 @@ import (
 func UploadFile(file *multipart.FileHeader, dest string) (*model.ReportMedia, error) {
 
 	path := config.LoadPathMedia()
-
 	src, err := file.Open()
 	if err != nil {
 		return nil, err
