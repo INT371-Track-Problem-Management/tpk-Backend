@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"tpk-backend/app/config"
 	"tpk-backend/app/constants"
 	"tpk-backend/app/pkg"
 
@@ -26,8 +27,13 @@ func (c controllerTPK) TestUploadFile(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, response)
 }
 
-func (c controllerTPK) TestDownloadFile(ctx echo.Context) error {
-	name := ctx.Param("image_id")
-	path := "../../images/report/" + name
+func (c controllerTPK) DownloadReportImage(ctx echo.Context) error {
+	id := ctx.Param("image_id")
+	image, err := c.service.ReportMediaById(id)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	pathImage := config.LoadPathMedia()
+	path := pathImage.Path + "report/" + image.FileName
 	return ctx.File(path)
 }

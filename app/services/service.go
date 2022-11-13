@@ -51,4 +51,5 @@ type ServiceInterface interface {
 	FetcStatDashBoard(req request.Stat) (*model.Stat, error)
 	FetchStatMaintain() (*model.StatMaintainer, error)
 	FetchOverviewMaintain(maintainerId int) (*response.OverviewMaintainer, error)
+	ReportMediaById(id string) (*model.ReportMedia, error)
 }

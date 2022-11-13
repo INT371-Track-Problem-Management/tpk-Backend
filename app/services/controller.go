@@ -48,5 +48,5 @@ type ControllerInterface interface {
 	FetchOverviewMaintain(ctx echo.Context) error
 
 	TestUploadFile(ctx echo.Context) error
-	TestDownloadFile(ctx echo.Context) error
+	DownloadReportImage(ctx echo.Context) error
 }
