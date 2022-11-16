@@ -92,7 +92,7 @@ func StartServer() {
 	emp.GET("customerById/:customerId", controller.FetchCustomerById, validator.EmployeeValidation)                           // Search customer by Id
 	emp.GET("employeeById/:employeeId", controller.FetchEmployeeById, validator.EmployeeValidation)                           // Search rmployee by Id
 	emp.DELETE("deleteEmployee/:employeeId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
-	emp.DELETE("deleteCustomer/:customerId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
+	emp.DELETE("deleteCustomer/:customerId", controller.DeleteCustomer, validator.EmployeeValidation)                         // Search rmployee by Id
 	emp.POST("dashboard", controller.FetcStatDashBoard, validator.EmployeeValidation)                                         // Get stat for dashboard
 	emp.GET("dashboard/maintainer", controller.FetchStatMaintain, validator.EmployeeValidation)                               // Get stat of maintainer
 	emp.GET("dashboard/maintainer/:maintainerId", controller.FetchOverviewMaintain, validator.EmployeeValidation)             // Overview of maintainer
