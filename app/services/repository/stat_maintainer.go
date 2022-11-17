@@ -3,7 +3,7 @@ package repository
 import "tpk-backend/app/models/model"
 
 func (r mysqlRepository) FetchStatMaintain() (*[]model.StatMaintainer, error) {
-	var stat model.StatMaintainer
+	var stat *[]model.StatMaintainer
 	sql := `
 	select
 		m.maintainerId,
@@ -21,10 +21,10 @@ func (r mysqlRepository) FetchStatMaintain() (*[]model.StatMaintainer, error) {
 	if err := r.conn.Raw(sql).Scan(&stat).Error; err != nil {
 		return nil, err
 	}
-	return &stat, nil
+	return stat, nil
 }
 
-func (r mysqlRepository) FetchOverviewMaintain(id int) (*model.OverviewMaintainer, error) {
+func (r mysqlRepository) FetchOverviewMaintain(id int) (*[]model.OverviewMaintainer, error) {
 	var stat *[]model.OverviewMaintainer
 	sql := `
 	select
