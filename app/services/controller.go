@@ -47,6 +47,7 @@ type ControllerInterface interface {
 	FetchStatMaintain(ctx echo.Context) error
 	FetchOverviewMaintain(ctx echo.Context) error
 	UploadProfilePic(ctx echo.Context) error
+	DownloadProfileImage(ctx echo.Context) error
 
 	TestUploadFile(ctx echo.Context) error
 	DownloadReportImage(ctx echo.Context) error
