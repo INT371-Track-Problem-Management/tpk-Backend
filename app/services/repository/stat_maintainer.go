@@ -2,7 +2,7 @@ package repository
 
 import "tpk-backend/app/models/model"
 
-func (r mysqlRepository) FetchStatMaintain() (*model.StatMaintainer, error) {
+func (r mysqlRepository) FetchStatMaintain() (*[]model.StatMaintainer, error) {
 	var stat model.StatMaintainer
 	sql := `
 	select
@@ -24,7 +24,7 @@ func (r mysqlRepository) FetchStatMaintain() (*model.StatMaintainer, error) {
 	return &stat, nil
 }
 
-func (r mysqlRepository) FetchOverviewMaintain(id int) (*[]model.OverviewMaintainer, error) {
+func (r mysqlRepository) FetchOverviewMaintain(id int) (*model.OverviewMaintainer, error) {
 	var stat *[]model.OverviewMaintainer
 	sql := `
 	select

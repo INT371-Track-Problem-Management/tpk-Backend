@@ -49,7 +49,7 @@ type ServiceInterface interface {
 	DeleteEmployee(id int) error
 	EndJobReport(req request.EndJobReport) error
 	FetcStatDashBoard(req request.Stat) (*model.Stat, error)
-	FetchStatMaintain() (*model.StatMaintainer, error)
+	FetchStatMaintain() (*[]model.StatMaintainer, error)
 	FetchOverviewMaintain(maintainerId int) (*response.OverviewMaintainer, error)
 	ReportMediaById(id string) (*model.ReportMedia, error)
 	CreateProfileMedia(image *multipart.FileHeader, email string) error
