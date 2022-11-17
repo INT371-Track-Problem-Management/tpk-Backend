@@ -38,9 +38,10 @@ func StartServer() {
 	api := e.Group("/api/")
 	api.GET("checkHealthy", controller.CheckHealthy)
 	api.POST("login", controller.Login)
-	api.PUT("logout", controller.LogoutToken)
+	api.DELETE("logout", controller.LogoutToken)
 	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
 	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
+	api.POST("test_upload_file", controller.TestUploadFile)
 	api.POST("test_upload_file", controller.TestUploadFile)
 	api.GET("download_report_image/:image_id", controller.DownloadReportImage)
 
@@ -49,6 +50,8 @@ func StartServer() {
 	service.POST("changeEmail", controller.ChangeEmail)                    // Change email customer or employee
 	service.POST("changePassword", controller.ChangePassword)              // Change password
 	service.GET("maintainerById/:maintainerId", controller.MaintainerById) // Search maintainer by Id
+	service.POST("uploadProfile/:email", controller.UploadProfilePic)      // Change password
+	service.GET("profileMedia/:email", controller.DownloadProfileImage)
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
@@ -92,7 +95,7 @@ func StartServer() {
 	emp.GET("customerById/:customerId", controller.FetchCustomerById, validator.EmployeeValidation)                           // Search customer by Id
 	emp.GET("employeeById/:employeeId", controller.FetchEmployeeById, validator.EmployeeValidation)                           // Search rmployee by Id
 	emp.DELETE("deleteEmployee/:employeeId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
-	emp.DELETE("deleteCustomer/:customerId", controller.DeleteEmployee, validator.EmployeeValidation)                         // Search rmployee by Id
+	emp.DELETE("deleteCustomer/:customerId", controller.DeleteCustomer, validator.EmployeeValidation)                         // Search rmployee by Id
 	emp.POST("dashboard", controller.FetcStatDashBoard, validator.EmployeeValidation)                                         // Get stat for dashboard
 	emp.GET("dashboard/maintainer", controller.FetchStatMaintain, validator.EmployeeValidation)                               // Get stat of maintainer
 	emp.GET("dashboard/maintainer/:maintainerId", controller.FetchOverviewMaintain, validator.EmployeeValidation)             // Overview of maintainer

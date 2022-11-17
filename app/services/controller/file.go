@@ -3,7 +3,6 @@ package controller
 import (
 	"net/http"
 	"tpk-backend/app/config"
-	"tpk-backend/app/constants"
 	"tpk-backend/app/pkg"
 
 	"github.com/labstack/echo/v4"
@@ -15,7 +14,7 @@ func (c controllerTPK) TestUploadFile(ctx echo.Context) error {
 		return err
 	}
 
-	image, err := pkg.UploadFile(file, constants.IMAGE_DES_REPORT)
+	image, err := pkg.UploadReportFile(file)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
@@ -35,5 +34,16 @@ func (c controllerTPK) DownloadReportImage(ctx echo.Context) error {
 	}
 	pathImage := config.LoadPathMedia()
 	path := pathImage.Path + "report/" + image.FileName
+	return ctx.File(path)
+}
+
+func (c controllerTPK) DownloadProfileImage(ctx echo.Context) error {
+	email := ctx.Param("email")
+	image, err := c.service.ProfileMediaByEmail(email)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	pathImage := config.LoadPathMedia()
+	path := pathImage.Path + "profile/" + image.FileName
 	return ctx.File(path)
 }
