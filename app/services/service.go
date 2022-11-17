@@ -54,4 +54,5 @@ type ServiceInterface interface {
 	ReportMediaById(id string) (*model.ReportMedia, error)
 	CreateProfileMedia(image *multipart.FileHeader, email string) error
 	GetUser(email string) (*model.User, error)
+	ProfileMediaByEmail(email string) (*model.ReportMedia, error)
 }

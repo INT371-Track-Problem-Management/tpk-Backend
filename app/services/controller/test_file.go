@@ -36,3 +36,14 @@ func (c controllerTPK) DownloadReportImage(ctx echo.Context) error {
 	path := pathImage.Path + "report/" + image.FileName
 	return ctx.File(path)
 }
+
+func (c controllerTPK) DownloadProfileImage(ctx echo.Context) error {
+	email := ctx.Param("email")
+	image, err := c.service.ProfileMediaByEmail(email)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	pathImage := config.LoadPathMedia()
+	path := pathImage.Path + "profile/" + image.FileName
+	return ctx.File(path)
+}
