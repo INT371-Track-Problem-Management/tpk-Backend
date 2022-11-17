@@ -15,7 +15,7 @@ func (r mysqlRepository) FetchStatMaintain() (*model.StatMaintainer, error) {
 	left join
 		reviewReports rr 
 	on
-		m.maintainerId = rr.maintainertId 
+		m.maintainerId = rr.maintainerId 
 	group by
 		m.maintainerId `
 	if err := r.conn.Raw(sql).Scan(&stat).Error; err != nil {
