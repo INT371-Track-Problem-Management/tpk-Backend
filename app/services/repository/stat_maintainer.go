@@ -33,7 +33,7 @@ func (r mysqlRepository) FetchOverviewMaintain(id int) (*[]model.OverviewMaintai
 	from
 		reviewReports rr
 	where
-		rr.maintainertId = ?`
+		rr.maintainerId = ?`
 	if err := r.conn.Raw(sql, id).Scan(&stat).Error; err != nil {
 		return nil, err
 	}
