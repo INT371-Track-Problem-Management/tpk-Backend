@@ -3,7 +3,6 @@ package controller
 import (
 	"net/http"
 	"tpk-backend/app/config"
-	"tpk-backend/app/constants"
 	"tpk-backend/app/pkg"
 
 	"github.com/labstack/echo/v4"
@@ -15,7 +14,7 @@ func (c controllerTPK) TestUploadFile(ctx echo.Context) error {
 		return err
 	}
 
-	image, err := pkg.UploadFile(file, constants.IMAGE_DES_REPORT)
+	image, err := pkg.UploadReportFile(file)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}

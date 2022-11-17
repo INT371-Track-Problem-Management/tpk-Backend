@@ -42,6 +42,7 @@ func StartServer() {
 	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
 	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
 	api.POST("test_upload_file", controller.TestUploadFile)
+	api.POST("test_upload_file", controller.TestUploadFile)
 	api.GET("download_report_image/:image_id", controller.DownloadReportImage)
 
 	service := api.Group("service/")
@@ -49,6 +50,7 @@ func StartServer() {
 	service.POST("changeEmail", controller.ChangeEmail)                    // Change email customer or employee
 	service.POST("changePassword", controller.ChangePassword)              // Change password
 	service.GET("maintainerById/:maintainerId", controller.MaintainerById) // Search maintainer by Id
+	service.POST("uploadProfile/:email", controller.UploadProfilePic)      // Change password
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

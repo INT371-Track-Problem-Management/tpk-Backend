@@ -1,6 +1,7 @@
 package service
 
 import (
+	"mime/multipart"
 	"tpk-backend/app/models/model"
 	"tpk-backend/app/models/request"
 	"tpk-backend/app/pkg"
@@ -21,6 +22,17 @@ func (s serviceTPK) EditProfile(req request.EditProfile, email string, role stri
 	}
 	err := s.repo.EditProfile(model, email, role)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s serviceTPK) CreateProfileMedia(image *multipart.FileHeader, email string) error {
+	model, err := pkg.UploadProfileFile(image, email)
+	if err != nil {
+		return err
+	}
+	if err := s.repo.CreateProfileMedia(*model); err != nil {
 		return err
 	}
 	return nil

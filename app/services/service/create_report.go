@@ -13,7 +13,7 @@ func (s serviceTPK) CreateReport(req request.ReportInsert, image *multipart.File
 	var err error
 	var file *model.ReportMedia
 	if image != nil {
-		file, err = pkg.UploadFile(image, constants.IMAGE_DES_REPORT)
+		file, err = pkg.UploadReportFile(image)
 		if err != nil {
 			return nil, err
 		}

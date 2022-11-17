@@ -52,4 +52,6 @@ type ServiceInterface interface {
 	FetchStatMaintain() (*model.StatMaintainer, error)
 	FetchOverviewMaintain(maintainerId int) (*response.OverviewMaintainer, error)
 	ReportMediaById(id string) (*model.ReportMedia, error)
+	CreateProfileMedia(image *multipart.FileHeader, email string) error
+	GetUser(email string) (*model.User, error)
 }

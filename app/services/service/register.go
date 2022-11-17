@@ -71,7 +71,7 @@ func (s serviceTPK) RegisterOwnerService(req request.RegisterOwner) (*int, error
 		Position:    req.Position,
 		CreateAt:    timenow,
 	}
-
+	
 	empId, err := s.repo.RegisterEmployeeRepo(regis)
 	if err != nil {
 		return nil, err
