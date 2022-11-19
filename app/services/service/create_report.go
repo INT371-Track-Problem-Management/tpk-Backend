@@ -29,14 +29,14 @@ func (s serviceTPK) CreateReport(req request.ReportInsert, image *multipart.File
 		UpdateBy:         req.UpdateBy,
 		CreateAt:         now,
 		CreateBy:         req.UpdateBy,
-		ImageId:          file.Id,
 	}
 	session := s.database.Begin()
-	if err := s.repo.CreateReportMedia(*file, session); err != nil {
-		return nil, err
-	}
 	reportId, err := s.repo.CreateReport(report, session)
 	if err != nil {
+		return nil, err
+	}
+	file.SetReportId(*reportId)
+	if err := s.repo.CreateReportMedia(*file, session); err != nil {
 		return nil, err
 	}
 

@@ -11,7 +11,6 @@ type Report struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
-	ImageId          string `json:"imageId" gorm:"column:imageId"`
 }
 
 type ReportInsert struct {
@@ -24,7 +23,6 @@ type ReportInsert struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createdBy" gorm:"column:createBy"`
-	ImageId          string `json:"imageId" gorm:"column:imageId"`
 }
 
 type EndReport struct {

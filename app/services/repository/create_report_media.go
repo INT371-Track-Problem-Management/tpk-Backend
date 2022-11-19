@@ -7,7 +7,7 @@ import (
 )
 
 func (r mysqlRepository) CreateReportMedia(req model.ReportMedia, session *gorm.DB) error {
-	if err := r.conn.Table("reportMedia").Create(&req).Error; err != nil {
+	if err := session.Table("reportMedia").Create(&req).Error; err != nil {
 		return err
 	}
 	return nil

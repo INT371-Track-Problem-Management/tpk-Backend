@@ -1,8 +1,8 @@
 package service
 
-import "tpk-backend/app/models/model"
+import "tpk-backend/app/models/response"
 
-func (s serviceTPK) ReportDetailById(reportId int) (*model.Report, error) {
+func (s serviceTPK) ReportDetailById(reportId int) (*response.ReportDetailById, error) {
 	report, err := s.repo.ReportDetailById(reportId)
 	if err != nil {
 		return nil, err

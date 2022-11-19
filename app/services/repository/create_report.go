@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"log"
 	"tpk-backend/app/models/model"
 
 	"gorm.io/gorm"
@@ -8,6 +9,7 @@ import (
 
 func (r mysqlRepository) CreateReport(model model.ReportInsert, session *gorm.DB) (*int, error) {
 	var reportId int
+	log.Println(model)
 	if err := session.Table("reports").Create(&model).Error; err != nil {
 		return nil, err
 	}

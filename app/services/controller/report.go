@@ -17,7 +17,7 @@ func (c controllerTPK) CreateReport(ctx echo.Context) error {
 	req := new(request.ReportInsert)
 	data := ctx.FormValue("data")
 	if err := json.Unmarshal([]byte(data), &req); err != nil {
-		return ctx.JSON(http.StatusBadRequest, "invalid josin format data")
+		return ctx.JSON(http.StatusBadRequest, "invalid json format data")
 	}
 	reportId, err := c.service.CreateReport(*req, file)
 	if err != nil {

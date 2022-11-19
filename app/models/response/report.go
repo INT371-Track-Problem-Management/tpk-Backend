@@ -14,8 +14,7 @@ type ReportList struct {
 	UpdateBy         int    `json:"updateBy" gorm:"column:updateBy"`
 	CreateAt         string `json:"createdAt" gorm:"column:createAt"`
 	CreateBy         int    `json:"createBy" gorm:"column:createBy"`
-	ImageId          string `json:"imageId" gorm:"column:imageId"`
-
+	
 	EngageId     int                `json:"-" gorm:"column:engageId"`
 	SelectedDate int                `json:"-" gorm:"column:selectedDate"`
 	Engage       model.ReportEngage `json:"-" gorm:"foreignKey:ReportId;references:EngageId"`
