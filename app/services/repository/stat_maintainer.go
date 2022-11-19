@@ -9,6 +9,8 @@ func (r mysqlRepository) FetchStatMaintain() (*[]model.StatMaintainer, error) {
 		m.maintainerId,
 		m.fname,
 		m.lname,
+		m.phone,
+		COUNT(rr.reviewId) as total,
 		AVG(rr.score) as average
 	from
 		maintainer m

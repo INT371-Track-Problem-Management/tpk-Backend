@@ -12,10 +12,12 @@ type Stat struct {
 }
 
 type StatMaintainer struct {
-	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
-	Fname        string `json:"fname" gorm:"column:fname"`
-	Lname        string `json:"lname" gorm:"column:lname"`
-	Average      int    `json:"average" gorm:"column:average"`
+	MaintainerId int     `json:"maintainerId" gorm:"column:maintainerId"`
+	Fname        string  `json:"fname" gorm:"column:fname"`
+	Lname        string  `json:"lname" gorm:"column:lname"`
+	Phone        string  `json:"phone" gorm:"column:phone"`
+	Total        string  `json:"total" gorm:"column:total"`
+	Average      float64 `json:"average" gorm:"column:average"`
 }
 
 type OverviewMaintainer struct {
