@@ -83,7 +83,7 @@ func (s serviceTPK) CreateReport(req request.ReportInsert, image *multipart.File
 		return nil, err
 	}
 
-	body := fmt.Sprintf("แจ้งเตือนการรายงานปัญหา รหัส: %v กรุณารอเจ้าหน้าที่ตรวจสอบ", reportId)
+	body := fmt.Sprintf("แจ้งเตือนการรายงานปัญหา รหัส: %v กรุณารอเจ้าหน้าที่ตรวจสอบ", *reportId)
 	if err := pkg.Smtp2(constants.SUBJECT_EMAIL_SENDING_REPORT, customer.Email, body); err != nil {
 		return nil, err
 	}
