@@ -92,4 +92,7 @@ type RepositoryInterface interface {
 	CreateProfileMedia(req model.ProfileMedia) error
 	ProfileMediaByEmail(email string) (*model.ReportMedia, error)
 	DeleteProfileMedia(email string) error
+
+	// Review
+	FetchReviewByReportId(reportId int) (*model.ReviewReports, error)
 }

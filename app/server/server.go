@@ -52,6 +52,7 @@ func StartServer() {
 	service.GET("maintainerById/:maintainerId", controller.MaintainerById) // Search maintainer by Id
 	service.POST("uploadProfile/:email", controller.UploadProfilePic)      // Change password
 	service.GET("profileMedia/:email", controller.DownloadProfileImage)
+	service.GET("report/review/:reportId", controller.FetchReviewByReportId)
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

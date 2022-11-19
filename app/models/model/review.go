@@ -3,6 +3,7 @@ package model
 type ReviewReports struct {
 	ReviewId     int    `json:"reviewId" gorm:"column:reviewId"`
 	Des          string `json:"des" gorm:"column:des"`
+	Score        int    `json:"score" gorm:"column:score"`
 	ReportId     int    `json:"reportId" gorm:"column:reportId"`
 	MaintainerId int    `json:"maintainerId" gorm:"column:maintainerId"`
 }
