@@ -89,9 +89,9 @@ type RepositoryInterface interface {
 	ReportMediaById(id string) (*model.ReportMedia, error)
 
 	// ProfileMedia
-	CreateProfileMedia(req model.ProfileMedia) error
+	CreateProfileMedia(req model.ProfileMedia, session *gorm.DB) error
 	ProfileMediaByEmail(email string) (*model.ReportMedia, error)
-	DeleteProfileMedia(email string) error
+	DeleteProfileMedia(email string, session *gorm.DB) error
 
 	// Review
 	FetchReviewByReportId(reportId int) (*model.ReviewReports, error)

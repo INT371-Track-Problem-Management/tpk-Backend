@@ -56,4 +56,5 @@ type ServiceInterface interface {
 	GetUser(email string) (*model.User, error)
 	ProfileMediaByEmail(email string) (*model.ReportMedia, error)
 	FetchReviewByReportId(reportId int) (*model.ReviewReports, error)
+	UpdateProfileMedia(image *multipart.FileHeader, email string) error
 }

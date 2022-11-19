@@ -32,8 +32,26 @@ func (s serviceTPK) CreateProfileMedia(image *multipart.FileHeader, email string
 	if err != nil {
 		return err
 	}
-	if err := s.repo.CreateProfileMedia(*model); err != nil {
+	session := s.database.Begin()
+	if err := s.repo.CreateProfileMedia(*model, session); err != nil {
 		return err
 	}
+	session.Commit()
+	return nil
+}
+
+func (s serviceTPK) UpdateProfileMedia(image *multipart.FileHeader, email string) error {
+	model, err := pkg.UploadProfileFile(image, email)
+	if err != nil {
+		return err
+	}
+	session := s.database.Begin()
+	if err := s.repo.DeleteProfileMedia(email, session); err != nil {
+		return err
+	}
+	if err := s.repo.CreateProfileMedia(*model, session); err != nil {
+		return err
+	}
+	session.Commit()
 	return nil
 }

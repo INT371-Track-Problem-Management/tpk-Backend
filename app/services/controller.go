@@ -49,6 +49,7 @@ type ControllerInterface interface {
 	UploadProfilePic(ctx echo.Context) error
 	DownloadProfileImage(ctx echo.Context) error
 	FetchReviewByReportId(ctx echo.Context) error
+	UpdateProfilePic(ctx echo.Context) error
 
 	TestUploadFile(ctx echo.Context) error
 	DownloadReportImage(ctx echo.Context) error

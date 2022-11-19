@@ -48,3 +48,18 @@ func (c controllerTPK) UploadProfilePic(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, "success")
 }
+
+func (c controllerTPK) UpdateProfilePic(ctx echo.Context) error {
+	email := ctx.Param("email")
+	file, err := ctx.FormFile("image")
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "need file image")
+	}
+	if _, err := c.service.GetUser(email); err != nil {
+		ctx.JSON(http.StatusBadRequest, "email not found")
+	}
+	if err := c.service.UpdateProfileMedia(file, email); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, "success")
+}

@@ -53,6 +53,7 @@ func StartServer() {
 	service.POST("uploadProfile/:email", controller.UploadProfilePic)      // Change password
 	service.GET("profileMedia/:email", controller.DownloadProfileImage)
 	service.GET("report/review/:reportId", controller.FetchReviewByReportId)
+	service.PUT("profile/update/media/:email", controller.UpdateProfilePic)
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))
