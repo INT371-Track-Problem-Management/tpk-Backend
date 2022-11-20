@@ -9,7 +9,7 @@ import (
 func (s serviceTPK) AddCustomerIntoRoom(req request.RoomAddCustomer) error {
 	now := pkg.GetDatetime()
 	model := model.RoomAddCustomer{
-		RoomId:     req.UpdateBy,
+		RoomId:     req.RoomId,
 		CustomerId: req.CustomerId,
 		BuildingId: req.BuildingId,
 		Status:     "A",
