@@ -54,6 +54,7 @@ func StartServer() {
 	service.GET("profileMedia/:email", controller.DownloadProfileImage)
 	service.GET("report/review/:reportId", controller.FetchReviewByReportId)
 	service.PUT("profile/update/media/:email", controller.UpdateProfilePic)
+	service.GET("room/roomNum/:roomNum", controller.FetchRoomByRoomNum)
 
 	cus := api.Group("customer/")
 	cus.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

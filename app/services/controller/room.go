@@ -60,3 +60,12 @@ func (c controllerTPK) GetAllRoomAndCustomerByBuildingId(ctx echo.Context) error
 	}
 	return ctx.JSON(http.StatusOK, rooms)
 }
+
+func (c controllerTPK) FetchRoomByRoomNum(ctx echo.Context) error {
+	roomNum := ctx.Param("roomNum")
+	room, err := c.service.FetchRoomByRoomNum(roomNum)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, room)
+}

@@ -67,6 +67,7 @@ type RepositoryInterface interface {
 	TotalFlooorsByBuildingId(buildingId int) (*int, error)
 	RoomInFloorByBuildingId(buildingId int, floor int) (*[]model.RoomByFloors, error)
 	GetAllRoomAndCustomerByBuildingId(buildingId int) ([]*model.RoomJoinBulding, error)
+	FetchRoomByRoomNum(roomnum string) (*model.Room, error)
 
 	//bulding
 	AllBuilding() (*[]response.AllBuilding, error)
