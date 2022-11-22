@@ -59,4 +59,5 @@ type ServiceInterface interface {
 	UpdateProfileMedia(image *multipart.FileHeader, email string) error
 	FetchRoomByRoomNum(roomnum string) (*model.Room, error)
 	ForgetPassword(user model.User) error
+	DeleteProfileMedia(email string) error
 }

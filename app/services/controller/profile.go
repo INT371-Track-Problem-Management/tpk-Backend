@@ -44,6 +44,11 @@ func (c controllerTPK) UploadProfilePic(ctx echo.Context) error {
 	if _, err := c.service.GetUser(email); err != nil {
 		ctx.JSON(http.StatusBadRequest, "email not found")
 	}
+	if _, err := c.service.ProfileMediaByEmail(email); err == nil {
+		if err := c.service.DeleteProfileMedia(email); err != nil {
+			return ctx.JSON(http.StatusInternalServerError, err)
+		}
+	}
 	if err := c.service.CreateProfileMedia(file, email); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
