@@ -3,10 +3,10 @@ package pkg
 import (
 	"crypto/tls"
 	"fmt"
+	"tpk-backend/app/config"
 	"tpk-backend/app/constants"
-	"tpk-backend/app/pkg/config"
 
-	gomail "gopkg.in/gomail.v2"
+	"gopkg.in/gomail.v2"
 )
 
 func Smtp2(sub string, to string, body string) error {
@@ -14,9 +14,6 @@ func Smtp2(sub string, to string, body string) error {
 	host := mail.Host
 	from := mail.Username
 	password := mail.Password
-	fmt.Println(sub)
-	fmt.Println(to)
-	fmt.Println(body)
 	m := gomail.NewMessage()
 	m.SetHeader("From", "rungmod.kmutt.sit@rungmod.com")
 
@@ -67,8 +64,24 @@ func UpdateStatus(to string, reportId int, title string, status string) error {
 	case "pending":
 		detail += constants.BODY_EMAIL_PENDING
 	}
-	err := Smtp2(constants.SUBJECT_EMAIL_STATUS_REPORT, to, detail)
-	if err != nil {
+	if err := Smtp2(constants.SUBJECT_EMAIL_STATUS_REPORT, to, detail); err != nil {
+		return err
+	}
+	return nil
+}
+
+func RegisterEmployeeNoti(to string, employeeId int, password string) error {
+	body := fmt.Sprintf(`
+	ลงทะเบียนพนักงานเสร็จสิ้น 
+	รหัสพนักงาน: %v
+	email: %v
+	Password: %v
+	`,
+		employeeId,
+		to,
+		password,
+	)
+	if err := Smtp2(constants.SUBJECT_EMAIL_REGISTER_EMPLOYEE, to, body); err != nil {
 		return err
 	}
 	return nil

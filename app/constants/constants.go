@@ -10,6 +10,7 @@ const (
 	SUBJECT_EMAIL_STATUS_REPORT  = "แจ้งเตือนการเปลี่ยนสถานะรายงาน"
 	SUBJECT_EMAIL_END_REPORT     = "รายงานของคุณได้รับการแก้ไขเรียบร้อยแล้ว"
 	SUBJECT_EMAIL_CANCEL_REPORT  = "ยกเลิกรายการ"
+	SUBJECT_EMAIL_REGISTER_EMPLOYEE = "แจ้งเตือนลงทะเบีบยพนักงานเสร็จสิ้น"
 
 	BODY_EMAIL_SENDING_REPORT        = "กรุณารอระบบตรวจสอบและรอรับเรื่อง"
 	BODY_EMAIL_APPROVE_REPORT        = "ระบบได้ตรวจสอบและทำการรับเรื่องเรียบร้อยแล้ว กรุณาเข้าสู่ระบบเพื่อตรวจสอบและเลือกวันดำเนินการ"
