@@ -8,6 +8,8 @@ services:
     ports:
       - "5000:5000"
     restart: on-failure
+    volumes:
+      - /home/rmadmin/prd-images/images:/app/images
 networks:
   default:
     external:
