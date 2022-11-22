@@ -25,7 +25,7 @@ type RepositoryInterface interface {
 	GetCustomerById(customerId int) (*model.Customer, error)
 	RegisterCustomersRepo(req request.CustomerRegis) (*int, error)
 	GetEmailCreateByReportId(reportId int) (*string, error)
-	GetListCustomer() ([]*model.Customer, error)
+	GetListCustomer() ([]*response.ListCustomer, error)
 	DeleteCustomer(id int) error
 
 	//employee

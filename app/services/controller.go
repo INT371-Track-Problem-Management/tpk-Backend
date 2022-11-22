@@ -51,6 +51,7 @@ type ControllerInterface interface {
 	FetchReviewByReportId(ctx echo.Context) error
 	UpdateProfilePic(ctx echo.Context) error
 	FetchRoomByRoomNum(ctx echo.Context) error
+	ForgetPassword(ctx echo.Context) error
 
 	TestUploadFile(ctx echo.Context) error
 	DownloadReportImage(ctx echo.Context) error

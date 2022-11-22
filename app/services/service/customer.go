@@ -1,6 +1,9 @@
 package service
 
-import "tpk-backend/app/models/model"
+import (
+	"tpk-backend/app/models/model"
+	"tpk-backend/app/models/response"
+)
 
 func (s serviceTPK) FetchCustomerByEmail(email string) (*model.Customer, error) {
 	customer, err := s.repo.CustomerByEmail(email)
@@ -10,7 +13,7 @@ func (s serviceTPK) FetchCustomerByEmail(email string) (*model.Customer, error) 
 	return customer, nil
 }
 
-func (s serviceTPK) GetListCustomer() ([]*model.Customer, error) {
+func (s serviceTPK) GetListCustomer() ([]*response.ListCustomer, error) {
 	customers, err := s.repo.GetListCustomer()
 	if err != nil {
 		return nil, err

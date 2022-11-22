@@ -55,3 +55,12 @@ func (s serviceTPK) UpdateProfileMedia(image *multipart.FileHeader, email string
 	session.Commit()
 	return nil
 }
+
+func (s serviceTPK) DeleteProfileMedia(email string) error {
+	session := s.database.Begin()
+	if err := s.repo.DeleteProfileMedia(email, session); err != nil {
+		return err
+	}
+	session.Commit()
+	return nil
+}

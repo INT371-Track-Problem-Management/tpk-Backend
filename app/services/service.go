@@ -41,7 +41,7 @@ type ServiceInterface interface {
 	Maintainerlist() ([]*model.Maintainer, error)
 	MaintainerById(maintainerId int) (*model.Maintainer, error)
 	EditProfile(req request.EditProfile, email string, role string) error
-	GetListCustomer() ([]*model.Customer, error)
+	GetListCustomer() ([]*response.ListCustomer, error)
 	GetListEmployee() ([]*model.Employee, error)
 	FetchEmployeeById(customerId int) (*model.Employee, error)
 	FetchCustomerById(customerId int) (*model.Customer, error)
@@ -58,4 +58,6 @@ type ServiceInterface interface {
 	FetchReviewByReportId(reportId int) (*model.ReviewReports, error)
 	UpdateProfileMedia(image *multipart.FileHeader, email string) error
 	FetchRoomByRoomNum(roomnum string) (*model.Room, error)
+	ForgetPassword(user model.User) error
+	DeleteProfileMedia(email string) error
 }

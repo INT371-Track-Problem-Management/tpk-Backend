@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"tpk-backend/app/jwt"
+	"tpk-backend/app/models/request"
 
 	"github.com/labstack/echo/v4"
 )
@@ -43,6 +44,11 @@ func (c controllerTPK) UploadProfilePic(ctx echo.Context) error {
 	if _, err := c.service.GetUser(email); err != nil {
 		ctx.JSON(http.StatusBadRequest, "email not found")
 	}
+	if _, err := c.service.ProfileMediaByEmail(email); err == nil {
+		if err := c.service.DeleteProfileMedia(email); err != nil {
+			return ctx.JSON(http.StatusInternalServerError, err)
+		}
+	}
 	if err := c.service.CreateProfileMedia(file, email); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
@@ -59,6 +65,21 @@ func (c controllerTPK) UpdateProfilePic(ctx echo.Context) error {
 		ctx.JSON(http.StatusBadRequest, "email not found")
 	}
 	if err := c.service.UpdateProfileMedia(file, email); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	return ctx.JSON(http.StatusOK, "success")
+}
+
+func (c controllerTPK) ForgetPassword(ctx echo.Context) error {
+	req := new(request.ForgetPassword)
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	user, err := c.service.GetUser(req.Email)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, "Email not found")
+	}
+	if err := c.service.ForgetPassword(*user); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, "success")
