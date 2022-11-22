@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"tpk-backend/app/models/model"
+	"tpk-backend/app/models/response"
 )
 
 func (r mysqlRepository) CustomerByEmail(email string) (*model.Customer, error) {
@@ -14,9 +15,24 @@ func (r mysqlRepository) CustomerByEmail(email string) (*model.Customer, error) 
 	return &Customer, nil
 }
 
-func (r mysqlRepository) GetListCustomer() ([]*model.Customer, error) {
-	var Customer []*model.Customer
-	if err := r.conn.Table("customer").Find(&Customer).Error; err != nil {
+func (r mysqlRepository) GetListCustomer() ([]*response.ListCustomer, error) {
+	var Customer []*response.ListCustomer
+	sql :=
+		`
+	SELECT
+    	c.customerId, c.fname, c.lname, c.email, rwc.roomId, r.roomNum, r.floors, rwc.buildingId
+	FROM
+    	customer c
+	LEFT JOIN
+    	roomWithCustomer rwc
+	ON
+    	rwc.customerId = c.customerId
+	LEFT JOIN
+    	room r 
+	ON
+    	r.roomId = rwc.roomId
+	`
+	if err := r.conn.Raw(sql).Scan(&Customer).Error; err != nil {
 		return nil, err
 	}
 	return Customer, nil
