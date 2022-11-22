@@ -42,12 +42,12 @@ func StartServer() {
 	api.POST("registerCustomer", controller.RegisterCustomers) // Register customer
 	api.POST("registerOwner", controller.RegisterOwner)        // Register owner
 	api.POST("test_upload_file", controller.TestUploadFile)
-	api.POST("test_upload_file", controller.TestUploadFile)
 	api.GET("download_report_image/:image_id", controller.DownloadReportImage)
-	api.GET("report/detail/:reportId", controller.ReportDetailById)                        
-	api.GET("reportStatus/detail/:reportId", controller.ReportStatusByReportId)            
+	api.GET("report/detail/:reportId", controller.ReportDetailById)
+	api.GET("reportStatus/detail/:reportId", controller.ReportStatusByReportId)
 	api.GET("reportEnagegFixDate/detail/:reportId", controller.ReportEnagegeFixDateDetail)
 	api.GET("maintainerById/:maintainerId", controller.MaintainerById)
+	api.POST("forgotPassword", controller.ForgetPassword)
 
 	service := api.Group("service/")
 	service.Use(middleware.JWTWithConfig(jwt.ValidateTokenJWTConfig()))

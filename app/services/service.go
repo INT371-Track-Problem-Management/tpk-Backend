@@ -58,4 +58,5 @@ type ServiceInterface interface {
 	FetchReviewByReportId(reportId int) (*model.ReviewReports, error)
 	UpdateProfileMedia(image *multipart.FileHeader, email string) error
 	FetchRoomByRoomNum(roomnum string) (*model.Room, error)
+	ForgetPassword(user model.User) error
 }

@@ -6,11 +6,12 @@ const (
 )
 
 const (
-	SUBJECT_EMAIL_SENDING_REPORT = "ส่งการรายงงานปัญหาเรียบร้อยแล้ว"
-	SUBJECT_EMAIL_STATUS_REPORT  = "แจ้งเตือนการเปลี่ยนสถานะรายงาน"
-	SUBJECT_EMAIL_END_REPORT     = "รายงานของคุณได้รับการแก้ไขเรียบร้อยแล้ว"
-	SUBJECT_EMAIL_CANCEL_REPORT  = "ยกเลิกรายการ"
+	SUBJECT_EMAIL_SENDING_REPORT    = "ส่งการรายงงานปัญหาเรียบร้อยแล้ว"
+	SUBJECT_EMAIL_STATUS_REPORT     = "แจ้งเตือนการเปลี่ยนสถานะรายงาน"
+	SUBJECT_EMAIL_END_REPORT        = "รายงานของคุณได้รับการแก้ไขเรียบร้อยแล้ว"
+	SUBJECT_EMAIL_CANCEL_REPORT     = "ยกเลิกรายการ"
 	SUBJECT_EMAIL_REGISTER_EMPLOYEE = "แจ้งเตือนลงทะเบีบยพนักงานเสร็จสิ้น"
+	SUBJECT_EMAIL_FORGET_PASSWORD   = "แจ้งรหัสผ่านใหม่ จากคำร้องลืมรหัสผ่าน"
 
 	BODY_EMAIL_SENDING_REPORT        = "กรุณารอระบบตรวจสอบและรอรับเรื่อง"
 	BODY_EMAIL_APPROVE_REPORT        = "ระบบได้ตรวจสอบและทำการรับเรื่องเรียบร้อยแล้ว กรุณาเข้าสู่ระบบเพื่อตรวจสอบและเลือกวันดำเนินการ"

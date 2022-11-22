@@ -15,3 +15,7 @@ type ChangePassword struct {
 	OldPassword string `gorm:"column:password" json:"oldPassword"`
 	NewPassword string `gorm:"column:password" json:"newPassword"`
 }
+
+type ForgetPassword struct {
+	Email string `gorm:"column:email" json:"email"`
+}
